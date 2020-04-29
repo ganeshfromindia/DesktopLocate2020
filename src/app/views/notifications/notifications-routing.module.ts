@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { AlertsComponent } from './alerts.component';
 import { BadgesComponent } from './badges.component';
 import { ModalsComponent } from './modals.component';
+import { TaskReminderComponent } from './taskReminder.component';
 
 const routes: Routes = [
   {
@@ -14,7 +15,14 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'alerts'
+        redirectTo: 'task-reminder'
+      },
+      {
+        path: 'task-reminder',
+        component: TaskReminderComponent,
+        data: {
+          title: 'Task Reminder'
+        }
       },
       {
         path: 'alerts',

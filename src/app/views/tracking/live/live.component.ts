@@ -29,7 +29,7 @@ export class LiveComponent implements OnInit {
       if (data['message'] == 'SUCCESS' && data['payload'].length > 0) {
          this.vehicleData = data['payload'];
          this.mapDataObj = {'eventType' : 'live' , data : this.vehicleData};
-         this.userService.setVehicleList(this.mapDataObj);
+         this.userService.setVehicleList(this.vehicleData);
       }else{
          this.vehicleData = [];
       }

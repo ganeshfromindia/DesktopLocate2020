@@ -217,6 +217,11 @@ export const navItems: INavData[] = [
     icon: 'icon-bell',
     children: [
       {
+      name: 'Task Reminder',
+      url: '/notifications/task-reminder',
+      icon: 'icon-bell'
+    },
+      {
         name: 'Alerts',
         url: '/notifications/alerts',
         icon: 'icon-bell'

@@ -1,0 +1,103 @@
+<div class="animated fadeIn">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-header">
+                    <strong>Create User</strong>
+                </div>
+                <div class="card-body">
+
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label for="name">Vehicle</label>
+                                    <select id="level" name="level" class="form-control" [(ngModel)]="vehicle">
+                                        <option *ngFor="let v of vehicleList" [ngValue]="v">{{v.vehicleNo}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label for="name">Insurance Date</label>
+                                    <input placeholder="Time:" class="form-control" [(ngModel)]="insuranceDate"
+                            [owlDateTimeTrigger]="st1" [owlDateTime]="st1">
+                        <owl-date-time [pickerType]="'calendar'" #st1></owl-date-time>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label for="name">Service Date</label>
+                                    <input placeholder="Time:" class="form-control" [(ngModel)]="serviceDate"
+                                    [owlDateTimeTrigger]="st2" [owlDateTime]="st2">
+                                <owl-date-time [pickerType]="'calendar'" #st2></owl-date-time>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label for="name">Oil Change Date</label>
+                                    <input placeholder="Time:" class="form-control" [(ngModel)]="oilChangeDate"
+                                    [owlDateTimeTrigger]="st3" [owlDateTime]="st3">
+                                <owl-date-time [pickerType]="'calendar'" #st3></owl-date-time>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label for="gender">Passing Date</label>
+                                    <input placeholder="Time:" class="form-control" [(ngModel)]="passingDate"
+                                    [owlDateTimeTrigger]="st4" [owlDateTime]="st4">
+                                <owl-date-time [pickerType]="'calendar'" #st4></owl-date-time>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label for="textarea-input">Puc Date</label>
+                                    <input placeholder="Time:" class="form-control" [(ngModel)]="pucDate"
+                                    [owlDateTimeTrigger]="st5" [owlDateTime]="st5">
+                                <owl-date-time [pickerType]="'calendar'" #st5></owl-date-time>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label for="gender">Oil Change Distance</label>
+                                    <input type="number" class="form-control" id="last-name" [(ngModel)]="oilChangeDistnce"
+                                        placeholder="Enter your Last Name">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label for="project">Service Distance</label>
+                                    <input type="number" class="form-control" id="last-name" [(ngModel)]="serviceChangeDistance"
+                                        placeholder="Enter your Last Name">
+                                </div>
+                            </div>
+                        </div>
+                </div>
+
+                <div class="card-footer">
+                    <button type="button" class="btn btn-sm btn-primary" (click)="submit()"><i
+                            class="fa fa-dot-circle-o"></i> {{userEditId ? 'Edit' : 'Save'}}</button>
+                    <button type="button" class="btn btn-sm btn-danger" (click)="onReset()"><i class="fa fa-ban"></i>
+                        Reset</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
