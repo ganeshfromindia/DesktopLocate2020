@@ -1,0 +1,30 @@
+<div class="row" style="margin : -15px">
+    <div class="col-md-10" style="padding: 0px;">
+        <div class="card">
+            <div class="card-body" style="padding: 0rem;">
+                <div id="map">
+                    <app-map [mapDataObj]="mapDataObj"></app-map>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2" style="padding: 0px;">
+        <div class="card" style="height: 617px;">
+            <div class="card-body" style="padding: 0rem;">
+                <table class="table table-responsive" style="max-height: 63vh;" scrollY="true">
+                    <tbody>
+                        <tr *ngFor="let vehicle of vehicleData" (click)="getHistory(vehicle)">
+                            <th scope="row">
+                                <div class="profile-img carImage">
+                                </div>
+                            </th>
+                            <td>{{vehicle.vehicleNo}}</td>
+                            <td>{{vehicle?.ignitionEvent ? vehicle?.ignitionEvent : "OFF"}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,87 @@
+<div class="animated fadeIn">
+    <div class="row">
+        <div class="col-sm-6">
+            <div *ngFor="let alert of alertsDismiss">
+                <alert [type]="alert.type" [dismissOnTimeout]="alert.timeout">{{ alert.msg }}</alert>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <strong>Create Make Model</strong>
+                </div>
+                <div class="card-body">
+
+                    <div class="form-group row">
+                        <label class="col-md-3 col-form-label" for="hf-email">Select Manufacturer</label>
+                        <div class="col-md-9">
+                            <select id="manufactureId" name="manufactureId" class="form-control"
+                            [(ngModel)]="manufactureId" (ngModelChange)="changeManufacture($event)">
+                                <option *ngFor="let manu of manufactureList" [value]="manu.id">
+                                    {{manu.manufacturer}}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-md-3 col-form-label" for="hf-email">Make Model</label>
+                        <div class="col-md-9">
+                            <input type="text" id="hf-makeModel" name="hf-makeModel" class="form-control"
+                                [(ngModel)]="makeModel" placeholder="Enter Make Model..">
+                            <!-- <span class="help-block">Please enter Designation</span> -->
+                        </div>
+                    </div>
+
+                </div>
+                <div class="card-footer">
+                    <button type="button" class="btn btn-sm btn-primary" (click)="save('Make Model Saved')"><i
+                            class="fa fa-dot-circle-o"></i> {{makeModelEditId ? 'Edit' : 'Save'}}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fa fa-align-justify"></i> Designation List
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Created Date</th>
+                                <th class="text-center">Edit</th>
+                                <th class="text-center">Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let make of makeModelList">
+                                <td>{{make.makeModel}}</td>
+                                <td>{{make.createdOn}}</td>
+                                <td class="text-center"><i class="fa fa-pencil fa-lg" aria-hidden="true"
+                                        (click)="edit(make)"></i></td>
+                                <td class="text-center">
+                                    <!-- <span class="badge badge-success">Active</span> -->
+                                    <i class="fa fa-trash fa-lg" aria-hidden="true" (click)="delete(make)"></i>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                    <ul class="pagination">
+                        <li class="page-item"><a class="page-link" href="#">Prev</a></li>
+                        <li class="page-item active">
+                            <a class="page-link" href="#">1</a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item"><a class="page-link" href="#">4</a></li>
+                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

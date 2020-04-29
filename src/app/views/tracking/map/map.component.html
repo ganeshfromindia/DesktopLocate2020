@@ -1,0 +1,21 @@
+<agm-map #AgmMap [latitude]="lat" [longitude]="lng" (mapReady)="mapReady($event)" [mapTypeControl]='true'
+    [fitBounds]="latLongBounds">
+
+    <agm-polyline [strokeColor]="'#2196f3'" [geodesic]="true">
+        <agm-polyline-point *ngFor="let polyline of polylines;let i = index;" [latitude]="polyline[0]"
+            [longitude]="polyline[1]">
+            <agm-marker [latitude]="polyline[0]" [longitude]="polyline[1]" [label]="startLabelOptions" [title]="Start"
+                *ngIf="i == 0">
+                <agm-info-window>
+                    <strong>Start</strong>
+                </agm-info-window>
+            </agm-marker>
+            <agm-marker [latitude]="polyline[0]" [longitude]="polyline[1]" [label]="endLabelOptions" [title]="End"
+                *ngIf="i == polylines.length-1">
+                <agm-info-window>
+                    <strong>End</strong>
+                </agm-info-window>
+            </agm-marker>
+        </agm-polyline-point>
+    </agm-polyline>
+</agm-map>

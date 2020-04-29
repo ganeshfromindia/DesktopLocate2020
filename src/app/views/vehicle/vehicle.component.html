@@ -1,0 +1,205 @@
+<div class="animated fadeIn">
+    <div class="row">
+        <div class="col-sm-6">
+            <div *ngFor="let alert of alertsDismiss">
+                <alert [type]="alert.type" [dismissOnTimeout]="alert.timeout">{{ alert.msg }}</alert>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <strong>Create User</strong>
+                </div>
+                <div class="card-body">
+
+                    <form [formGroup]="vehicleForm">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label for="name">Vehicle Device Id.</label>
+                                    <input type="text" class="form-control" id="first-name"
+                                        formControlName="vehicleDeviceId" placeholder="Enter Vehicle Device Id.">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label for="name">Vehicle No.</label>
+                                    <input type="text" class="form-control" id="last-name" formControlName="vehicleNo"
+                                        placeholder="Enter Vehicle No.">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label for="name">Asset No.</label>
+                                    <input type="text" id="assetNo" name="assetNo" class="form-control"
+                                        formControlName="assetNo" placeholder="Enter Asset No..">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label for="name">Moblie No</label>
+                                    <input type="number" id="mobile" name="mobile" class="form-control"
+                                        formControlName="mobileNumber" placeholder="Enter Moblie No..">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label for="gender">Vehicle Device Type</label>
+                                    <select id="vehicleDeviceType" name="vehicleDeviceType" class="form-control"
+                                        formControlName="vehicleDeviceType">
+                                        <option *ngFor="let type of deviceTypeList" [value]="type.deviceType">
+                                            {{type.deviceType}} ({{type.portNumber}}) </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label for="gender">Vehicle Manufacture</label>
+                                    <select id="manufacturerId" name="manufacturerId"
+                                        (change)="changeManufacture($event)" class="form-control"
+                                        formControlName="manufacturerId">
+                                        <option *ngFor="let manu of manufactureList" [value]="manu.id">
+                                            {{manu.manufacturer}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label for="gender">Vehicle Make Model</label>
+                                    <select id="makeModelId" name="makeModelId" class="form-control"
+                                        formControlName="makeModelId">
+                                        <option *ngFor="let make of makeModelList" [value]="make.id">
+                                            {{make.makeModel}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label for="gender">Vehicle Type</label>
+                                    <select id="vehicleTypeId" name="vehicleTypeId" class="form-control"
+                                        formControlName="vehicleTypeId">
+                                        <option *ngFor="let type of vehicleTypeList" [value]="type.id">
+                                            {{type.vehicleType}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label for="name">Fuel Tank Capacity</label>
+                                    <input type="number" id="fuelTankCapacity" name="fuelTankCapacity"
+                                        class="form-control" formControlName="fuelTankCapacity"
+                                        placeholder="Enter Fuel Tank Capacity..">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label for="name">Manufacturing Year</label>
+                                    <input type="number" id="manufacturerYear" name="manufacturerYear"
+                                        class="form-control" formControlName="manufacturerYear"
+                                        placeholder="Enter Manufacturing Year..">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label for="gender">ProjectId</label>
+                                    <select id="projectId" name="projectId" class="form-control"
+                                        formControlName="projectId">
+                                        <option *ngFor="let pro of projectList" [value]="pro.id">
+                                            {{pro.project}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="name">Start Time</label>
+                                    <ngb-timepicker formControlName="effectiveFrom"></ngb-timepicker>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="name">End Time</label>
+                                    <ngb-timepicker formControlName="effectiveTo"></ngb-timepicker>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="card-footer">
+                    <button type="button" class="btn btn-sm btn-primary" [disabled]="!vehicleForm.valid"
+                        (click)="submit()"><i class="fa fa-dot-circle-o"></i> {{vehicleEditId ? 'Edit' : 'Save'}}</button>
+                    <button type="button" class="btn btn-sm btn-danger" (click)="onReset()"><i class="fa fa-ban"></i>
+                        Reset</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <strong>Find User</strong>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label for="gender">Select Type</label>
+                                        <select id="type" name="type" class="form-control" [(ngModel)]="userSelectType">
+                                            <option selected value="vehicleNumber">Vehicle Number</option>
+                                            <option value="manufacturerId">Manufacturer Id</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label for="gender">{{userSelectType}}</label>
+                                        <input type="text" id="hf-designation" name="hf-designation"
+                                            class="form-control" [(ngModel)]="selectedValue" placeholder="Enter..">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button type="button" class="btn btn-sm btn-primary" (click)="changeType(userSelectType)"><i
+                                    class="fa fa-dot-circle-o"></i> Find
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

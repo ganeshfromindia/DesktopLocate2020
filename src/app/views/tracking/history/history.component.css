@@ -1,0 +1,45 @@
+.moving th {
+    padding-left: 5px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  
+  .moving td {
+    padding-left: 40px;
+    width: 263px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  
+  .moving p {
+    margin-bottom: 0px; 
+  }
+
+  .routeMappingTable{
+    max-height: 56vh;
+  }
+
+  .movingIndicatorStop{
+    border-right: 5px solid red;
+  }
+  
+  .movingIndicatorStart{
+    border-right: 5px solid #4285f4;
+  }
+
+  .padding0{
+    padding: 0px;
+  }
+
+  .trackingHistoryHt{
+    height: 56vh;
+  }
+
+  .buttonPosition{
+    position: absolute;
+    top: 30px;
+  }
+
+  #map {
+    height: 55.5vh;
+  }
