@@ -63,8 +63,28 @@ export const routes: Routes = [
         loadChildren: () => import('./views/vehicle/vehicle.module').then(m => m.VehicleModule)
       },
       {
+        path: 'site',
+        loadChildren: () => import('./views/sites/sites.module').then(m => m.SiteModule)
+      },
+      {
+        path: 'project',
+        loadChildren: () => import('./views/project/project.module').then(m => m.projectModule)
+      },
+      {
         path: 'list',
         loadChildren: () => import('./views/vehicle-list/vehicle-list.module').then(m => m.vehicleListModule)
+      },
+      {
+        path: 'polygon',
+        loadChildren: () => import('./views/polygon/polygon.module').then(m => m.polygonModule)
+      },
+      {
+        path: 'customer',
+        loadChildren: () => import('./views/customer/customer.module').then(m => m.CustomerModule)
+      },
+      {
+        path: 'ignition',
+        loadChildren: () => import('./views/ignition/ignition.module').then(m => m.IgnitionModule)
       },
       {
         path: 'tracking',
@@ -72,7 +92,7 @@ export const routes: Routes = [
       },
       {
         path: 'download',
-        loadChildren: () => import('./views/reports/reports.module').then(m => m.vehicleListModule)
+        loadChildren: () => import('./views/reports/reports.module').then(m => m.reportModule)
       },
       {
         path: 'base',

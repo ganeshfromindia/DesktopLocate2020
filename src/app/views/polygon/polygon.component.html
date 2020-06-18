@@ -1,0 +1,128 @@
+<div class="animated fadeIn">
+    <div class="row">
+        <div class="col-sm-6">
+            <div *ngFor="let alert of alertsDismiss">
+                <alert [type]="alert.type" [dismissOnTimeout]="alert.timeout">{{ alert.msg }}</alert>
+            </div>
+            <div class="card">
+                    <form [formGroup]="polygonForm">
+                <div class="card-header">
+                    <strong>Create Polygon</strong>
+                </div>
+                <div class="card-body">
+                   
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label for="bill-address">Project Name</label>
+                                    <select id="projectId" name="projectSearchId" class="form-control"
+                                        formControlName="projectId" (change)="getPolygonDetail()" >
+                                        <option *ngFor="let pro of projectList" [value]="pro.id">
+                                            {{pro.project}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label for="name">Name</label>
+                                    <input type="text" class="form-control" id="name" formControlName="name"
+                                        placeholder="Enter Name">
+                                </div>
+                            </div>
+                            <span formGroupName="circularPoint" style="width: 100%">
+                                <div class="col-sm-12">
+                                        <div class="form-group">
+                                                <label for="name">Address</label>
+                                                <input type="text" class="form-control" id="address" formControlName="address"
+                                                autocapitalize="off" placeholder="Enter Address" autocorrect="off"
+                                                #searchAddress>
+                                            </div>
+                                </div>
+                                <div class="col-sm-12">
+                                        <div class="form-group">
+                                                <label for="aerialDistance">Aerial Distance</label>
+                                                <input type="number" class="form-control" id="aerialDistance" formControlName="aerialDistance"
+                                                    placeholder="Enter Aerial Distance">
+                                            </div>
+                                </div>
+                            </span>
+
+
+                        </div>
+                   
+                </div>
+                <div class="card-footer">
+                        <button type="button" class="btn btn-sm btn-primary" [disabled]="!polygonForm.valid" (click)="onFormSubmit()"><i
+                                class="fa fa-dot-circle-o"></i> Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-sm-6">
+                <div class="card">
+                        <strong class="card-header primary-color white-text">Circular Polygon</strong>
+                        <div class="card-body" style="padding: 0px;">
+                
+                          <agm-map #AgmMap [latitude]="lat" [longitude]="lng" (mapReady)="mapReady($event)" [mapTypeControl]='true'
+                            (mapClick)="placeMarker($event)" [fitBounds]="latLongBounds">
+                            <agm-circle [latitude]="circleLat" [longitude]="circleLng" [radius]=agmCircleRadius
+                              [strokeColor]="'#706bd6'" [strokeOpacity]="1" [strokePosition]="0" [strokeWeight]="2" [strokeOpacity]=".9"
+                              [fillColor]="'#000'" [circleDraggable]="true" (dragEnd)="placeMarker($event)">
+                            </agm-circle>
+                
+                            <agm-marker [latitude]="circleLat" [longitude]="circleLng" [label]="'C'">
+                            </agm-marker>
+                
+                          </agm-map>
+                
+                        </div>
+                      </div>
+        </div>
+    </div>
+
+    <div class="row">
+            <div class="col-sm-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fa fa-align-justify"></i> Site List
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Polygon Type</th>
+                                        <th class="text-center">Address</th>
+                                        <th class="text-center">Aerial Distance</th>
+                                        <th class="text-center">Edit</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let p of polygonList">
+                                        <td>
+                                            <span class="text-truncate d-inline-block"> {{p.name}} </span></td>
+                                        <td><span class="text-truncate d-inline-block"> {{p.polygonType}} </span> </td>
+                                        <td><span class="text-truncate d-inline-block"> {{p.circularPoint.address}} </span> </td>
+                                        <td><span class="text-truncate d-inline-block"> {{p.circularPoint.aerialDistance}} </span> </td>
+                                        <td class="text-center"><i class="fa fa-pencil fa-lg" aria-hidden="true"
+                                                (click)="edit(p)"></i></td>
+                                    </tr>
+        
+                                </tbody>
+                            </table>
+                            <ul class="pagination">
+                                <li class="page-item"><a class="page-link" href="#">Prev</a></li>
+                                <li class="page-item active">
+                                    <a class="page-link" href="#">1</a>
+                                </li>
+                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item"><a class="page-link" href="#">4</a></li>
+                                <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+    </div>
+
+</div>

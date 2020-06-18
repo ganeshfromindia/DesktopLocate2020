@@ -1,0 +1,133 @@
+<div class="animated fadeIn">
+    <div class="row">
+        <div class="col-sm-6">
+            <div *ngFor="let alert of alertsDismiss">
+                <alert [type]="alert.type" [dismissOnTimeout]="alert.timeout">{{ alert.msg }}</alert>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <strong>Create Sites</strong>
+                </div>
+                <div class="card-body">
+                    <form [formGroup]="siteForm">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label for="name">Site Name</label>
+                                    <input type="text" class="form-control" id="site-name" formControlName="siteName"
+                                        placeholder="Enter Site Name">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label for="name">Project Name</label>
+                                    <ng-multiselect-dropdown [placeholder]="'Project Name'" [data]="projectList" formControlName="projectIdList"
+                                        [settings]="dropdownSettings">
+                                    </ng-multiselect-dropdown>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label for="name">Address</label>
+                                    <input type="text" class="form-control" id="address" formControlName="address"
+                                        autocapitalize="off" placeholder="Enter Address" autocorrect="off"
+                                        #searchAddress>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label for="name">latitude</label>
+                                    <input type="text" class="form-control" id="latitude" formControlName="latitude"
+                                        placeholder="latitude">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label for="name">longitude</label>
+                                    <input type="text" class="form-control" id="longitude" formControlName="longitude"
+                                        placeholder="longitude">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label for="name">Telephone Number</label>
+                                    <input type="text" class="form-control" id="phoneNumber"
+                                        formControlName="telephoneNumber"
+                                        placeholder="Enter Phone number (Comma seperated)">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="card-footer">
+                    <button type="button" class="btn btn-sm btn-primary" (click)="onFormSubmit()"><i
+                            class="fa fa-dot-circle-o"></i> Submit</button>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fa fa-align-justify"></i> Site List
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Address</th>
+                                <th class="text-center">latitude</th>
+                                <th class="text-center">longitude</th>
+                                <th class="text-center">Phone Number</th>
+                                <th class="text-center">Edit</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let s of siteList">
+                                <td>
+                                    <span class="text-truncate d-inline-block"> {{s.siteName}} </span></td>
+                                <td><span class="text-truncate d-inline-block"> {{s.address}} </span> </td>
+                                <td><span class="text-truncate d-inline-block"> {{s.latitude}} </span> </td>
+                                <td><span class="text-truncate d-inline-block"> {{s.longitude}} </span> </td>
+                                <td>
+                                    <ul >
+                                        <li *ngFor="let t of s.telephoneNumber">{{t}}</li>
+                                    </ul>
+                                </td>
+                                <td class="text-center"><i class="fa fa-pencil fa-lg" aria-hidden="true"
+                                        (click)="edit(s)"></i></td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                    <ul class="pagination">
+                        <li class="page-item"><a class="page-link" href="#">Prev</a></li>
+                        <li class="page-item active">
+                            <a class="page-link" href="#">1</a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item"><a class="page-link" href="#">4</a></li>
+                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

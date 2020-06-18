@@ -155,6 +155,20 @@ export class UserService {
     let calcTime = hours + ':' + minutes + ' ' + ampm;
     return calcTime;
   }
+
+  convertMS( milliseconds ) {
+    var day, hour, minute, seconds;
+    seconds = Math.floor(milliseconds / 1000);
+    minute = Math.floor(seconds / 60);
+    seconds = seconds % 60;
+    hour = Math.floor(minute / 60);
+    minute = minute % 60;
+    day = Math.floor(hour / 24);
+    hour = hour % 24;
+
+    return ( day > 9 ? day : '0'+ day ) +' : ' + ( hour > 9 ? hour : '0'+ hour ) + ' : ' +
+     ( minute > 9 ? minute : '0'+ minute ) + ' : ' + ( seconds > 9 ? seconds : '0'+ seconds );
+  }
 }
 
 @Pipe({name: 'keys'})

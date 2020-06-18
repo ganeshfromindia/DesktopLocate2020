@@ -1,0 +1,378 @@
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <i class="fa fa-align-justify"></i> Search Vehicle
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label for="bill-address">Search Type</label>
+                            <select id="projectSearchId" name="projectId" class="form-control" 
+                                [(ngModel)]="vehicleSearchType" (ngModelChange)="vehicleSearchChange($event)">
+                                <option *ngFor="let c of searchList" [value]="c.type">
+                                    {{c.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-3" *ngIf="vehicleSearchType == 'vehicleName'">
+                        <div class="form-group">
+                            <label for="site-address">Vechile Name</label>
+                            <input type="text" class="form-control" id="vehicleSearchId" [(ngModel)]="vehicleSearchName"
+                                placeholder="Enter Vehicle Name">
+                        </div>
+
+                    </div>
+                    <div class="col-lg-3" *ngIf="vehicleSearchType == 'projectName' || vehicleSearchType == 'siteName'">
+                        <div class="form-group">
+                            <label for="bill-address">Project Name</label>
+                            <select id="projectId" name="projectSearchId" class="form-control" 
+                                [(ngModel)]="projectSearchId" (ngModelChange)="vehicleProjectChange($event)">
+                                <option *ngFor="let pro of projectList" [value]="pro.id">
+                                    {{pro.project}}</option>
+                            </select>
+                        </div>
+                    </div>
+                     <div class="col-lg-3" *ngIf="vehicleSearchType == 'siteName'">
+                        <div class="form-group">
+                            <label for="bill-address">Site Name</label>
+                            <select id="projectId" name="projectId" class="form-control" [(ngModel)]="siteSearchId">
+                                <option *ngFor="let c of siteSearchList" [value]="c.id">
+                                    {{c.siteName}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-3"   *ngIf="vehicleSearchType == 'vehicleStatus'">
+                        <div class="form-group">
+                            <label for="bill-address">Vehicle Status</label>
+                            <select id="projectId" name="projectId" class="form-control" [(ngModel)]="vehicleStatusSearch">
+                                <option *ngFor="let c of vehicleStatusList" [value]="c.code">
+                                        {{c.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-sm btn-primary pojectSearchClick" (click)="searchVehicle()"><i
+                                class="fa fa-dot-circle-o"></i> Search </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <i class="fa fa-align-justify"></i> Combined All Table
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered table-striped table-sm">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Device Type</th>
+                            <th>Mobile No.</th>
+                            <th>Project</th>
+                            <th>Site</th>
+                            <th>Working Start</th>
+                            <th>Working End</th>
+                            <th>Vehicle Status</th>
+                            <th>Vehicle Condition</th>
+                            <th class="text-center">Billing</th>
+                            <th class="text-center">Vehicle Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let vehicle of vehicleData">
+                            <td>{{vehicle.vehicleNo}}</td>
+                            <td>{{vehicle.vehicleDeviceType}}</td>
+                            <td>{{vehicle.mobileNumber}}</td>
+                            <td>{{vehicle?.project ? vehicle.project.project : '-'}}</td>
+                            <td>{{vehicle?.site ? vehicle.site.siteName : '-'}}</td>
+                            <td>{{vehicle.effectiveFrom | date : 'dd/MM/yy h:mm a'}}</td>
+                            <td>{{vehicle.effectiveTo | date : 'dd/MM/yy h:mm a'}}</td>
+                            <td>{{vehicle.vehicleStatus}}</td>
+                            <td>{{vehicle.vehicleCondition}}</td>
+                            <td class="text-center"><i class="fa fa-pencil-square-o" aria-hidden="true"
+                                    (click)="addBillingData(vehicle.id)"></i></td>
+                            <td class="text-center"><i class="fa fa-pencil-square-o" aria-hidden="true"
+                                    (click)="addVehicleStatus(vehicle.id)"></i></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div bsModal #largeModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Address</h4>
+                <button type="button" class="close" (click)="largeModal.hide()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <form [formGroup]="AssignBillingForm">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="bill-address">Customer</label>
+                                <select id="projectId" name="projectId" class="form-control"
+                                    (change)="getCustomerDetail(this.AssignBillingForm.controls['customerId'].value)"
+                                    formControlName="customerId">
+                                    <option *ngFor="let c of customerList" [value]="c.id">
+                                        {{c.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="bill-address">Bill Address</label>
+                                <select id="billAddress" name="billAddress" class="form-control"
+                                    (change)="selectBillAddress($event)" formControlName="billAddress">
+                                    <option *ngFor="let bill of customerDetailList" [ngValue]="bill">
+                                        {{bill.billingAddress}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="site-address">Site Address</label>
+                                <input type="text" class="form-control" id="site-address" formControlName="siteAddress"
+                                    placeholder="Enter Site Address">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="work-Order">Work Order No.</label>
+                                <input type="number" class="form-control" id="work-Order" formControlName="workOrderNo"
+                                    placeholder="Enter Work Order No.">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="site-address">Work Order Date</label>
+                                <input placeholder="Time:" class="form-control" formControlName="workOrderDate"
+                                    [owlDateTimeTrigger]="st1" [owlDateTime]="st1">
+                                <owl-date-time [pickerType]="'calendar'" #st1></owl-date-time>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="site-address">Ammendment Date</label>
+                                <input placeholder="Time:" class="form-control" formControlName="AmmendmentDate"
+                                    [owlDateTimeTrigger]="st2" [owlDateTime]="st2">
+                                <owl-date-time [pickerType]="'calendar'" #st2></owl-date-time>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="site-address">Billing Description</label>
+                                <input type="text" class="form-control" id="billing-description"
+                                    formControlName="billingDescription" placeholder="Enter Billing Description">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="site-address">Sub Billing Description</label>
+                                <input type="text" class="form-control" id="sub-billing-description"
+                                    formControlName="subDescription" placeholder="Enter Sub Billing Description">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="site-address">Per Hour Billing : </label>
+                                <label class="switch switch-label switch-primary"
+                                    style="margin-bottom :-0.5rem; position: absolute; top: 30px; left: 18px;">
+                                    <input type="checkbox" class="switch-input" formControlName="perHourBilling">
+                                    <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="site-address">Normal Rate : </label>
+                                <input type="number" class="form-control" formControlName="NormalRate">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="site-address">Overtime Rate : </label>
+                                <input type="number" class="form-control" formControlName="OverTimeRate">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="per-month-billing-rate">Per Month Billing Rate</label>
+                                <input type="number" class="form-control" id="per-month-billing-rate"
+                                    formControlName="perMonthBillingRate" placeholder="Enter Per Month Billing Rate">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="state">State</label>
+                                <input type="text" class="form-control" id="state" formControlName="state"
+                                    placeholder="State">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="cgst">CGST</label>
+                                <input type="number" class="form-control" id="cgst" formControlName="cgst"
+                                    placeholder="cgst">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="sgst">SGST</label>
+                                <input type="number" class="form-control" id="sgst" formControlName="sgst"
+                                    placeholder="sgst">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="igst">IGST</label>
+                                <input type="number" class="form-control" id="igst" formControlName="igst"
+                                    placeholder="igst">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="largeModal.hide()">Close</button>
+                <button type="button" class="btn btn-sm btn-primary" (click)="submit()"><i
+                        class="fa fa-dot-circle-o"></i> Save </button>
+                <button type="button" class="btn btn-sm btn-danger" (click)="onReset()"><i class="fa fa-ban"></i>
+                    Reset</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div bsModal #vehicleStatusModel="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Vehicle Status</h4>
+                <button type="button" class="close" (click)="vehicleStatusModel.hide()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="vehicleConditionForm">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="vehicle-status">Vehicle Status</label>
+                                <select id="vehicle-status" name="vehicle-status" class="form-control"
+                                    formControlName="vehicleStatus" (change)="selectStatus(this.vehicleConditionForm.controls['vehicleStatus'].value)">
+                                    <option *ngFor="let c of vehicleStatusList" [value]="c.code">
+                                        {{c.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" *ngIf="vehicleStatusFlag == 'ASSIGNED_TO_PROJECT'">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="project">Project</label>
+                                <select id="project" name="project" class="form-control"
+                                    formControlName="project" (change)="projectChange($event.target.value)">
+                                    <option *ngFor="let pro of projectList" [value]="pro.id">
+                                        {{pro.project}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="site">Site</label>
+                                <select id="site" name="site" class="form-control"
+                                    formControlName="site">
+                                    <option *ngFor="let s of siteList" [value]="s.id">
+                                        {{s.siteName}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="bill-address">Vehicle Condition</label>
+                                <select id="vehicle-condition" name="vehicle-condition" class="form-control"
+                                    formControlName="vehicleCondition">
+                                    <option *ngFor="let c of vehicleConditionList" [value]="c.code">
+                                        {{c.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="site-address">From date</label>
+                                <input placeholder="Time:" class="form-control" formControlName="fromdate"
+                                    [owlDateTimeTrigger]="st3" [owlDateTime]="st3">
+                                <owl-date-time [pickerType]="'calendar'" #st3></owl-date-time>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="site-address">To Date</label>
+                                <input placeholder="Time:" class="form-control" formControlName="toDate"
+                                    [owlDateTimeTrigger]="st4" [owlDateTime]="st4">
+                                <owl-date-time [pickerType]="'calendar'" #st4></owl-date-time>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="vehicleStatusModel.hide()">Close</button>
+                <button type="button" class="btn btn-sm btn-primary" (click)="saveVehicleStatus()" [disabled]="!vehicleConditionForm.valid">
+                    <i class="fa fa-dot-circle-o"></i> Save 
+                </button>
+                <button type="button" class="btn btn-sm btn-danger"><i class="fa fa-ban"></i>
+                    Reset</button>
+            </div>
+        </div>
+    </div>
+</div>

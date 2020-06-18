@@ -36,4 +36,4 @@ const routes: Routes = [
   providers:[DataService],
   declarations: [ ReportsComponent, KeysPipe ]
 })
-export class vehicleListModule { }
+export class reportModule { }

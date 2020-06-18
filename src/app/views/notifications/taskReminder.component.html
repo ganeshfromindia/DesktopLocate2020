@@ -7,95 +7,139 @@
                 </div>
                 <div class="card-body">
 
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="form-group">
-                                    <label for="name">Vehicle</label>
-                                    <select id="level" name="level" class="form-control" [(ngModel)]="vehicle">
-                                        <option *ngFor="let v of vehicleList" [ngValue]="v">{{v.vehicleNo}}</option>
-                                    </select>
-                                </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="name">Vehicle</label>
+                                <select id="level" name="level" class="form-control" [(ngModel)]="vehicle" (ngModelChange)="getSavedTaskList($event)">
+                                    <option *ngFor="let v of vehicleList" [ngValue]="v">{{v.vehicleNo}}</option>
+                                </select>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="form-group">
-                                    <label for="name">Insurance Date</label>
-                                    <input placeholder="Time:" class="form-control" [(ngModel)]="insuranceDate"
-                            [owlDateTimeTrigger]="st1" [owlDateTime]="st1">
-                        <owl-date-time [pickerType]="'calendar'" #st1></owl-date-time>
-                                </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-10">
+                            <div class="form-group">
+                                <label for="name">Insurance Date</label>
+                                <input placeholder="Time:" class="form-control" [(ngModel)]="insuranceDate"
+                                    [owlDateTimeTrigger]="st1" [owlDateTime]="st1">
+                                <owl-date-time [pickerType]="'calendar'" #st1></owl-date-time>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="form-group">
-                                    <label for="name">Service Date</label>
-                                    <input placeholder="Time:" class="form-control" [(ngModel)]="serviceDate"
+                        <div class="col-sm-2" style="top: 30px;">
+                            <button type="button" class="btn btn-sm btn-danger"   (click)="showImage('insuranceImage')">
+                                <i class="fa fa-eye" aria-hidden="true" ></i>
+                                 Image</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="name">Service Date</label>
+                                <input placeholder="Time:" class="form-control" [(ngModel)]="serviceDate"
                                     [owlDateTimeTrigger]="st2" [owlDateTime]="st2">
                                 <owl-date-time [pickerType]="'calendar'" #st2></owl-date-time>
-                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="form-group">
-                                    <label for="name">Oil Change Date</label>
-                                    <input placeholder="Time:" class="form-control" [(ngModel)]="oilChangeDate"
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="name">Oil Change Date</label>
+                                <input placeholder="Time:" class="form-control" [(ngModel)]="oilChangeDate"
                                     [owlDateTimeTrigger]="st3" [owlDateTime]="st3">
                                 <owl-date-time [pickerType]="'calendar'" #st3></owl-date-time>
-                                </div>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="form-group">
-                                    <label for="gender">Passing Date</label>
-                                    <input placeholder="Time:" class="form-control" [(ngModel)]="passingDate"
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="gender">Passing Date</label>
+                                <input placeholder="Time:" class="form-control" [(ngModel)]="passingDate"
                                     [owlDateTimeTrigger]="st4" [owlDateTime]="st4">
                                 <owl-date-time [pickerType]="'calendar'" #st4></owl-date-time>
-                                </div>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="form-group">
-                                    <label for="textarea-input">Puc Date</label>
-                                    <input placeholder="Time:" class="form-control" [(ngModel)]="pucDate"
+                    <div class="row">
+                        <div class="col-sm-10">
+                            <div class="form-group">
+                                <label for="textarea-input">Puc Date</label>
+                                <input placeholder="Time:" class="form-control" [(ngModel)]="pucDate"
                                     [owlDateTimeTrigger]="st5" [owlDateTime]="st5">
                                 <owl-date-time [pickerType]="'calendar'" #st5></owl-date-time>
-                                </div>
                             </div>
                         </div>
+                        <div class="col-sm-1" style="top: 30px;" *ngIf="pucImageName">
+                            <i class="fa fa-eye" aria-hidden="true" (click)="showImage('pucImage')"></i>
+                        </div>
+                    </div>
 
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="form-group">
-                                    <label for="gender">Oil Change Distance</label>
-                                    <input type="number" class="form-control" id="last-name" [(ngModel)]="oilChangeDistnce"
-                                        placeholder="Enter your Last Name">
-                                </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="gender">Oil Change Distance</label>
+                                <input type="number" class="form-control" id="last-name" [(ngModel)]="oilChangeDistnce"
+                                    placeholder="Enter your Last Name">
                             </div>
                         </div>
+                    </div>
 
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="form-group">
-                                    <label for="project">Service Distance</label>
-                                    <input type="number" class="form-control" id="last-name" [(ngModel)]="serviceChangeDistance"
-                                        placeholder="Enter your Last Name">
-                                </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="project">Service Distance</label>
+                                <input type="number" class="form-control" id="last-name"
+                                    [(ngModel)]="serviceChangeDistance" placeholder="Enter your Last Name">
                             </div>
                         </div>
+                    </div>
                 </div>
 
                 <div class="card-footer">
                     <button type="button" class="btn btn-sm btn-primary" (click)="submit()"><i
-                            class="fa fa-dot-circle-o"></i> {{userEditId ? 'Edit' : 'Save'}}</button>
+                            class="fa fa-dot-circle-o"></i> Save </button>
                     <button type="button" class="btn btn-sm btn-danger" (click)="onReset()"><i class="fa fa-ban"></i>
                         Reset</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fa fa-align-justify"></i> <strong>Saved Task</strong>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Task Name</th>
+                                        <th>Time/ Distance</th>
+                                        <th>Edit</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let t of taskList">
+                                        <td>{{t.taskType}}</td>
+                                        <td>{{t.activityDuration}}</td>
+                                        <td><i class="fa fa-pencil-square-o" aria-hidden="true" (click)="editTask(t)"></i></td>
+                                        <td>
+                                            <span class="badge badge-success">Active</span>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

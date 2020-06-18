@@ -26,13 +26,31 @@ export class DataService {
     return throwError(errorMessage);
   }
 
-  public sendGetRequest(url){
-    return this.httpClient.get(environment.base_url + url).pipe(catchError(this.handleError));
+  public sendGetRequest(url, param?){
+    let httpOptions = {
+      headers: new HttpHeaders().set('Content-Type', 'application/json') 
+    };
+    if(param){
+      httpOptions['params'] = param;
+    }
+
+    return this.httpClient.get(environment.base_url + url, httpOptions).pipe(catchError(this.handleError));
   }
 
   public sendPostRequest(url, body, param?){
     let httpOptions = {
       headers: new HttpHeaders().set('Content-Type', 'application/json') 
+    };
+    if(param){
+      httpOptions['params'] = param;
+    }
+    
+    return this.httpClient.post(environment.base_url + url, body, httpOptions).pipe(catchError(this.handleError));
+  }
+
+  public sendPostImgRequest(url, body, param?){
+    let httpOptions = {
+      headers: new HttpHeaders() 
     };
     if(param){
       httpOptions['params'] = param;

@@ -1,0 +1,8 @@
+#map {
+    height: 55.5vh;
+  }
+
+  .buttonPosition{
+    position: absolute;
+    top: 30px;
+  }

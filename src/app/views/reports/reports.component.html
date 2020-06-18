@@ -5,14 +5,15 @@
                 <div class="row">
                     <div class="form-group col-sm-2">
                         <label for="ccmonth">Vehicle</label>
-                        <select id="level" name="level" class="form-control" [(ngModel)]="vehicle">
+                        <select id="level" name="level" class="form-control" [(ngModel)]="vehicle"
+                            [disabled]="selectedValue == 'Tk'">
                             <option *ngFor="let v of vehicleList" [ngValue]="v">{{v.vehicleNo}}</option>
                         </select>
                     </div>
                     <div class="form-group col-sm-3">
                         <label for="ccmonth">Start Time</label>
                         <input placeholder="Time:" class="form-control" [(ngModel)]="startTime"
-                            [owlDateTimeTrigger]="st1" [owlDateTime]="st1">
+                            [disabled]="selectedValue == 'Tk'" [owlDateTimeTrigger]="st1" [owlDateTime]="st1">
                         <owl-date-time #st1></owl-date-time>
                     </div>
                     <div class="form-group col-sm-3">
@@ -34,8 +35,9 @@
                             (click)="showReport(selectedValue)"><i class="fa fa-dot-circle-o"></i> Submit</button>
                     </div>
                     <div class="form-group col-sm-1">
-                        <button type="submit" class="btn btn-sm btn-primary buttonPosition"><i class="fa fa-download"
-                                aria-hidden="true"></i> Download</button>
+                        <button type="submit" class="btn btn-sm btn-primary buttonPosition"
+                            (click)="downloadReport(selectedValue)"><i class="fa fa-download" aria-hidden="true"></i>
+                            Download</button>
                     </div>
                 </div>
             </div>
@@ -48,20 +50,129 @@
     <div class="col-md-12 padding0">
         <div class="card" *ngIf="selectedValue == 'Dt' && showTable">
             <div class="card-body">
-                    <table class="table table-bordered" style="overflow-x:auto;">
-                            <tr>
-                              <th nowrap>Vehicle Name</th>
-                              <th>Distance Travelled(Km)</th>
-                            </tr>
-                            <tr *ngFor="let v of distanceTraveledReport">
-                              <td nowrap>{{v.vehicleName}}</td>
-                              <td nowrap>{{v.distance}}</td>
-                            </tr>
-                            <h3 *ngIf="distanceTraveledEmpty" style="position: absolute;padding: 3px 381px;"> Data is not available
-                            </h3>
-                            <i *ngIf="distanceTraveledReport.length == 0 && !distanceTraveledEmpty" class="fa fa-spinner fa-spin"
-                              style="font-size:30px; position: absolute;padding: 3px 381px;"></i>
-                          </table>
+                <table class="table table-bordered" style="overflow-x:auto;">
+                    <tr>
+                        <th nowrap>Vehicle Name</th>
+                        <th>Distance Travelled(Km)</th>
+                    </tr>
+                    <tr *ngFor="let v of distanceTraveledReport">
+                        <td nowrap>{{v.vehicleName}}</td>
+                        <td nowrap>{{v.distance}}</td>
+                    </tr>
+                    <h3 *ngIf="distanceTraveledEmpty" style="position: absolute;padding: 3px 381px;"> Data is not
+                        available
+                    </h3>
+                    <i *ngIf="distanceTraveledReport.length == 0 && !distanceTraveledEmpty"
+                        class="fa fa-spinner fa-spin"
+                        style="font-size:30px; position: absolute;padding: 3px 381px;"></i>
+                </table>
+            </div>
+        </div>
+
+        <div class="card" *ngIf="selectedValue == 'Tk' && showTable">
+            <div class="card-body">
+                <table class="table table-bordered" style="overflow-x:auto;">
+                    <tr>
+                        <th nowrap>Vehicle Name</th>
+                        <th>Task Name</th>
+                        <th>Task Time</th>
+                    </tr>
+                    <tr *ngFor="let t of taskReminderReport">
+                        <td nowrap>{{t.vehicleName}}</td>
+                        <td nowrap>{{t.taskName}}</td>
+                        <td nowrap>{{ t?.taskTime ? ( t?.taskTime | date : 'dd/MM/yy h:mm a' ) : "-" }}</td>
+                    </tr>
+                    <h3 *ngIf="distanceTraveledEmpty" style="position: absolute;padding: 3px 381px;"> Data is not
+                        available
+                    </h3>
+                    <i *ngIf="taskReminderReport.length == 0 && !distanceTraveledEmpty" class="fa fa-spinner fa-spin"
+                        style="font-size:30px; position: absolute;padding: 3px 381px;"></i>
+                </table>
+            </div>
+        </div>
+
+        <div class="row" *ngIf="selectedValue == 'Vs' && showTable">
+            <div class="col-md-12">
+                <div class="row" style="margin-bottom: 15px;">
+                    <div class="col-md-2">
+                        <ul class="list-group">
+                            <li class="list-group-item active text-center">Working</li>
+                            <li class="list-group-item text-center">{{vehicleStatusTimeCount.WORKING ?
+                                                 userService.convertMS(vehicleStatusTimeCount.WORKING) : '-' }}</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-2">
+                        <ul class="list-group">
+                            <li class="list-group-item active text-center">Breakdown</li>
+                            <li class="list-group-item text-center">{{vehicleStatusTimeCount.BREAKDOWN ?
+                                                    userService.convertMS(vehicleStatusTimeCount.BREAKDOWN) : '-'}}
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-2">
+                        <ul class="list-group">
+                            <li class="list-group-item active text-center">Dispatch</li>
+                            <li class="list-group-item text-center">{{vehicleStatusTimeCount.DISPATCH ?
+                                                    userService.convertMS(vehicleStatusTimeCount.DISPATCH ) : '-'}}
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-2">
+                        <ul class="list-group">
+                            <li class="list-group-item active text-center">Delivery at Site</li>
+                            <li class="list-group-item text-center">
+                                {{vehicleStatusTimeCount.DELIVERY_AT_SITE ?
+                                                    userService.convertMS(vehicleStatusTimeCount.DELIVERY_AT_SITE) : '-'}}</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-2">
+                        <ul class="list-group">
+                            <li class="list-group-item active text-center">Work Commenced</li>
+                            <li class="list-group-item text-center">
+                                {{vehicleStatusTimeCount.WORK_COMMENCED ?
+                                                    userService.convertMS(vehicleStatusTimeCount.WORK_COMMENCED) : '-'}}</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-2">
+                        <ul class="list-group text-center">
+                            <li class="list-group-item active">To Be Dispatched</li>
+                            <li class="list-group-item text-center">
+                                {{vehicleStatusTimeCount.TO_BE_DISPATCHED ?
+                                                    userService.convertMS(vehicleStatusTimeCount.TO_BE_DISPATCHED) : '-'}}</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <table class="table table-bordered" style="overflow-x:auto;">
+                                    <tr>
+                                        <th nowrap>From</th>
+                                        <th nowrap>To</th>
+                                        <th nowrap>Vehicle Status</th>
+                                        <th>Vehicle Condition</th>
+                                        <th>Time( DD : HH : MM : SS)</th>
+                                    </tr>
+                                    <tr *ngFor="let t of vehicleStatusList">
+                                        <td nowrap>{{t.fromDate | date : 'dd/MM/yy h:mm a'}}</td>
+                                        <td nowrap>{{t.toDate | date : 'dd/MM/yy h:mm a'}}</td>
+                                        <td nowrap>{{t.vehicle_status}}</td>
+                                        <td nowrap>{{t.vehicle_condition}}</td>
+                                        <td nowrap>{{ userService.convertMS(t.time_differ) }}</td>
+                                    </tr>
+                                    <h3 *ngIf="vehicleStatusEmpty" style="position: absolute;padding: 3px 381px;"> Data
+                                        is not
+                                        available
+                                    </h3>
+                                    <i *ngIf="vehicleStatusList.length == 0 && !vehicleStatusEmpty"
+                                        class="fa fa-spinner fa-spin"
+                                        style="font-size:30px; position: absolute;padding: 3px 381px;"></i>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

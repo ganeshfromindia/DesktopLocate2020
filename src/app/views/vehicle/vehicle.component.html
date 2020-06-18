@@ -126,11 +126,24 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="form-group">
-                                    <label for="gender">ProjectId</label>
+                                    <label for="project">Project</label>
                                     <select id="projectId" name="projectId" class="form-control"
-                                        formControlName="projectId">
+                                        formControlName="projectId" (change)="projectChange($event.target.value)">
                                         <option *ngFor="let pro of projectList" [value]="pro.id">
                                             {{pro.project}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label for="site">Site</label>
+                                    <select id="siteId" name="siteId" class="form-control"
+                                        formControlName="siteId">
+                                        <option *ngFor="let s of siteList" [value]="s.id">
+                                            {{s.siteName}}</option>
                                     </select>
                                 </div>
                             </div>
@@ -150,12 +163,65 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="row">
+                            <div class="col-sm-8">
+                                <div class="form-group">
+                                    <label for="gender">Vehicle Insurance</label>
+                                    <input name="file" style="display: none" type="file" #vehicleInsurance
+                                                (change)="thumbnailFile($event)">
+                                    <input class="form-control" type="text" id="vehicleInsurance"
+                                        formControlName="vehicleInsurance" placeholder="Enter Image Path" />
+                                </div>
+                            </div>
+                            <div class="col-sm-2" style="top: 30px;">
+                                <!-- <button class="btn btn-default btn-sm"
+                                    (click)="imagePath.click()">Upload</button> -->
+                                <button type="button" class="btn btn-sm btn-danger"   (click)="vehicleInsurance.click()">
+                                    <i class="fa fa-upload" aria-hidden="true"></i>
+                                    Upload</button>
+                            </div>
+                            <div class="col-sm-1" style="top: 30px;" *ngIf="insuranceImageName">
+                                <i class="fa fa-eye" aria-hidden="true" (click)="showImage('insuranceImage')"></i>
+                            </div>
+                            <div class="col-sm-1" style="top: 30px;" *ngIf="insuranceImageName">
+                                <i class="fa fa-trash" aria-hidden="true" (click)="deleteImage('insuranceImage')"></i>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-8">
+                                <div class="form-group">
+                                    <label for="gender">PUC</label>
+                                    <input name="file" style="display: none" type="file" #pucImage
+                                                (change)="detailImageFile($event)">
+                                    <input class="form-control" type="text" id="pucImage"
+                                        formControlName="pucImage" placeholder="Enter Image Path" />
+                                </div>
+                            </div>
+                            <div class="col-sm-2" style="top: 30px;">
+                                <!-- <button class="btn btn-default btn-sm"
+                                    (click)="imagePath.click()">Upload</button> -->
+                                <button type="button" class="btn btn-sm btn-danger"   (click)="pucImage.click()">
+                                    <i class="fa fa-upload" aria-hidden="true"></i>
+                                    Upload</button>
+                            </div>
+                            <div class="col-sm-1" style="top: 30px;" *ngIf="pucImageName">
+                                <i class="fa fa-eye" aria-hidden="true" (click)="showImage('pucImage')"></i>
+                            </div>
+                            <div class="col-sm-1" style="top: 30px;" *ngIf="pucImageName">
+                                <i class="fa fa-trash" aria-hidden="true" (click)="deleteImage('pucImage')"></i>
+                            </div>
+                        </div>
                     </form>
                 </div>
 
+                
+                <!-- [disabled]="!vehicleForm.valid"     -->
                 <div class="card-footer">
-                    <button type="button" class="btn btn-sm btn-primary" [disabled]="!vehicleForm.valid"
-                        (click)="submit()"><i class="fa fa-dot-circle-o"></i> {{vehicleEditId ? 'Edit' : 'Save'}}</button>
+                    <button type="button" class="btn btn-sm btn-primary" 
+                        (click)="submit()"><i class="fa fa-dot-circle-o"></i>
+                        {{vehicleEditId ? 'Edit' : 'Save'}}</button>
                     <button type="button" class="btn btn-sm btn-danger" (click)="onReset()"><i class="fa fa-ban"></i>
                         Reset</button>
                 </div>
@@ -199,6 +265,26 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div bsModal #largeModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Image</h4>
+                <button type="button" class="close" (click)="largeModal.hide()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <img  src="{{commonImageName}}" class="img-responsive" alt="" style="width: 100%;">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="largeModal.hide()">Close</button>
             </div>
         </div>
     </div>

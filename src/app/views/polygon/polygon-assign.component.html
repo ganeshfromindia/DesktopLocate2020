@@ -1,0 +1,79 @@
+<div class="animated fadeIn">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <strong>Create Polygon</strong>
+                </div>
+                <div class="card-body">
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label text-center" for="hf-email">Project Name : </label>
+                                <div class="col-md-9">
+                                    <select id="projectId" name="projectSearchId" class="form-control"
+                                        [(ngModel)]="projectId" (ngModelChange)="getPolygonDetail(projectId)">
+                                        <option *ngFor="let pro of projectList" [value]="pro.id">
+                                            {{pro.project}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label text-center" for="hf-email">Project Name : </label>
+                                <div class="col-md-9">
+                                    <select id="polygonId" name="projectSearchId" class="form-control"
+                                        [(ngModel)]="polygonId" (ngModelChange)="getVehiclePolyList(polygonId)">
+                                        <option *ngFor="let l of polygonList" [value]="l.id">
+                                            {{l.name}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fa fa-align-justify"></i> Combined All Table
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered table-striped table-sm">
+                            <thead>
+                                <tr>
+
+                                    <th>Name</th>
+                                    <th>Device Type</th>
+                                    <th>Mobile No.</th>
+                                    <th>Project</th>
+                                    <th>Site</th>
+                                    <th>Assign/UnAssign</th>                                    
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let vehicle of vehicleDataShow">
+                                    <td>{{vehicle.vehicleNo}}</td>
+                                    <td>{{vehicle.vehicleDeviceType}}</td>
+                                    <td>{{vehicle.mobileNumber}}</td>
+                                    <td>{{vehicle?.project ? vehicle.project.project : '-'}}</td>
+                                    <td>{{vehicle?.site ? vehicle.site.siteName : '-'}}</td>
+                                    <td>
+                                            <label class="switch switch-label switch-primary" style="margin-bottom :-0.5rem;">
+                                            <input type="checkbox" class="switch-input" [(ngModel)]="vehicle.isAssigned" (change)="FieldsChange(vehicle, vehicle.isAssigned)">
+                                            <span class="switch-slider" data-checked="" data-unchecked=""></span>
+                                        </label>
+                                        </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>

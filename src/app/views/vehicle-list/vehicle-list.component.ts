@@ -26,8 +26,8 @@ export class VehicleListComponent implements OnInit {
     let params = new HttpParams().set("userId", "8");
 
     this.dataService.sendPostRequest('jmc/api/v1/vehicle/live', {}, params).subscribe(data => {
-      if (data['message'] == 'SUCCESS' && data['payload'].length > 0) {
-         this.vehicleData = data['payload'];
+      if (data['message'] == 'SUCCESS' && data['payLoad'].length > 0) {
+         this.vehicleData = data['payLoad'];
       }else{
          this.vehicleData = [];
       }

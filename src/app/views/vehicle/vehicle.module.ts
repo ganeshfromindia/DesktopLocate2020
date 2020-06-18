@@ -13,6 +13,7 @@ import { DataService } from '../../data.service';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { NgbTimepickerModule  } from '@ng-bootstrap/ng-bootstrap';
+import { ModalModule } from 'ngx-bootstrap/modal';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { NgbTimepickerModule  } from '@ng-bootstrap/ng-bootstrap';
     FormsModule,
     ReactiveFormsModule,
     VehicleRoutingModule,
-    NgbTimepickerModule
+    NgbTimepickerModule,
+    ModalModule.forRoot()
   ],
   providers:[DataService],
   declarations: [

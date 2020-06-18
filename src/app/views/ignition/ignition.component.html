@@ -1,0 +1,129 @@
+<div class="row">
+    <div class="col-md-12 padding0">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="form-group col-sm-2">
+                        <label for="ccmonth">Vehicle</label>
+                        <select id="level" name="level" class="form-control" [(ngModel)]="vehicle">
+                            <option *ngFor="let v of vehicleList" [ngValue]="v">{{v.vehicleNo}}</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-sm-3">
+                        <label for="ccmonth">Start Time</label>
+                        <input placeholder="Time:" class="form-control" [(ngModel)]="startTime"
+                            [owlDateTimeTrigger]="st1" [owlDateTime]="st1">
+                        <owl-date-time #st1></owl-date-time>
+                    </div>
+                    <div class="form-group col-sm-3">
+                        <label for="ccmonth">End Time</label>
+                        <input placeholder="Time:" class="form-control" [(ngModel)]="endTime" [owlDateTimeTrigger]="st2"
+                            [owlDateTime]="st2">
+                        <owl-date-time #st2></owl-date-time>
+                    </div>
+                    
+                    <div class="form-group col-sm-1">
+                        <button type="submit" class="btn btn-sm btn-primary buttonPosition"
+                            (click)="showIgnition()"><i class="fa fa-dot-circle-o"></i> Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 padding0">
+        <div class="card">
+            <div class="card-header">
+                <strong>Ignition Day List</strong>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered" style="overflow-x:auto;">
+                    <tr>
+                        <th nowrap>Start Time</th>
+                        <th>End Time</th>
+                        <th>Working Time</th>
+                        <th>Over Time</th>
+                        <th>View</th>
+                    </tr>
+                    <tr *ngFor="let v of igntionDayList ; index as ind">
+                        <td nowrap>{{v?.startTime ? ( v?.startTime | date : 'dd/MM/yy h:mm a' ) : "-"}}</td>
+                        <td nowrap>{{v?.endTime ? ( v?.endTime | date : 'dd/MM/yy h:mm a' ) : "-"}}</td>
+                        <td nowrap>{{v?.workingTime ? v?.workingTime : "-"}}</td>
+                        <td nowrap>{{v?.overTime ? v?.overTime : "-"}}</td>
+                        <td nowrap><i class="fa fa-pencil-square-o" aria-hidden="true"
+                                (click)="showIgnitionData(v.vehicleIgnitionList, ind)"></i></td>
+                    </tr>
+
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 padding0">
+        <div class="card">
+            <div class="card-header">
+                <strong>Ignition List</strong>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered" style="overflow-x:auto;">
+                    <tr>
+                        <th nowrap>Start Time</th>
+                        <th>Start Address</th>
+                        <th>End Time</th>
+                        <th>End Address</th>
+                        <th>Accept</th>
+                        <th>Decline</th>
+                    </tr>
+                    <tr *ngFor="let i of innerIgntionList; index as ind">
+                        <td nowrap>{{i?.startTime ? ( i?.startTime | date : 'dd/MM/yy h:mm a' ) : "-"}}</td>
+                        <td nowrap><span class="pointer" (click)="getAddress({'lattitude' : i.sourceLatitude, 'longitude' : i.sourceLongitude})">
+                                <i class="fa fa-map-marker fa-lg " style="color: darkred;" aria-hidden="true"></i>
+                            </span></td>
+                        <td nowrap>{{i?.endTime ? ( i?.endTime | date : 'dd/MM/yy h:mm a' ) : "-"}}</td>
+                        <td nowrap><span class="pointer" (click)="getAddress({'lattitude' : i.destinationLatitude, 'longitude' : i.destinationLongitude})">
+                                <i class="fa fa-map-marker fa-lg " style="color: darkred;" aria-hidden="true"></i>
+                            </span></td>
+                        <td nowrap>
+                                <button type="button" class="btn btn-pill btn-block btn-success active" *ngIf="!i.approved && i.approved != false"
+                                 aria-pressed="true" (click)="acceptIgntion(i, ind)">Accept</button>
+                                 <button type="button" class="btn btn-pill btn-block btn-light active" *ngIf="i.approved == true || i.approved == false"
+                                  [disabled]="true" aria-pressed="true">Accept</button>
+                        </td>
+                        <td nowrap>
+                                <button type="button" class="btn btn-pill btn-block btn-danger active" *ngIf="!i.approved && i.approved != false"
+                                 aria-pressed="true" (click)="declineIgntion(i, ind)">Decline</button>
+                                 <button type="button" class="btn btn-pill btn-block btn-light active" *ngIf="i.approved == true || i.approved == false" 
+                                  [disabled]="true" aria-pressed="true">Decline</button>
+                        </td>
+                    </tr>
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div bsModal #largeModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Address</h4>
+                <button type="button" class="close" (click)="largeModal.hide()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>{{mapAddress}}</p>
+                <div id="map">
+                    <app-map [mapDataObj]="mapDataObj"></app-map>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="largeModal.hide()">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

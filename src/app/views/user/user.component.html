@@ -1,6 +1,9 @@
 <div class="animated fadeIn">
     <div class="row">
         <div class="col-sm-6">
+            <div *ngFor="let alert of alertsDismiss">
+                <alert [type]="alert.type" [dismissOnTimeout]="alert.timeout">{{ alert.msg }}</alert>
+            </div>
             <div class="card">
                 <div class="card-header">
                     <strong>Create User</strong>
@@ -79,20 +82,35 @@
                                 </div>
                             </div>
                         </div>
-
+                    
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="form-group">
                                     <label for="project">Project</label>
-                                    <select id="project" name="project" class="form-control"
-                                        formControlName="project">
-                                        <option *ngFor="let pro of projectList" [value]="pro.id">
-                                            {{pro.project}}</option>
-                                    </select>
+                                    <ng-multiselect-dropdown [placeholder]="'Project Name'" [data]="projectList" formControlName="project"
+                                        (onSelect)="projectSelect($event)" [settings]="dropdownSettings">
+                                    </ng-multiselect-dropdown>
                                 </div>
                             </div>
                         </div>
 
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label for="site">Site</label>
+                                    <!-- <select id="site" name="site" class="form-control"
+                                        formControlName="site">
+                                        <option *ngFor="let s of siteList" [value]="s.id">
+                                            {{s.siteName}}</option>
+                                    </select> -->
+
+                                    <ng-multiselect-dropdown [placeholder]="'Site Name'" [data]="siteList" formControlName="siteIdList"
+                                         [settings]="siteDropDownSetting">
+                                    </ng-multiselect-dropdown>
+                                </div>
+                            </div>
+                        </div>
+                    
                     </form>
                 </div>
 

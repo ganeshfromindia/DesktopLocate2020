@@ -6,6 +6,8 @@ import { HttpParams, HttpClient } from '@angular/common/http';
 import { Angular5Csv } from 'angular5-csv/dist/Angular5-csv';
 import { AddressService } from '../../services/address.service'
 
+import { environment } from '../../../environments/environment';
+
 @Component({
   selector: 'app-reports',
   templateUrl: './reports.component.html',
@@ -20,14 +22,19 @@ export class ReportsComponent implements OnInit {
   selectedValue: string;
   distanceTraveledReport : Array<any> = [];
   distanceTraveledEmpty : boolean = false;
+  TaskReminderEmpty : boolean = false;
   showTable : boolean = false;
+  taskReminderReport: Array<any> = [];
+  vehicleStatusEmpty: boolean = false;
 
   downloadList: any[] = [
     { value: 'Dt', viewValue: 'Distance Traveled' },
     { value: 'Ar', viewValue: 'Analytics Report' },
     { value: 'Al', viewValue: 'Alert Report' },
     { value: 'hi', viewValue: 'History Report' },
-    { value: 'Tm', viewValue: 'Temperature Report' }
+    { value: 'Tm', viewValue: 'Temperature Report' },
+    { value: 'Tk', viewValue: 'Task Reminder Report' },
+    { value: 'Vs', viewValue: 'Vehicle Status' }
   ];
 
   constructor(private userService: UserService, private dataService: DataService, private addressService : AddressService) { }
@@ -46,8 +53,8 @@ export class ReportsComponent implements OnInit {
     let params = new HttpParams().set("userId", "8");
 
     this.dataService.sendPostRequest('jmc/api/v1/vehicle/live', {}, params).subscribe(data => {
-      if (data['message'] == 'SUCCESS' && data['payload'].length > 0) {
-         this.vehicleList = data['payload'];
+      if (data['message'] == 'SUCCESS' && data['payLoad'].length > 0) {
+         this.vehicleList = data['payLoad'];
          this.vehicle = this.vehicleList[0];
          this.userService.setVehicleList(this.vehicleList);
       }else{
@@ -57,7 +64,6 @@ export class ReportsComponent implements OnInit {
   }
 
   showReport(downloadType){
-
     if(downloadType && this.userService.getTime(this.startTime) && this.userService.getTime(this.endTime) 
         && this.userService.getTime(this.endTime) > this.userService.getTime(this.startTime)){
           if(this.selectedValue == 'Dt'){
@@ -71,11 +77,48 @@ export class ReportsComponent implements OnInit {
     
           }else if(this.selectedValue == 'Dg'){
             // this.getDGSetReport();
-          }else if(this.selectedValue == 'hi'){
-            this.getHistory(this.vehicle, this.userService.getTime(this.startTime), this.userService.getTime(this.endTime));
+          }else if(this.selectedValue == 'Tk'){
+            this.getTaskReminderReport(this.userService.getEndTime(this.endTime), '8');  
+          }else if(this.selectedValue == 'Vs'){
+              this._getVehicleStatus(this.vehicle, this.userService.getTime(this.startTime), this.userService.getTime(this.endTime));
           }
         }
     
+  }
+
+  downloadReport(downloadType){
+    if(downloadType && this.userService.getTime(this.startTime) && this.userService.getTime(this.endTime) 
+    && this.userService.getTime(this.endTime) > this.userService.getTime(this.startTime)){
+      if(this.selectedValue == 'hi'){
+        this.getHistory(this.vehicle, this.userService.getTime(this.startTime), this.userService.getTime(this.endTime));
+      }else if(this.selectedValue == 'Tk'){
+        this.downloadTaskReminder(this.userService.getCurrentStartTime().toString() ,this.userService.getEndTime(this.endTime), '8');  
+      }
+    }
+  }
+
+  getTaskReminderReport(end, userId){
+
+    if(end && userId){
+
+      let params = new HttpParams().set("userId", userId)
+      .set('startTime', this.userService.getCurrentStartTime().toString())
+      .set('endTime', end);
+  
+      this.showTable = true;
+      this.taskReminderReport = [];
+      this.TaskReminderEmpty = false;
+      
+      this.dataService.sendPostRequest('jmc/api/v1/task/reminder/report', {}, params).subscribe(data => {
+        if (data['status'] == 200 && data['payLoad'].length > 0) {
+          this.taskReminderReport = data['payLoad'];
+          this.TaskReminderEmpty = false;
+        }else{
+          this.taskReminderReport = [];
+          this.TaskReminderEmpty = true;
+        }
+      })  
+    }
   }
 
   getDisatanceTraveled(start, end, vehicle){
@@ -309,6 +352,32 @@ export class ReportsComponent implements OnInit {
           })
       }
     });
+  }
+
+    vehicleStatusList : Array<any> = [];
+    vehicleStatusTimeCount : Object = {};
+  _getVehicleStatus(vehicle, startTime, endTime){
+
+    let params = new HttpParams().set("vehicleId", '10').set("startTime", startTime).set("endTime", endTime);
+    this.showTable = true;
+    this.vehicleStatusEmpty = false;
+    this.vehicleStatusList = [];
+    this.vehicleStatusTimeCount = {};
+
+    this.dataService.sendGetRequest('jmc/api/v1/vehicle/status/report', params).subscribe(data => {
+      if (data['status'] == 200 && data['payLoad']) {
+        this.vehicleStatusList = data['payLoad'].reportList;
+        this.vehicleStatusTimeCount = data['payLoad'].statusTimeCount;
+        this.vehicleStatusEmpty = false;
+      }else{
+        this.vehicleStatusEmpty = true;
+      }
+    })
+  }
+
+  downloadTaskReminder(start, end, user){
+    window.open( environment.base_url + 'jmc/api/v1/task/reminder/report?userId='+user+'&endTime='+end+'&startTime='+start);
+    // window.open("http://localhost:8071/jmc/api/v1/download/voucher?vehicleId=1&startTime=1572856073000&endTime=1572962911000&dayWise=true");
   }
 
 }
