@@ -35,6 +35,7 @@ export class PolygonComponent implements OnInit {
   initRegistrationForm() {
 
     this.polygonForm = new FormGroup({
+      id : new FormControl(null),
       name: new FormControl('', Validators.required),
       projectId: new FormControl(null, Validators.required),
       polygonType: new FormControl('CIRCULAR', Validators.required),
@@ -69,6 +70,8 @@ export class PolygonComponent implements OnInit {
             const addressComponent = place.address_components;
             const location: Object = this.createLocationData(place ,addressComponent);
             this.polygonForm.controls['circularPoint'].patchValue(location);
+
+            this.setArialDistance();
           });
         });
       });
@@ -94,35 +97,54 @@ export class PolygonComponent implements OnInit {
       }
   
       const location: Object = {
-        address: place.formatted_address,
+        address:  place.formatted_address,
         city: requiredAddress['city'] !== undefined ? requiredAddress['city'] : '',
         pinCode: requiredAddress['postal_code'] !== undefined ? requiredAddress['postal_code'] : '',
         state: requiredAddress['state'] !== undefined ? requiredAddress['state'] : '',
-        latitude: place.geometry.location.lat,
-        longitude: place.geometry.location.lng
+        latitude: place.geometry.location_type == "GEOMETRIC_CENTER" ? place.geometry.location.lat : place.geometry.location.lat(),
+        longitude: place.geometry.location_type == "GEOMETRIC_CENTER" ? place.geometry.location.lng : place.geometry.location.lng()
       };
-  
+
       return location;
     }
 
     onFormSubmit(){
      
       var data = this.polygonForm.getRawValue();
+      
+      if(data.id){
+        this.dataService.sendPutRequest('jmc/api/v1/polygon/update', data).subscribe(data => {
+          if (data['status'] == 200) {
+            this.add(data['message']);
+            
+            this.initLatLongBounds('19.000917', '72.8303492');
+            this.polygonForm.patchValue({
+              'projectId' : data['projectId']
+            })
+            this.getPolygonDetail(data['projectId']);   
+            this.polygonForm.reset();
+          }else{
+            this.add(data['message']);
+          }
+        });
+      }else{
+        this.dataService.sendPostRequest('jmc/api/v1/polygon/save', data).subscribe(data => {
+          if (data['status'] == 200) {
+            this.add(data['message']);
+            
+            this.initLatLongBounds('19.000917', '72.8303492');
+            this.polygonForm.patchValue({
+              'projectId' : data['projectId']
+            })
+            this.getPolygonDetail(data['projectId']);   
+            this.polygonForm.reset();
+          }else{
+            this.add(data['message']);
+          }
+        });
+      }
 
-      this.dataService.sendPostRequest('jmc/api/v1/polygon/save', data).subscribe(data => {
-        if (data['status'] == 200) {
-          this.add(data['message']);
-          
-          this.initLatLongBounds('19.000917', '72.8303492');
-          this.polygonForm.patchValue({
-            'projectId' : data['projectId']
-          })
-          this.getPolygonDetail(data['projectId']);   
-          this.polygonForm.reset();
-        }else{
-          this.add(data['message']);
-        }
-      });
+      
     }
 
     alertsDismiss: any = [];
@@ -216,6 +238,28 @@ export class PolygonComponent implements OnInit {
     }
 
     edit(p){
-      console.log(p);
+      this.polygonForm.patchValue({
+        id : p.id,
+        name : p.name,
+        projectId : p.project.id,
+        polygonType : "CIRCULAR",
+        circularPoint : {
+          address: p.circularPoint.address,
+          latitude: p.circularPoint.latitude,
+          longitude: p.circularPoint.longitude,
+          aerialDistance: p.circularPoint.aerialDistance
+        }
+      });
+      console.log(this.polygonForm.getRawValue());
+      this.setArialDistance();
+    }
+
+    setArialDistance(){
+      if(this.polygonForm && this.polygonForm.value 
+        && this.polygonForm.value.circularPoint.aerialDistance && this.polygonForm.value.circularPoint.latitude 
+        && this.polygonForm.value.circularPoint.longitude){
+          this.assignCircle(this.polygonForm.value.circularPoint.aerialDistance,
+           this.polygonForm.value.circularPoint.latitude, this.polygonForm.value.circularPoint.longitude);
+      }
     }
 }

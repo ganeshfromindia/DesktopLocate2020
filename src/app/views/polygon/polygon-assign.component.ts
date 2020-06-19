@@ -7,6 +7,7 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 import { AddressService } from '../../services/address.service';
 
 import { MapsAPILoader } from '@agm/core';
+import { error } from '@angular/compiler/src/util';
 declare var google: any;
 
 @Component({
@@ -77,6 +78,14 @@ export class PolygonAssignComponent implements OnInit {
       if (this.vehicledataList && this.vehiclePolyList) {
         this.mergeVehiclePolygon(this.vehicleData, this.assignedPolygon);
       }
+    }, error => {
+      
+      if(error == 404){
+        this.vehiclePolyList = true;
+        if (this.vehicledataList && this.vehiclePolyList) {
+          this.mergeVehiclePolygon(this.vehicleData, this.assignedPolygon);
+        }
+      }
     })
 
     this.getLiveData(this.projectId);
@@ -107,6 +116,8 @@ export class PolygonAssignComponent implements OnInit {
         this.mergeVehiclePolygon(this.vehicleData, this.assignedPolygon);
       }
 
+    }, error => {
+      console.log(error);
     });
   }
 

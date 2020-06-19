@@ -22,8 +22,8 @@ export class DataService {
       // Server-side errors
       errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
     }
-    window.alert(errorMessage);
-    return throwError(errorMessage);
+    //window.alert(errorMessage);
+    return throwError(error.status);
   }
 
   public sendGetRequest(url, param?){

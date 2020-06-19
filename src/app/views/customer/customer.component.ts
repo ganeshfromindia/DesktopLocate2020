@@ -14,6 +14,8 @@ export class CustomerComponent implements OnInit {
   customerName = "";
   editId = null;
   makeModelEditId = false;
+  customerSearch : String = "";
+  customerDataCopy : Array<any> = [];
 
   constructor(private dataService: DataService) { }
 
@@ -26,6 +28,7 @@ export class CustomerComponent implements OnInit {
     this.dataService.sendGetRequest('jmc/api/v1/customer/get/all', params).subscribe(data => {
       if (data['status'] == 200 && data['payLoad'].length > 0) {
         this.customerList = data['payLoad'];
+        this.customerDataCopy = JSON.parse(JSON.stringify(this.customerList));
       }
     })
   }
@@ -72,8 +75,18 @@ export class CustomerComponent implements OnInit {
     }
   }
 
+  search(){
+    this.customerList = JSON.parse(JSON.stringify(this.customerDataCopy));
 
-  alertsDismiss: any = [];
+    if ( this.customerSearch && this.customerSearch != "" && this.customerList.length > 0 ) {
+      this.customerList = this.customerList.filter(element => {
+        return (element.name.toLowerCase().indexOf(this.customerSearch.toLocaleLowerCase()) > -1
+      );
+    });
+  }
+  }
+
+alertsDismiss: any = [];
 add(text): void {
   this.alertsDismiss = [];
   this.alertsDismiss.push({

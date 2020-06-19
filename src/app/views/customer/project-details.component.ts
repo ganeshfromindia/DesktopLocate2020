@@ -439,16 +439,9 @@ export class ProjectDetailsComponent implements OnInit {
     }
 
     searchVehicle(){
-      console.log(this.projectSearchId);
-      console.log(this.vehicleSearchName);
-      console.log(this.siteSearchId);
-      console.log(this.vehicleSearchType);
-      console.log(this.vehicleStatusSearch);
 
       if(this.vehicleSearchType == 'vehicleName'){
-
         this.vehicleData = this.vehicleListCopy;
-
           if ( this.vehicleSearchName && this.vehicleSearchName != "" && this.vehicleData.length > 0 ) {
               this.vehicleData = this.vehicleData.filter(element => {
                 return (element.vehicleNo.toLowerCase().indexOf(this.vehicleSearchName.toLocaleLowerCase()) > -1
@@ -456,21 +449,14 @@ export class ProjectDetailsComponent implements OnInit {
             });
           }
         }else if(this.vehicleSearchType == 'projectName'){
-
           this.getLiveData(this.projectSearchId);
-
         }else if(this.vehicleSearchType == 'siteName'){
-         
           this.getLiveData(null, this.siteSearchId);
-        
         }else if(this.vehicleSearchType == 'vehicleStatus'){
-         
           this.getLiveData(null, null ,this.vehicleStatusSearch);
-        
         }else if(this.vehicleSearchType == 'ALL'){
           this.getLiveData();
         }
-
         //getLiveData
       }
   }
