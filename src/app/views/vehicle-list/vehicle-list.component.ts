@@ -31,10 +31,14 @@ export class VehicleListComponent implements OnInit {
 
     this.dataService.sendPostRequest('jmc/api/v1/vehicle/live', {}, params).subscribe(data => {
       if (data['message'] == 'SUCCESS' && data['payLoad'].length > 0) {
-         this.vehicleData = data['payLoad'];
-      }else{
+         this.createPaginationList(data['payLoad']);
+        }else{
          this.vehicleData = [];
+         this.sortedVehicleList = [];
       }
+    }, error => {
+      this.vehicleData = [];
+      this.sortedVehicleList = [];
     })
   }
 
@@ -66,6 +70,25 @@ export class VehicleListComponent implements OnInit {
         }
       });
     }
+  }
+
+
+  public sortedVehicleList = [];
+  public paginationIndex : Number = 0;
+
+  private createPaginationList(allVehicleList) {
+    this.sortedVehicleList = [];
+    var i,j,temparray,chunk = 2;
+    for (i=0,j=allVehicleList.length; i<j; i+=chunk) {
+        temparray = allVehicleList.slice(i,i+chunk);
+        this.sortedVehicleList.push(temparray);                
+    }
+    this.setSelectedPageList(this.sortedVehicleList[0], 0);
+  }
+
+  public setSelectedPageList(list, i){
+    this.vehicleData = list;
+    this.paginationIndex = i;
   }
 
 }

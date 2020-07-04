@@ -234,10 +234,14 @@ export class PolygonComponent implements OnInit {
   
       this.dataService.sendPostRequest('jmc/api/v1/polygon/get/list', {}, params).subscribe(data => {
         if (data['status'] == 200) {
-          this.polygonList = data['payLoad'];
+          this.createPaginationList(data['payLoad']);
         }else{
           this.polygonList = [];
+          this.sortedVehicleList = [];
         }
+      }, error => {
+        this.polygonList = [];
+        this.sortedVehicleList = [];
       })
     }
 
@@ -266,4 +270,23 @@ export class PolygonComponent implements OnInit {
            this.polygonForm.value.circularPoint.latitude, this.polygonForm.value.circularPoint.longitude);
       }
     }
+
+    public sortedVehicleList = [];
+    public paginationIndex : Number = 0;
+  
+    private createPaginationList(allVehicleList) {
+      this.sortedVehicleList = [];
+      var i,j,temparray,chunk = 4;
+      for (i=0,j=allVehicleList.length; i<j; i+=chunk) {
+          temparray = allVehicleList.slice(i,i+chunk);
+          this.sortedVehicleList.push(temparray);                
+      }
+      this.setSelectedPageList(this.sortedVehicleList[0], 0);
+    }
+  
+    public setSelectedPageList(list, i){
+      this.polygonList = list;
+      this.paginationIndex = i;
+    }
+  
 }

@@ -29,9 +29,6 @@
                 </div>
             </div>
         </div>
-    </div>
-
-    <div class="row">
         <div class="col-sm-6">
             <div class="card">
                 <div class="card-header">
@@ -55,7 +52,7 @@
                                     </ul>
                                 </td>
 
-                                <td class="text-center"><i class="fa fa-pencil fa-lg" aria-hidden="true"
+                                <td class="text-center"><i class="fa fa-pencil fa-lg pointer" aria-hidden="true"
                                         (click)="edit(pro)"></i>
                                 </td>
                             </tr>
@@ -63,14 +60,12 @@
                         </tbody>
                     </table>
                     <ul class="pagination">
-                        <li class="page-item"><a class="page-link" href="#">Prev</a></li>
-                        <li class="page-item active">
-                            <a class="page-link" href="#">1</a>
+                        <!-- <li class="page-item"><a class="page-link" href="#">Prev</a></li> -->
+                        <li class="page-item active" *ngFor="let p of sortedVehicleList; let idx = index;"
+                         [ngClass]="{'active': idx == paginationIndex }">
+                            <a class="page-link" (click)="setSelectedPageList(p, idx)">{{idx + 1}}</a>
                         </li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item"><a class="page-link" href="#">4</a></li>
-                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                        <!-- <li class="page-item"><a class="page-link" href="#">Next</a></li> -->
                     </ul>
                 </div>
             </div>

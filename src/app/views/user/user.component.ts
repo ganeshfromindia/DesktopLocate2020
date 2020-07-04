@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpParams, HttpClient } from '@angular/common/http';
 import { DataService } from '../../data.service';
@@ -21,6 +21,8 @@ export class UserComponent implements OnInit {
   dropdownSettings = {};
   siteDropDownSetting = {};
   userId : Number;
+
+  @ViewChild('projectElement') public projectEle: ElementRef<HTMLElement>;
 
   constructor(private formBuilder: FormBuilder, private dataService: DataService,
     private userDetails: UserService) { 
@@ -170,7 +172,6 @@ export class UserComponent implements OnInit {
    }
   }
 
-
   getUser(type, value) {
     this.dataService.sendGetRequest('jmc/api/v1/user/get?'+ type + '=' + value).subscribe(data => {
       if (data['status'] == 200) {
@@ -178,6 +179,10 @@ export class UserComponent implements OnInit {
         userData.designationId = data['payLoad'].designation.id;
 
         userData.project = this.getMultiSelectData(userData.projects, "project", 'project');
+
+        let pArray = this.getIdArray(userData.project);
+        this.getSiteList(pArray);
+
         userData['siteIdList'] = this.getMultiSelectData(userData.sites, "siteName", 'siteName');
 
         this.userEditId = userData.id; 
@@ -192,7 +197,10 @@ export class UserComponent implements OnInit {
         delete userData.sites;
         delete userData.projects;
 
-        this.userForm.setValue(userData);  
+        this.userForm.setValue(userData);
+        
+        let el: HTMLElement = this.projectEle.nativeElement;
+        el.click();
       }
     })
   }

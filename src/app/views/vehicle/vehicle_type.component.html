@@ -27,9 +27,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-    
-        <div class="row">
             <div class="col-sm-6">
                 <div class="card">
                     <div class="card-header">
@@ -49,10 +46,10 @@
                                 <tr *ngFor="let v of vehicleTypeList">
                                     <td>{{v.vehicleType}}</td>
                                     <td>{{v.createdOn}}</td>
-                                    <td class="text-center"><i class="fa fa-pencil fa-lg" aria-hidden="true" (click)="edit(v)"></i></td>
+                                    <td class="text-center"><i class="fa fa-pencil fa-lg pointer" aria-hidden="true" (click)="edit(v)"></i></td>
                                     <td class="text-center">
                                         <!-- <span class="badge badge-success">Active</span> -->
-                                        <i class="fa fa-trash fa-lg" aria-hidden="true"
+                                        <i class="fa fa-trash fa-lg pointer" aria-hidden="true"
                                             (click)="delete(v)"></i>
                                     </td>
                                 </tr>
@@ -60,14 +57,12 @@
                             </tbody>
                         </table>
                         <ul class="pagination">
-                            <li class="page-item"><a class="page-link" href="#">Prev</a></li>
-                            <li class="page-item active">
-                                <a class="page-link" href="#">1</a>
+                            <!-- <li class="page-item"><a class="page-link" href="#">Prev</a></li> -->
+                            <li class="page-item active" *ngFor="let p of sortedVehicleList; let idx = index;"
+                             [ngClass]="{'active': idx == paginationIndex }">
+                                <a class="page-link" (click)="setSelectedPageList(p, idx)">{{idx + 1}}</a>
                             </li>
-                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item"><a class="page-link" href="#">4</a></li>
-                            <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                            <!-- <li class="page-item"><a class="page-link" href="#">Next</a></li> -->
                         </ul>
                     </div>
                 </div>

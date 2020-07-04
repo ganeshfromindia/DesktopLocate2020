@@ -30,7 +30,7 @@ export class ProjectComponent implements OnInit {
     let params = new HttpParams().set("userId", this.userId.toString());
     this.dataService.sendGetRequest('jmc/api/v1/project/get/all', params).subscribe(data => {
       if (data['status'] == 200 && data['payLoad'].length > 0) {
-        this.projectList = data['payLoad'];
+        this.createPaginationList(data['payLoad']);
       }
     })
   }
@@ -122,6 +122,24 @@ edit(p){
     this.projectName = null;
     this.editId = null;
     this.makeModelEditId = false;
+  }
+
+  public sortedVehicleList = [];
+  public paginationIndex : Number = 0;
+
+  private createPaginationList(allVehicleList) {
+    this.sortedVehicleList = [];
+    var i,j,temparray,chunk = 2;
+    for (i=0,j=allVehicleList.length; i<j; i+=chunk) {
+        temparray = allVehicleList.slice(i,i+chunk);
+        this.sortedVehicleList.push(temparray);                
+    }
+    this.setSelectedPageList(this.sortedVehicleList[0], 0);
+  }
+
+  public setSelectedPageList(list, i){
+    this.projectList = list;
+    this.paginationIndex = i;
   }
 
 }

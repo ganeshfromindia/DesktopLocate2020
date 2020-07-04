@@ -87,7 +87,7 @@
                             <div class="col-sm-12">
                                 <div class="form-group">
                                     <label for="project">Project <sup>*</sup></label>
-                                    <ng-multiselect-dropdown [placeholder]="'Project Name'" [data]="projectList" formControlName="project"
+                                    <ng-multiselect-dropdown  [placeholder]="'Project Name'" [data]="projectList" formControlName="project"
                                         (onSelect)="projectSelect($event, 'select')" (onSelectAll)="projectSelect($event, 'selectAll')"
                                         (onDeSelect)="projectSelect($event, 'select')" [settings]="dropdownSettings">
                                     </ng-multiselect-dropdown>
@@ -159,6 +159,8 @@
                             <button type="button" class="btn btn-sm btn-primary" (click)="changeType(userSelectType)"><i
                                     class="fa fa-dot-circle-o"></i> Find
                             </button>
+                            <button type="button" #projectElement class="btn btn-sm btn-danger" style="visibility: hidden;"><i class="fa fa-ban"></i>
+                                Reset</button>
                         </div>
                     </div>
                 </div>

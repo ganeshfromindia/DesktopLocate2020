@@ -23,7 +23,7 @@ export class VehicleTypeComponent implements OnInit {
   getVehicleTypeList() {
     this.dataService.sendGetRequest('jmc/api/v1/vehicle-type/get/all').subscribe(data => {
       if (data['status'] == 200 && data['payLoad'].length > 0) {
-        this.vehicleTypeList = data['payLoad'];
+        this.createPaginationList(data['payLoad']);
       }
     })
   }
@@ -81,4 +81,23 @@ export class VehicleTypeComponent implements OnInit {
       })
     }
   }
+  
+  public sortedVehicleList = [];
+  public paginationIndex : Number = 0;
+
+  private createPaginationList(allVehicleList) {
+    this.sortedVehicleList = [];
+    var i,j,temparray,chunk = 2;
+    for (i=0,j=allVehicleList.length; i<j; i+=chunk) {
+        temparray = allVehicleList.slice(i,i+chunk);
+        this.sortedVehicleList.push(temparray);                
+    }
+    this.setSelectedPageList(this.sortedVehicleList[0], 0);
+  }
+
+  public setSelectedPageList(list, i){
+    this.vehicleTypeList = list;
+    this.paginationIndex = i;
+  }
+
 }

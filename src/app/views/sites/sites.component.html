@@ -1,6 +1,6 @@
 <div class="animated fadeIn">
     <div class="row">
-        <div class="col-sm-6">
+        <div class="col-sm-12">
             <div *ngFor="let alert of alertsDismiss">
                 <alert [type]="alert.type" [dismissOnTimeout]="alert.timeout">{{ alert.msg }}</alert>
             </div>
@@ -11,30 +11,22 @@
                 <div class="card-body">
                     <form [formGroup]="siteForm">
                         <div class="row">
-                            <div class="col-sm-12">
+                            <div class="col-sm-4">
                                 <div class="form-group">
                                     <label for="name">Site Name</label>
                                     <input type="text" class="form-control" id="site-name" formControlName="siteName"
                                         placeholder="Enter Site Name">
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-sm-12">
+                            <div class="col-sm-4">
                                 <div class="form-group">
                                     <label for="name">Project Name</label>
-                                    <ng-multiselect-dropdown [placeholder]="'Project Name'" [data]="projectList" formControlName="projectIdList"
-                                        [settings]="dropdownSettings">
+                                    <ng-multiselect-dropdown [placeholder]="'Project Name'" [data]="projectList"
+                                        formControlName="projectIdList" (onSelect)="projectSelect($event, 'select')" [settings]="dropdownSettings">
                                     </ng-multiselect-dropdown>
                                 </div>
                             </div>
-                        </div>
-
-
-
-                        <div class="row">
-                            <div class="col-sm-12">
+                            <div class="col-sm-4">
                                 <div class="form-group">
                                     <label for="name">Address</label>
                                     <input type="text" class="form-control" id="address" formControlName="address"
@@ -44,25 +36,21 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-sm-12">
+                            <div class="col-sm-4">
                                 <div class="form-group">
                                     <label for="name">latitude</label>
                                     <input type="text" class="form-control" id="latitude" formControlName="latitude"
                                         placeholder="latitude">
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-12">
+                            <div class="col-sm-4">
                                 <div class="form-group">
                                     <label for="name">longitude</label>
                                     <input type="text" class="form-control" id="longitude" formControlName="longitude"
                                         placeholder="longitude">
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-12">
+                            <div class="col-sm-4">
                                 <div class="form-group">
                                     <label for="name">Telephone Number</label>
                                     <input type="text" class="form-control" id="phoneNumber"
@@ -77,13 +65,17 @@
                 <div class="card-footer">
                     <button type="button" class="btn btn-sm btn-primary" (click)="onFormSubmit()"><i
                             class="fa fa-dot-circle-o"></i> Submit</button>
-                    <button type="button" class="btn btn-sm btn-dark" (click)="reset()"><i
-                        class="fa fa-refresh"></i> Reset </button>        
+                    <button type="button" class="btn btn-sm btn-dark" (click)="reset()"><i class="fa fa-refresh"></i>
+                        Reset </button>
                 </div>
 
             </div>
         </div>
-        <div class="col-sm-6">
+
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
             <div class="card">
                 <div class="card-header">
                     <i class="fa fa-align-justify"></i> Site List
@@ -92,41 +84,37 @@
                     <table class="table table-bordered">
                         <thead>
                             <tr>
-                                <th>Name</th>
+                                <th>Site Name</th>
                                 <th>Address</th>
-                                <th class="text-center">latitude</th>
-                                <th class="text-center">longitude</th>
+                                <th>Project</th>
                                 <th class="text-center">Phone Number</th>
                                 <th class="text-center">Edit</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr *ngFor="let s of siteList">
+                                <!-- text-truncate d-inline-block -->
+                                <td> <span> {{s.siteName}} </span></td>
+                                <td><span> {{s.address}} </span> </td>
+                                <td><span> {{s.project.project}} </span> </td>
                                 <td>
-                                    <span class="text-truncate d-inline-block"> {{s.siteName}} </span></td>
-                                <td><span class="text-truncate d-inline-block"> {{s.address}} </span> </td>
-                                <td><span class="text-truncate d-inline-block"> {{s.latitude}} </span> </td>
-                                <td><span class="text-truncate d-inline-block"> {{s.longitude}} </span> </td>
-                                <td>
-                                    <ul >
+                                    <ul>
                                         <li *ngFor="let t of s.telephoneNumber">{{t}}</li>
                                     </ul>
                                 </td>
-                                <td class="text-center"><i class="fa fa-pencil fa-lg" aria-hidden="true"
+                                <td class="text-center pointer"><i class="fa fa-pencil fa-lg" aria-hidden="true"
                                         (click)="edit(s)"></i></td>
                             </tr>
 
                         </tbody>
                     </table>
                     <ul class="pagination">
-                        <li class="page-item"><a class="page-link" href="#">Prev</a></li>
-                        <li class="page-item active">
-                            <a class="page-link" href="#">1</a>
+                        <!-- <li class="page-item"><a class="page-link" href="#">Prev</a></li> -->
+                        <li class="page-item active" *ngFor="let p of sortedVehicleList; let idx = index;"
+                         [ngClass]="{'active': idx == paginationIndex }">
+                            <a class="page-link" (click)="setSelectedPageList(p, idx)">{{idx + 1}}</a>
                         </li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item"><a class="page-link" href="#">4</a></li>
-                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                        <!-- <li class="page-item"><a class="page-link" href="#">Next</a></li> -->
                     </ul>
                 </div>
             </div>

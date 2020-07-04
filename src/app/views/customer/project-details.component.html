@@ -98,13 +98,21 @@
                             <td>{{vehicle.effectiveTo | date : 'dd/MM/yy h:mm a'}}</td>
                             <td>{{vehicle.vehicleStatus}}</td>
                             <td>{{vehicle.vehicleCondition}}</td>
-                            <td class="text-center"><i class="fa fa-pencil-square-o" aria-hidden="true"
+                            <td class="text-center"><i class="fa fa-pencil-square-o fa-lg pointer" aria-hidden="true"
                                     (click)="addBillingData(vehicle.id)"></i></td>
-                            <td class="text-center"><i class="fa fa-pencil-square-o" aria-hidden="true"
+                            <td class="text-center"><i class="fa fa-pencil-square-o fa-lg pointer" aria-hidden="true"
                                     (click)="addVehicleStatus(vehicle.id)"></i></td>
                         </tr>
                     </tbody>
                 </table>
+                <ul class="pagination">
+                    <!-- <li class="page-item"><a class="page-link" href="#">Prev</a></li> -->
+                    <li class="page-item active" *ngFor="let p of sortedVehicleList; let idx = index;"
+                     [ngClass]="{'active': idx == paginationIndex }">
+                        <a class="page-link" (click)="setSelectedPageList(p, idx)">{{idx + 1}}</a>
+                    </li>
+                    <!-- <li class="page-item"><a class="page-link" href="#">Next</a></li> -->
+                </ul>
             </div>
         </div>
     </div>

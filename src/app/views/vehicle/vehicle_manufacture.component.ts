@@ -20,7 +20,7 @@ export class VehicleManufactureComponent implements OnInit {
   getManufactureList() {
     this.dataService.sendGetRequest('jmc/api/v1/vehicle/manufacturer/get/all').subscribe(data => {
       if (data['status'] == 200 && data['payLoad'].length > 0) {
-        this.manufactureList = data['payLoad'];
+        this.createPaginationList(data['payLoad']);
       }
     })
   }
@@ -100,5 +100,23 @@ export class VehicleManufactureComponent implements OnInit {
         result.push(selectedcol);
     }
     return result.join(', ');
+  }
+
+  public sortedVehicleList = [];
+  public paginationIndex : Number = 0;
+
+  private createPaginationList(allVehicleList) {
+    this.sortedVehicleList = [];
+    var i,j,temparray,chunk = 2;
+    for (i=0,j=allVehicleList.length; i<j; i+=chunk) {
+        temparray = allVehicleList.slice(i,i+chunk);
+        this.sortedVehicleList.push(temparray);                
+    }
+    this.setSelectedPageList(this.sortedVehicleList[0], 0);
+  }
+
+  public setSelectedPageList(list, i){
+    this.manufactureList = list;
+    this.paginationIndex = i;
   }
 }

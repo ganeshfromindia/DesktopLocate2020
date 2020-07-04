@@ -68,7 +68,7 @@ export const navItems: INavData[] = [
         icon: 'fa fa-align-justify'
       },
       {
-        name: 'Create',
+        name: 'Create Vehicle',
         url: '/admin/vehicle/vehicleCreation',
         icon: 'fa fa-car'
       }

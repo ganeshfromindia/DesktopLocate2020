@@ -41,7 +41,7 @@ const routes: Routes = [
     path: 'project-detail',
     component: ProjectDetailsComponent,
     data: {
-      title: 'project-Detail'
+      title: 'Assign Billing'
     }
   }
 ];

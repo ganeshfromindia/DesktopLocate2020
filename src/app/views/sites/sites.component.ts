@@ -226,9 +226,25 @@ export class SitesComponent implements OnInit {
     let params = new HttpParams().set("userId", this.userId.toString());
     this.dataService.sendGetRequest('jmc/api/v1/site/get/all', params).subscribe(data => {
       if (data['status'] == 200 && data['payLoad'].length > 0) {
-        this.siteList = data['payLoad'];
+        this.createPaginationList(data['payLoad']);
       }
+    }, error => {
+      this.siteList = [];
+      this.sortedVehicleList = [];
     })
+  }
+
+  projectSelect(event, type){
+    console.log(event);
+    let params = new HttpParams().set("projectId", event.id);
+    this.dataService.sendGetRequest('jmc/api/v1/site/get', params).subscribe(data => {
+      if (data['status'] == 200 && data['payLoad'].length > 0) {
+        this.createPaginationList(data['payLoad']);
+      }
+    }, error => {
+      this.siteList = [];
+      this.sortedVehicleList = [];
+    });
   }
 
   getProjectList() {
@@ -283,4 +299,23 @@ export class SitesComponent implements OnInit {
   reset(){
     this.siteForm.reset();
   }
+
+  public sortedVehicleList = [];
+  public paginationIndex : Number = 0;
+
+  private createPaginationList(allVehicleList) {
+    this.sortedVehicleList = [];
+    var i,j,temparray,chunk = 4;
+    for (i=0,j=allVehicleList.length; i<j; i+=chunk) {
+        temparray = allVehicleList.slice(i,i+chunk);
+        this.sortedVehicleList.push(temparray);                
+    }
+    this.setSelectedPageList(this.sortedVehicleList[0], 0);
+  }
+
+  public setSelectedPageList(list, i){
+    this.siteList = list;
+    this.paginationIndex = i;
+  }
+  
 }

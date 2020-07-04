@@ -2,7 +2,7 @@
     <div class="col-lg-12">
         <div class="card">
             <div class="card-header">
-                <i class="fa fa-align-justify"></i> Combined All Table
+                <i class="fa fa-align-justify"></i> Vehicle List
             </div>
             <div class="card-body">
                 <table class="table table-bordered table-striped table-sm">
@@ -37,14 +37,12 @@
                 </table>
                 <nav>
                     <ul class="pagination">
-                        <li class="page-item"><a class="page-link" href="#">Prev</a></li>
-                        <li class="page-item active">
-                            <a class="page-link" href="#">1</a>
+                        <!-- <li class="page-item"><a class="page-link" href="#">Prev</a></li> -->
+                        <li class="page-item active" *ngFor="let p of sortedVehicleList; let idx = index;"
+                         [ngClass]="{'active': idx == paginationIndex }">
+                            <a class="page-link" (click)="setSelectedPageList(p, idx)">{{idx + 1}}</a>
                         </li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item"><a class="page-link" href="#">4</a></li>
-                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                        <!-- <li class="page-item"><a class="page-link" href="#">Next</a></li> -->
                     </ul>
                 </nav>
             </div>

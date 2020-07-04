@@ -16,6 +16,10 @@ sup {
     color: darkred;
 }
 
+.fa-lg {
+    font-size: 1.8em;
+}
+
 .cdk-overlay-container {
     position: fixed;
     pointer-events: none;
@@ -36,4 +40,12 @@ sup {
     display: flex;
     position: absolute;
     z-index: 9999999 !important;
+}
+
+button {
+    margin: 2px;
+}
+
+.sidebar .nav-link .nav-icon {
+    margin: 0 .7rem 0 0;
 }

@@ -8,3 +8,11 @@
 .d-inline-block {
     display: inline-block !important;
 }
+
+.table th, .table td {
+    padding: 0.5rem;
+}
+
+ol, ul, dl {
+    margin-bottom: 5px;
+}
