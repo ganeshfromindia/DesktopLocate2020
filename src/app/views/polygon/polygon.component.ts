@@ -21,9 +21,13 @@ export class PolygonComponent implements OnInit {
 
   @ViewChild("searchAddress")
   public searchAddress: ElementRef;
+  userId : Number;
 
   constructor(private dataService: DataService, private userService: UserService,
-     private formBuilder: FormBuilder, private mapsAPILoader: MapsAPILoader, private ngZone: NgZone, private addressService : AddressService) { }
+     private formBuilder: FormBuilder, private mapsAPILoader: MapsAPILoader, private ngZone: NgZone, private addressService : AddressService) {
+      var userDetail = this.userService.getUserDetails(); 
+      this.userId = userDetail['id'];
+      }
 
   ngOnInit(): void {
   
@@ -41,15 +45,15 @@ export class PolygonComponent implements OnInit {
       polygonType: new FormControl('CIRCULAR', Validators.required),
       circularPoint: new FormGroup({
         address: new FormControl(null, Validators.required),
-        aerialDistance: new FormControl(null, Validators.required),
+        aerialDistance: new FormControl(200, [Validators.max(2000), Validators.min(200), Validators.required]),
         latitude: new FormControl(null, Validators.required),
         longitude: new FormControl(null, Validators.required)
       })
     });
-  }
+  } 
 
   getAllProjects(){
-    let params = new HttpParams().set("userId", "8");
+    let params = new HttpParams().set("userId", this.userId.toString());
     this.dataService.sendGetRequest('jmc/api/v1/project/get/all', params).subscribe(data => {
       if (data['status'] == 200 && data['payLoad'].length > 0) {
         this.projectList = data['payLoad'];

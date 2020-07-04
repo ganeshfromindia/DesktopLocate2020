@@ -23,9 +23,13 @@ export class PolygonAssignComponent implements OnInit {
   public polygonId: Number;
   vehicleData: any = [];
   vehicleDataShow: Array<any> = [];
+  userId : Number;
 
   constructor(private dataService: DataService, private userService: UserService,
-    private formBuilder: FormBuilder, private mapsAPILoader: MapsAPILoader, private ngZone: NgZone, private addressService: AddressService) { }
+    private formBuilder: FormBuilder, private mapsAPILoader: MapsAPILoader, private ngZone: NgZone, private addressService: AddressService) {
+      var userDetail = this.userService.getUserDetails(); 
+      this.userId = userDetail['id'];
+     }
 
 
   ngOnInit(): void {
@@ -33,7 +37,7 @@ export class PolygonAssignComponent implements OnInit {
   }
 
   getAllProjects() {
-    let params = new HttpParams().set("userId", "8");
+    let params = new HttpParams().set("userId", this.userId.toString());
     this.dataService.sendGetRequest('jmc/api/v1/project/get/all', params).subscribe(data => {
       if (data['status'] == 200 && data['payLoad'].length > 0) {
         this.projectList = data['payLoad'];
@@ -67,6 +71,7 @@ export class PolygonAssignComponent implements OnInit {
     let params = new HttpParams().set("polygonId", polygonId);
     this.vehiclePolyList = false;
     this.assignedPolygon = [];
+    console.log(params);
 
     this.dataService.sendGetRequest('jmc/api/v1/polygon/assign-vehicle', params).subscribe(data => {
       if (data['status'] == 200) {
@@ -80,7 +85,7 @@ export class PolygonAssignComponent implements OnInit {
       }
     }, error => {
       
-      if(error == 404){
+      if(error.status == 404){
         this.vehiclePolyList = true;
         if (this.vehicledataList && this.vehiclePolyList) {
           this.mergeVehiclePolygon(this.vehicleData, this.assignedPolygon);
@@ -89,6 +94,17 @@ export class PolygonAssignComponent implements OnInit {
     })
 
     this.getLiveData(this.projectId);
+  }
+
+  alertsDismiss: any = [];
+
+  add(text): void {
+    this.alertsDismiss = [];
+    this.alertsDismiss.push({
+      type: 'warning',
+      msg: text,
+      timeout: 9000
+    });
   }
 
   getLiveData(projectId?) {
@@ -118,6 +134,7 @@ export class PolygonAssignComponent implements OnInit {
 
     }, error => {
       console.log(error);
+      this.add(error['message']);
     });
   }
 
@@ -146,10 +163,12 @@ export class PolygonAssignComponent implements OnInit {
   
         this.dataService.sendPostRequest('jmc/api/v1/polygon/assign', assignData).subscribe(data => {
           if (data['message'] == 'SUCCESS') {
-            
+            this.add(data['message']);
           } else {
-            
+            this.add(data['message']);
           }
+        }, error => {
+          this.add(error['message']);
         });
       }else{
         event.isAssigned = false;
@@ -162,10 +181,12 @@ export class PolygonAssignComponent implements OnInit {
 
         this.dataService.sendPostRequest('jmc/api/v1/polygon/unassign', unAssignData).subscribe(data => {
           if (data['message'] == 'SUCCESS') {
-           
+            this.add(data['message']); 
           } else {
-           
+            this.add(data['message']);
           }
+        }, error => {
+          this.add(error['message']);
         });
       }else{
         event.isAssigned = true;

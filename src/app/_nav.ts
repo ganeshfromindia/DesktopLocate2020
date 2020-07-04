@@ -3,117 +3,122 @@ import { INavData } from '@coreui/angular';
 export const navItems: INavData[] = [
   
   {
+    name: 'Dashboard',
+    url: '/dashboard',
+    icon: 'icon-speedometer',
+    badge: {
+      variant: 'info',
+      text: 'NEW'
+    }
+  }
+  ,
+  {
     name: 'Admin',
-    url: '/user',
+    url: '/admin',
     icon: 'fa fa-car',
     children: [
       {
         name: 'User',
-        url: '/user',
+        url: '/admin/user',
         icon: 'icon-people'
       },
       {
         name: 'Designation',
-        url: '/designation',
+        url: '/admin/designation',
         icon: 'icon-star'
       },
       {
         name: 'Type',
-        url: '/vehicle/vehicleType',
+        url: '/admin/vehicle/vehicleType',
         icon: 'fa fa-car'
       },
       {
         name: 'Manufacturer',
-        url: '/vehicle/vehicleManufacturer',
+        url: '/admin/vehicle/vehicleManufacturer',
         icon: 'fa fa-car'
       },
       {
         name: 'Make Model',
-        url: '/vehicle/vehicleMakeModel',
+        url: '/admin/vehicle/vehicleMakeModel',
         icon: 'fa fa-car'
       },
       {
         name: 'Project',
-        url: '/project',
+        url: '/admin/project',
         icon: 'icon-people'
       },
       {
         name: 'Sites',
-        url: '/site/map',
+        url: '/admin/site/map',
         icon: 'icon-people'
       },
       {
         name: 'Vehicle List',
-        url: '/list/vehicle',
+        url: '/admin/list/vehicle',
         icon: 'fa fa-align-justify'
       },
       {
         name: 'Polygon',
-        url: '/polygon/create',
+        url: '/admin/polygon/create',
         icon: 'fa fa-align-justify'
       },
       {
         name: 'Polygon-Assign',
-        url: '/polygon/assign',
+        url: '/admin/polygon/assign',
         icon: 'fa fa-align-justify'
       },
       {
         name: 'Create',
-        url: '/vehicle/vehicleCreation',
+        url: '/admin/vehicle/vehicleCreation',
         icon: 'fa fa-car'
       }
     ]
   },
   {
     name: 'Billing',
-    url: '/customer',
+    url: '/billing',
     icon: 'fa fa-car',
     children: [
       {
         name: 'Customer Name',
-        url: '/customer/create',
+        url: '/billing/customer/create',
         icon: 'fa fa-car'
       },
       {
         name: 'Customer Detail',
-        url: '/customer/customer-detail',
+        url: '/billing/customer/customer-detail',
         icon: 'fa fa-car'
       },
       {
         name: 'Assign Billing',
-        url: '/customer/project-detail',
+        url: '/billing/customer/project-detail',
         icon: 'fa fa-car'
       },
       {
         name: 'Ignition Report',
-        url: '/ignition/report',
+        url: '/billing/ignition/report',
         icon: 'fa fa-car'
       }
     ]
   },
   {
     name: 'Tracking',
-    url: '/tracking',
+    url: '/track',
     icon: 'fa fa-car',
     children: [
       {
         name: 'Live',
-        url: '/tracking/live',
+        url: '/track/tracking/live',
         icon: 'fa fa-car'
       },
       {
         name: 'History',
-        url: '/tracking/history',
+        url: '/track/tracking/history',
         icon: 'fa fa-car'
       },
       {
         name: 'Ignition View',
-        url: '/ignition/view',
-        icon: 'fa fa-car'
-      },
-      {
-        name: 'Ignition Report',
-        url: '/ignition/report',
+        url: '/track/ignition/view',
         icon: 'fa fa-car'
       }
     ]
@@ -125,17 +130,17 @@ export const navItems: INavData[] = [
   },
   {
     name: 'Setting',
-    url: '/list',
+    url: '/setting',
     icon: 'fa fa-car',
     children: [
       {
         name: 'List',
-        url: '/list/vehicle',
+        url: '/setting/list/vehicle',
         icon: 'fa fa-align-justify'
       },
       {
         name: 'Task Reminder',
-        url: '/notifications/task-reminder',
+        url: '/setting/notifications/task-reminder',
         icon: 'icon-bell'
       }
     ]

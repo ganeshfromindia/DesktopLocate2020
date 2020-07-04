@@ -6,6 +6,7 @@ import { UploadFileService } from '../../services/upload-file.service';
 import {ModalDirective} from 'ngx-bootstrap/modal';
 
 import { HttpParams, HttpClient } from '@angular/common/http';
+import { UserService } from '../../user.service';
 
 @Component({
   selector: 'app-vehicle',
@@ -23,9 +24,14 @@ export class vehicleComponent implements OnInit {
 
   time = {hour: 13, minute: 30};
   meridian = true;
+  userId : Number;
 
   constructor(private formBuilder: FormBuilder, private dataService: DataService,
-              private uploadFileService : UploadFileService) { }
+              private uploadFileService : UploadFileService,
+              private userDetails: UserService) {
+                var userDetail = this.userDetails.getUserDetails(); 
+                this.userId = userDetail['id'];
+               }
 
   ngOnInit(): void {
     this.getManufactureList();
@@ -118,7 +124,7 @@ export class vehicleComponent implements OnInit {
   }
 
   getAllProjects(){
-    let params = new HttpParams().set("userId", "8");
+    let params = new HttpParams().set("userId", this.userId.toString());
     this.dataService.sendGetRequest('jmc/api/v1/project/get/all', params).subscribe(data => {
       if (data['status'] == 200 && data['payLoad'].length > 0) {
         this.projectList = data['payLoad'];

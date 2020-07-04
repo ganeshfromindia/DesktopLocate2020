@@ -71,6 +71,7 @@ export class LoginComponent {
 				tap(user => {
           console.log(user);
           this.userService.setRoleBasedMenu(user['payLoad']['jsonData'])  
+          this.userService.setUserDetails(user['payLoad'].userDetails);
 					this.router.navigateByUrl('/dashboard'); // Main page
 				}),
 				takeUntil(this.unsubscribe),

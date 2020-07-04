@@ -43,20 +43,21 @@ export const routes: Routes = [
       title: 'Register Page'
     }
   },
+
   {
-    path: '',
+    path: 'admin',
     component: DefaultLayoutComponent,
     data: {
-      title: 'Home'
+      title: 'Admin'
     },
     children: [
       {
-        path: 'designation',
-        loadChildren: () => import('./views/designation/designation.module').then(m => m.designationModule)
-      },
-      {
         path: 'user',
         loadChildren: () => import('./views/user/user.module').then(m => m.userModule)
+      },
+      {
+        path: 'designation',
+        loadChildren: () => import('./views/designation/designation.module').then(m => m.designationModule)
       },
       {
         path: 'vehicle',
@@ -78,21 +79,73 @@ export const routes: Routes = [
         path: 'polygon',
         loadChildren: () => import('./views/polygon/polygon.module').then(m => m.polygonModule)
       },
+    ]
+  },
+  {
+    path: 'billing',
+    component: DefaultLayoutComponent,
+    data: {
+      title: 'Billing'
+    },
+    children: [
       {
         path: 'customer',
         loadChildren: () => import('./views/customer/customer.module').then(m => m.CustomerModule)
-      },
+      },      
       {
         path: 'ignition',
         loadChildren: () => import('./views/ignition/ignition.module').then(m => m.IgnitionModule)
-      },
+      }
+    ]
+  },
+  {
+    path: 'track',
+    component: DefaultLayoutComponent,
+    data: {
+      title: 'Tracking'
+    },
+    children: [
       {
         path: 'tracking',
         loadChildren: () => import('./views/tracking/tracking.module').then(m => m.TrackingModule)
-      },
+      },      
+      {
+        path: 'ignition',
+        loadChildren: () => import('./views/ignition/ignition.module').then(m => m.IgnitionModule)
+      }
+    ]
+  },
+  {
+    path: 'setting',
+    component: DefaultLayoutComponent,
+    data: {
+      title: 'Setting'
+    },
+    children: [
+      {
+        path: 'list',
+        loadChildren: () => import('./views/vehicle-list/vehicle-list.module').then(m => m.vehicleListModule)
+      },{
+        path: 'notifications',
+        loadChildren: () => import('./views/notifications/notifications.module').then(m => m.NotificationsModule)
+      }
+    ]
+  },
+  {
+    path: '',
+    component: DefaultLayoutComponent,
+    data: {
+      title: 'Home'
+    },
+    children: [
+      
       {
         path: 'download',
         loadChildren: () => import('./views/reports/reports.module').then(m => m.reportModule)
+      },
+      {
+        path: 'dashboard',
+        loadChildren: () => import('./views/dashboard/dashboard.module').then(m => m.DashboardModule)
       },
       {
         path: 'base',
@@ -106,17 +159,10 @@ export const routes: Routes = [
         path: 'charts',
         loadChildren: () => import('./views/chartjs/chartjs.module').then(m => m.ChartJSModule)
       },
-      {
-        path: 'dashboard',
-        loadChildren: () => import('./views/dashboard/dashboard.module').then(m => m.DashboardModule)
-      },
+      
       {
         path: 'icons',
         loadChildren: () => import('./views/icons/icons.module').then(m => m.IconsModule)
-      },
-      {
-        path: 'notifications',
-        loadChildren: () => import('./views/notifications/notifications.module').then(m => m.NotificationsModule)
       },
       {
         path: 'theme',

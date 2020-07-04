@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders  } from '@angular/common/http';
 import { environment } from '../environments/environment';
+import { UserService } from './user.service';
 
 import {  throwError } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
@@ -11,7 +12,7 @@ import { Observable, of, forkJoin } from 'rxjs';
 })
 export class DataService {
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient, private userService : UserService) { }
 
   handleError(error: HttpErrorResponse) {
     let errorMessage = 'Unknown error!';
@@ -23,7 +24,7 @@ export class DataService {
       errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
     }
     //window.alert(errorMessage);
-    return throwError(error.status);
+    return throwError(error.error);
   }
 
   public sendGetRequest(url, param?){
@@ -68,7 +69,7 @@ export class DataService {
         return of(null);
     }
     const body = {"userName": email ,"password": password}
-    return  this.httpClient.post(environment.base_url + 'login', body).pipe(catchError(this.handleError));;
+    return  this.httpClient.post(environment.base_url + 'jmc/api/v1/login', body).pipe(catchError(this.handleError));;
 
 }
 

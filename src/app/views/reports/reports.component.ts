@@ -26,6 +26,7 @@ export class ReportsComponent implements OnInit {
   showTable : boolean = false;
   taskReminderReport: Array<any> = [];
   vehicleStatusEmpty: boolean = false;
+  userId : Number;
 
   downloadList: any[] = [
     { value: 'Dt', viewValue: 'Distance Traveled' },
@@ -37,7 +38,12 @@ export class ReportsComponent implements OnInit {
     { value: 'Vs', viewValue: 'Vehicle Status' }
   ];
 
-  constructor(private userService: UserService, private dataService: DataService, private addressService : AddressService) { }
+  constructor(private userService: UserService, private dataService: DataService,
+             private addressService : AddressService,
+             private userDetails: UserService) { 
+              var userDetail = this.userDetails.getUserDetails(); 
+              this.userId = userDetail['id'];
+             }
 
   ngOnInit(): void {
 
@@ -50,7 +56,7 @@ export class ReportsComponent implements OnInit {
   }
 
   getVehicleList(){
-    let params = new HttpParams().set("userId", "8");
+    let params = new HttpParams().set("userId", this.userId.toString());
 
     this.dataService.sendPostRequest('jmc/api/v1/vehicle/live', {}, params).subscribe(data => {
       if (data['message'] == 'SUCCESS' && data['payLoad'].length > 0) {
@@ -78,7 +84,7 @@ export class ReportsComponent implements OnInit {
           }else if(this.selectedValue == 'Dg'){
             // this.getDGSetReport();
           }else if(this.selectedValue == 'Tk'){
-            this.getTaskReminderReport(this.userService.getEndTime(this.endTime), '8');  
+            this.getTaskReminderReport(this.userService.getEndTime(this.endTime), this.userId.toString());  
           }else if(this.selectedValue == 'Vs'){
               this._getVehicleStatus(this.vehicle, this.userService.getTime(this.startTime), this.userService.getTime(this.endTime));
           }
@@ -92,7 +98,9 @@ export class ReportsComponent implements OnInit {
       if(this.selectedValue == 'hi'){
         this.getHistory(this.vehicle, this.userService.getTime(this.startTime), this.userService.getTime(this.endTime));
       }else if(this.selectedValue == 'Tk'){
-        this.downloadTaskReminder(this.userService.getCurrentStartTime().toString() ,this.userService.getEndTime(this.endTime), '8');  
+        this.downloadTaskReminder(this.userService.getCurrentStartTime().toString() ,this.userService.getEndTime(this.endTime), this.userId.toString());  
+      }else if(this.selectedValue == 'Vs'){
+        this.downloadVehicleStatus(this.vehicle['id'], this.userService.getTime(this.startTime), this.userService.getTime(this.endTime));
       }
     }
   }
@@ -127,7 +135,7 @@ export class ReportsComponent implements OnInit {
     this.distanceTraveledEmpty = false;
     this.showTable = true;
 
-    let params = new HttpParams().set("userId", "8")
+    let params = new HttpParams().set("userId", this.userId.toString())
     .set('startTime', start).set('endTime', end);
 
     this.dataService.sendPostRequest('jmc/api/v1/vehicle/distance/travelled', [vehicle.id], params).subscribe(data => {
@@ -151,8 +159,8 @@ export class ReportsComponent implements OnInit {
     var eTime = new Date(endTime).getTime();
     let fileName = vehicle.vehicleNo + "'s Location Report " + new Date(startTime).toLocaleDateString().replace(new RegExp("/", "g"), '_') + "_to_" + new Date(endTime).toLocaleDateString().replace(new RegExp("/", "g"), '_');
 
-    let params = new HttpParams().set("userId", "8")
-    .set("vehicleId", '2').set("startTime", '1572719400000').set("endTime", '1573050600000');
+    let params = new HttpParams().set("userId", this.userId.toString())
+    .set("vehicleId", vehicle['id']).set("startTime", sTime.toString()).set("endTime", eTime.toString());
 
     this.dataService.sendPostRequest('jmc/api/v1/vehicle/history', {}, params).subscribe(data => {
       if (data['payLoad'].length > 0) {
@@ -358,7 +366,7 @@ export class ReportsComponent implements OnInit {
     vehicleStatusTimeCount : Object = {};
   _getVehicleStatus(vehicle, startTime, endTime){
 
-    let params = new HttpParams().set("vehicleId", '10').set("startTime", startTime).set("endTime", endTime);
+    let params = new HttpParams().set("vehicleId", vehicle.id).set("startTime", startTime).set("endTime", endTime);
     this.showTable = true;
     this.vehicleStatusEmpty = false;
     this.vehicleStatusList = [];
@@ -378,6 +386,11 @@ export class ReportsComponent implements OnInit {
   downloadTaskReminder(start, end, user){
     window.open( environment.base_url + 'jmc/api/v1/task/reminder/report?userId='+user+'&endTime='+end+'&startTime='+start);
     // window.open("http://localhost:8071/jmc/api/v1/download/voucher?vehicleId=1&startTime=1572856073000&endTime=1572962911000&dayWise=true");
+  }
+
+  downloadVehicleStatus(vehicleId, start, end){
+    window.open( environment.base_url + 'jmc/api/v1/vehicle/status/report/excel?vehicleIdList='+vehicleId+'&endTime='+end+'&startTime='+start);
+    // window.open("http://192.168.0.108:8071/jmc/api/v1/vehicle/status/report/excel?vehicleIdList=10&startTime=1588291200000&endTime=1593475200000");
   }
 
 }

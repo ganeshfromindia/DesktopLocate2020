@@ -28,12 +28,12 @@
           <div class="form-group col-sm-3">
             <label for="ccmonth">Start Time</label>
             <input placeholder="Time:" class="form-control" [(ngModel)]="startTime" [owlDateTimeTrigger]="st1" [owlDateTime]="st1">
-            <owl-date-time [pickerType]="'timer'" #st1></owl-date-time>
+            <owl-date-time  #st1></owl-date-time>
           </div>
           <div class="form-group col-sm-3">
             <label for="ccmonth">End Time</label>
             <input placeholder="Time:" class="form-control" [(ngModel)]="endTime" [owlDateTimeTrigger]="st2" [owlDateTime]="st2">
-            <owl-date-time [pickerType]="'timer'" #st2></owl-date-time>
+            <owl-date-time  #st2></owl-date-time>
           </div>
           <div class="form-group col-sm-3">
               <button type="submit" class="btn btn-sm btn-primary buttonPosition" (click)="getHistory(vehicle, startTime, endTime)"><i class="fa fa-dot-circle-o"></i> Submit</button>
@@ -68,7 +68,7 @@
               </th>
               <td>
                 <p>{{details?.startTime | date : 'shortTime'}} - {{details?.endTime | date : 'shortTime'}}</p>
-                <p>{{details?.type != 'STATIC' ? (details?.distance+" Kms") : ""}}</p>
+                <p>{{details?.type != 'STATIC' ? (( details?.distance / 1000.0 | number : '1.2-2' )+" Kms") : ""}}</p>
                 <p>
                   {{details?.type != 'STATIC' ? "Max Speed : "+(details?.speed * 3.6 | number : '1.2-2') +" Kmph" : ""}}
                 </p>

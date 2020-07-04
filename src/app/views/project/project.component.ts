@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DataService } from '../../data.service';
 import { HttpParams, HttpClient } from '@angular/common/http';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
+import { UserService } from '../../user.service';
 
 @Component({
   selector: 'app-project',
@@ -14,15 +15,19 @@ export class ProjectComponent implements OnInit {
   projectName = "";
   editId = null;
   makeModelEditId = false;
+  userId : Number;
 
-  constructor(private dataService: DataService) { }
+  constructor(private dataService: DataService,
+    private userDetails: UserService) {
+      var userDetail = this.userDetails.getUserDetails(); 
+      this.userId = userDetail['id']; }
 
   ngOnInit(): void {
     this.getProjectList();
   }
 
   getProjectList() {
-    let params = new HttpParams().set("userId", "8");
+    let params = new HttpParams().set("userId", this.userId.toString());
     this.dataService.sendGetRequest('jmc/api/v1/project/get/all', params).subscribe(data => {
       if (data['status'] == 200 && data['payLoad'].length > 0) {
         this.projectList = data['payLoad'];
@@ -35,7 +40,7 @@ export class ProjectComponent implements OnInit {
     if(this.projectName){
       
       let data = {"project": this.projectName};
-      let params = new HttpParams().set("userId", "8");
+      let params = new HttpParams().set("userId", this.userId.toString());
       
       if(this.editId){
         data['id'] = this.editId;
@@ -50,6 +55,13 @@ export class ProjectComponent implements OnInit {
             this.add(data['message']);
             this.projectName = "";
             this.editId = null;
+          }
+        }, error => {        
+          if(error.payLoad && error.payLoad.length > 0){
+            let ePaylad = this.arrayTextCommaSeperated(error.payLoad);
+            this.add(error['message'] +" "+ ePaylad);
+          }else {
+            this.add(error['message']);
           }
         });
 
@@ -66,6 +78,13 @@ export class ProjectComponent implements OnInit {
             this.add(data['message']);
             this.projectName = "";
           }
+        }, error => {        
+          if(error.payLoad && error.payLoad.length > 0){
+            let ePaylad = this.arrayTextCommaSeperated(error.payLoad);
+            this.add(error['message'] +" "+ ePaylad);
+          }else {
+            this.add(error['message']);
+          }
         });
       }
     }
@@ -78,7 +97,7 @@ add(text): void {
   this.alertsDismiss.push({
     type: 'warning',
     msg: text,
-    timeout: 5000
+    timeout: 9000
   });
 }
 
@@ -86,7 +105,23 @@ edit(p){
 
     this.projectName = p.project;
     this.editId = p.id;
-    this.makeModelEditId = true
+    this.makeModelEditId = true;
+  }
+
+  public arrayTextCommaSeperated(payload : Array<any>){
+    var result = new Array();
+    for (var i=0; i< payload.length; i++)
+    {
+        var selectedcol = payload[i].firstName + " " + payload[i].lastName;
+        result.push(selectedcol);
+    }
+    return result.join(', ');
+  }
+
+  reset(){
+    this.projectName = null;
+    this.editId = null;
+    this.makeModelEditId = false;
   }
 
 }

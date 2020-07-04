@@ -15,8 +15,13 @@ import {MapsAPILoader} from '@agm/core';
 export class LiveComponent implements OnInit {
 
   vehicleData: any = [];
+  userId : Number;
 
-  constructor(private dataService: DataService, private userService: UserService, private router: Router, private mapsAPILoader: MapsAPILoader) { }
+  constructor(private dataService: DataService, private userService: UserService,
+     private router: Router, private mapsAPILoader: MapsAPILoader) {
+      var userDetail = this.userService.getUserDetails(); 
+      this.userId = userDetail['id'];
+      }
 
   mapDataObj : any;
 
@@ -25,7 +30,7 @@ export class LiveComponent implements OnInit {
   }
 
   getLiveData(){
-    let params = new HttpParams().set("userId", "8");
+    let params = new HttpParams().set("userId", this.userId.toString());
 
     this.dataService.sendPostRequest('jmc/api/v1/vehicle/live', {}, params).subscribe(data => {
       if (data['message'] == 'SUCCESS' && data['payLoad'].length > 0) {
@@ -39,7 +44,7 @@ export class LiveComponent implements OnInit {
   }
 
   getHistory(data){
-    this.router.navigate(['/tracking/history', {type: 'live' , data : data}]);
+    this.router.navigate(['/track/tracking/history', {type: 'live' , data : data}]);
   }
 
 }

@@ -3,7 +3,7 @@
         <div class="col-sm-6">
             <div class="card">
                 <div class="card-header">
-                    <strong>Create User</strong>
+                    <strong>Create Task</strong>
                 </div>
                 <div class="card-body">
 
@@ -26,8 +26,8 @@
                                 <owl-date-time [pickerType]="'calendar'" #st1></owl-date-time>
                             </div>
                         </div>
-                        <div class="col-sm-2" style="top: 30px;">
-                            <button type="button" class="btn btn-sm btn-danger"   (click)="showImage('insuranceImage')">
+                        <div class="col-sm-2" style="top: 30px;" *ngIf="insuranceImageName">
+                            <button type="button" class="btn btn-sm btn-danger"   (click)="showImage('insuranceImage', vehicle)">
                                 <i class="fa fa-eye" aria-hidden="true" ></i>
                                  Image</button>
                         </div>
@@ -73,8 +73,10 @@
                                 <owl-date-time [pickerType]="'calendar'" #st5></owl-date-time>
                             </div>
                         </div>
-                        <div class="col-sm-1" style="top: 30px;" *ngIf="pucImageName">
-                            <i class="fa fa-eye" aria-hidden="true" (click)="showImage('pucImage')"></i>
+                        <div class="col-sm-2" style="top: 30px;" *ngIf="pucImageName">
+                            <button type="button" class="btn btn-sm btn-danger" (click)="showImage('pucImage', vehicle)">
+                                <i class="fa fa-eye" aria-hidden="true" ></i>
+                                 Image</button>
                         </div>
                     </div>
 
@@ -127,8 +129,9 @@
                                 </thead>
                                 <tbody>
                                     <tr *ngFor="let t of taskList">
-                                        <td>{{t.taskType}}</td>
-                                        <td>{{t.activityDuration}}</td>
+                                        <td>{{taskModefObj[t.taskType].name}}</td>
+                                        <td>{{taskModefObj[t.taskType].isTime ? 
+                                            (t.activityDuration | date : 'dd/MM/yy h:mm a') : t.activityDuration}}</td>
                                         <td><i class="fa fa-pencil-square-o" aria-hidden="true" (click)="editTask(t)"></i></td>
                                         <td>
                                             <span class="badge badge-success">Active</span>
@@ -141,6 +144,31 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div bsModal #largeModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Image</h4>
+                <button type="button" class="close" (click)="largeModal.hide()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <span *ngIf="commonImageName">
+                        <img  src="{{commonImageName}}" class="img-responsive" alt="" style="width: 100%;">
+                </span>
+                <span *ngIf="!commonImageName">
+                    <h3>No Image Found</h3>
+                </span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="largeModal.hide()">Close</button>
             </div>
         </div>
     </div>

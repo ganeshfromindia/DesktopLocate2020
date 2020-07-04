@@ -14,16 +14,20 @@ export class VehicleListComponent implements OnInit {
 
   vehicleData: any = [];
   theCheckbox : boolean = false;
+  userId : Number;
   @ViewChild('largeModal') public largeModal: ModalDirective;
 
-  constructor(private dataService: DataService, private userService: UserService, private addressService : AddressService) { }
+  constructor(private dataService: DataService, private userService: UserService, private addressService : AddressService) {
+    var userDetail = this.userService.getUserDetails(); 
+    this.userId = userDetail['id'];
+   }
 
   ngOnInit(): void {
     this.getLiveData();
   }
 
   getLiveData(){
-    let params = new HttpParams().set("userId", "8");
+    let params = new HttpParams().set("userId", this.userId.toString());
 
     this.dataService.sendPostRequest('jmc/api/v1/vehicle/live', {}, params).subscribe(data => {
       if (data['message'] == 'SUCCESS' && data['payLoad'].length > 0) {

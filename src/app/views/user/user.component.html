@@ -14,7 +14,7 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="form-group">
-                                    <label for="name">First Name</label>
+                                    <label for="name">First Name <sup>*</sup></label>
                                     <input type="text" class="form-control" id="first-name" formControlName="firstName"
                                         placeholder="Enter your First Name">
                                 </div>
@@ -23,7 +23,7 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="form-group">
-                                    <label for="name">Last Name</label>
+                                    <label for="name">Last Name <sup>*</sup></label>
                                     <input type="text" class="form-control" id="last-name" formControlName="lastName"
                                         placeholder="Enter your Last Name">
                                 </div>
@@ -32,7 +32,7 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="form-group">
-                                    <label for="name">Eamail Id</label>
+                                    <label for="name">Email Id <sup>*</sup></label>
                                     <input type="email" id="email" name="email" class="form-control"
                                         formControlName="emailId" placeholder="Enter Email.." autocomplete="email">
                                 </div>
@@ -41,9 +41,9 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="form-group">
-                                    <label for="name">Moblie No</label>
+                                    <label for="name">Mobile No <sup>*</sup></label>
                                     <input type="number" id="mobile" name="mobile" class="form-control"
-                                        formControlName="mobileNumber" placeholder="Enter Moblie No..">
+                                        formControlName="mobileNumber" placeholder="Enter Mobile No..">
                                 </div>
                             </div>
                         </div>
@@ -51,7 +51,7 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="form-group">
-                                    <label for="gender">Gender</label>
+                                    <label for="gender">Gender <sup>*</sup></label>
                                     <select id="gender" name="gender" class="form-control" formControlName="gender">
                                         <option value="MALE">Male</option>
                                         <option value="FEMALE">Female</option>
@@ -63,7 +63,7 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="form-group">
-                                    <label for="textarea-input">Address</label>
+                                    <label for="textarea-input">Address <sup>*</sup></label>
                                     <textarea id="textarea-input" name="textarea-input" rows="3" class="form-control"
                                         formControlName="address" placeholder="Address"></textarea>
                                 </div>
@@ -73,7 +73,7 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="form-group">
-                                    <label for="gender">Designation</label>
+                                    <label for="gender">Designation <sup>*</sup></label>
                                     <select id="designation" name="designation" class="form-control"
                                         formControlName="designationId">
                                         <option *ngFor="let desig of designationList" [value]="desig.id">
@@ -86,9 +86,10 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="form-group">
-                                    <label for="project">Project</label>
+                                    <label for="project">Project <sup>*</sup></label>
                                     <ng-multiselect-dropdown [placeholder]="'Project Name'" [data]="projectList" formControlName="project"
-                                        (onSelect)="projectSelect($event)" [settings]="dropdownSettings">
+                                        (onSelect)="projectSelect($event, 'select')" (onSelectAll)="projectSelect($event, 'selectAll')"
+                                        (onDeSelect)="projectSelect($event, 'select')" [settings]="dropdownSettings">
                                     </ng-multiselect-dropdown>
                                 </div>
                             </div>
@@ -97,7 +98,7 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="form-group">
-                                    <label for="site">Site</label>
+                                    <label for="site">Site <sup>*</sup></label>
                                     <!-- <select id="site" name="site" class="form-control"
                                         formControlName="site">
                                         <option *ngFor="let s of siteList" [value]="s.id">
@@ -115,7 +116,7 @@
                 </div>
 
                 <div class="card-footer">
-                    <button type="button" class="btn btn-sm btn-primary" (click)="submit()"><i
+                    <button type="button" class="btn btn-sm btn-primary" (click)="submit()" [disabled]="!userForm.valid"><i
                             class="fa fa-dot-circle-o"></i> {{userEditId ? 'Edit' : 'Save'}}</button>
                     <button type="button" class="btn btn-sm btn-danger" (click)="onReset()"><i class="fa fa-ban"></i>
                         Reset</button>
@@ -149,7 +150,7 @@
                                         <label for="gender">{{userSelectType}}</label>
                                         <input type="text" id="hf-designation" name="hf-designation"
                                             class="form-control" [(ngModel)]="selectedValue"
-                                            placeholder="Enter designation..">
+                                            placeholder="Enter..">
                                     </div>
                                 </div>
                             </div>

@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpParams, HttpClient } from '@angular/common/http';
-import { DataService } from '../../data.service'
+import { DataService } from '../../data.service';
+import { UserService } from '../../user.service';
 
 @Component({
   selector: 'app-user',
@@ -19,8 +20,13 @@ export class UserComponent implements OnInit {
   userEditId: Number;
   dropdownSettings = {};
   siteDropDownSetting = {};
+  userId : Number;
 
-  constructor(private formBuilder: FormBuilder, private dataService: DataService) { }
+  constructor(private formBuilder: FormBuilder, private dataService: DataService,
+    private userDetails: UserService) { 
+      var userDetail = this.userDetails.getUserDetails(); 
+      this.userId = userDetail['id'];
+    }
 
   ngOnInit(): void {
     this.getDesignationList();
@@ -29,6 +35,7 @@ export class UserComponent implements OnInit {
     this.multiSelectDropDownSiteSetting();
 
     this.userForm = this.formBuilder.group({
+      id: [''],
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       emailId: ['', [Validators.required, Validators.email]],
@@ -59,7 +66,7 @@ export class UserComponent implements OnInit {
   }
 
   getProjectList(){
-    let params = new HttpParams().set("userId", "8");
+    let params = new HttpParams().set("userId", this.userId.toString());
     this.dataService.sendGetRequest('jmc/api/v1/project/get/all', params).subscribe(data => {
       if (data['status'] == 200 && data['payLoad'].length > 0) {
         this.projectList = data['payLoad'];
@@ -67,8 +74,11 @@ export class UserComponent implements OnInit {
     })  
   }
 
-  projectSelect(event){
-    
+  projectSelect(event, type){
+    if(type == 'selectAll'){
+      this.userForm.controls.project.setValue(event);
+    }
+
     if(this.userForm.controls.project.value && this.userForm.controls.project.value.length > 0){
       let pArray = this.getIdArray(this.userForm.controls.project.value);
       this.getSiteList(pArray);
@@ -85,8 +95,7 @@ export class UserComponent implements OnInit {
 
   getMultiSelectData(array : Array<any>, key, value){
     let mArray = [];
-    
-     
+      
     array.forEach(element => {
       var data = {"id" : null};
       data.id = element.id;
@@ -114,17 +123,36 @@ export class UserComponent implements OnInit {
       let data = this.userForm.getRawValue();
       var siteIdList = this.getIdArray(data.siteIdList);
       var projectIdList = this.getIdArray(data.project);
+      if(siteIdList != null && siteIdList.length > 0){
+        if(projectIdList != null && projectIdList.length < 0){
+          alert("Please select Project");
+          return;
+        }
+      }
       data['projectIdList'] = projectIdList;
       data['siteIdList'] = siteIdList;
 
-      this.dataService.sendPostRequest('jmc/api/v1/user/save', data).subscribe(data => {
-        if (data['status'] == 200) {
-          this.add(data['message']);
-          this.onReset()
-        }else{
-          this.add(data['message']);
-        }
-      });
+      if(data.id){
+        this.dataService.sendPutRequest('jmc/api/v1/user/update', data).subscribe(data => {
+          if (data['status'] == 200) {
+            this.add(data['message']);
+            this.onReset()
+            this.userEditId = null;
+          }else{
+            this.add(data['message']);
+          }
+        });
+      }else{
+        this.dataService.sendPostRequest('jmc/api/v1/user/save', data).subscribe(data => {
+          if (data['status'] == 200) {
+            this.add(data['message']);
+            this.onReset()
+            this.userEditId = null;
+          }else{
+            this.add(data['message']);
+          }
+        });
+      }
     }
   }
 
@@ -155,7 +183,6 @@ export class UserComponent implements OnInit {
         this.userEditId = userData.id; 
         delete userData.createdOn;
         delete userData.lastUpdate;
-        delete userData.id;
         delete userData.designationModel;
         delete userData.registrationDate;
         delete userData.active;

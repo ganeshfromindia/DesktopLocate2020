@@ -19,21 +19,25 @@ export class IgnitionComponent implements OnInit {
   endTime = new Date(this.userService.getCurrentEndTime());
   igntionDayList : Array<any> = []; 
   innerIgntionList : Array<any> = [];
+  userId : Number;
 
   @ViewChild('largeModal') public largeModal: ModalDirective;
 
   constructor(private userService: UserService,
               private dataService: DataService,
-              private addressService : AddressService) { }
+              private addressService : AddressService) {
+                var userDetail = this.userService.getUserDetails(); 
+                this.userId = userDetail['id'];
+               }
 
   ngOnInit(): void {
     this.getVehicleList();
   }
 
   getVehicleList(){
-    let params = new HttpParams().set("userId", "8");
+    let params = new HttpParams().set("userId", this.userId.toString());
 
-    this.dataService.sendPostRequest('jmc/api/v1/vehicle/live', {}, params).subscribe(data => {
+    this.dataService.sendPostRequest('jmc/api/v1/vehicle/list', {}, params).subscribe(data => {
       if (data['message'] == 'SUCCESS' && data['payLoad'].length > 0) {
          this.vehicleList = data['payLoad'];
          this.vehicle = this.vehicleList[0];
@@ -46,13 +50,10 @@ export class IgnitionComponent implements OnInit {
   showIgnition(){
     console.log(this.vehicle);
 
-    var data = 
-    // {"vehicleId":2,
-    //             "startTime":this.userService.getStartTime(this.startTime),
-    //             "endTime":this.userService.getEndTime(this.endTime),
-    //             "dayWise":true}
-
-               {"vehicleId":1,"startTime":1572856073000,"endTime":1572962911000,"dayWise":true}
+    var data = {"vehicleId":this.vehicle['id'],
+                "startTime":this.userService.getStartTime(this.startTime),
+                "endTime":this.userService.getEndTime(this.endTime),
+                "dayWise":true};
 
     this.dataService.sendPostRequest('jmc/api/v1/get/vehicle/ignition', data).subscribe(data => {
       if (data['message'] == 'SUCCESS' && data['payLoad'].length > 0) {
@@ -85,15 +86,15 @@ export class IgnitionComponent implements OnInit {
 
   getAddress(element){
 
-    this.latitude = element.lattitude;
+    this.latitude = element.latitude;
     this.longitude = element.longitude;
 
-    this.lat = element.lattitude;
+    this.lat = element.latitude;
     this.lng = element.longitude;
     
-    if(element.lattitude && element.longitude){
+    if(element.latitude && element.longitude){
       this.addressService
-      .getAddress(element.lattitude, element.longitude)
+      .getAddress(element.latitude, element.longitude)
       .then(data => {
         try {
           this.mapAddress = data["results"][0]["formatted_address"];
@@ -128,10 +129,8 @@ export class IgnitionComponent implements OnInit {
 
   declineIgntion(data ,i){
     if(confirm("Do you want to Decline")) {
-      console.log(data);
-      console.log(i);
 
-      data['parentUserId'] = 8;
+      data['parentUserId'] = this.userId.toString();
       data['approved'] = false;
 
       this.dataService.sendPostRequest('jmc/api/v1/update-status/save-report', data).subscribe(data => {

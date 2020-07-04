@@ -31,7 +31,7 @@ export class UserService {
 
   getUserDetails(){
 
-    return sessionStorage.getItem('userDetails');
+    return JSON.parse(sessionStorage.getItem('userDetails'));
   }
 
   setUserDetails(userDetails){
@@ -168,6 +168,16 @@ export class UserService {
 
     return ( day > 9 ? day : '0'+ day ) +' : ' + ( hour > 9 ? hour : '0'+ hour ) + ' : ' +
      ( minute > 9 ? minute : '0'+ minute ) + ' : ' + ( seconds > 9 ? seconds : '0'+ seconds );
+  }
+
+  public arrayTextCommaSeperated(payload : Array<any>){
+    var result = new Array();
+    for (var i=0; i< payload.length; i++)
+    {
+        var selectedcol = payload[i].firstName + " " + payload[i].lastName;
+        result.push(selectedcol);
+    }
+    return result.join(', ');
   }
 }
 

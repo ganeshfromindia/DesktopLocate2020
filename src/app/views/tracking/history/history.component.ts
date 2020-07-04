@@ -17,8 +17,12 @@ export class HistoryComponent implements OnInit {
   vehicle : object = {};
   startTime = new Date(this.userService.getCurrentStartTime());
   endTime = new Date(this.userService.getCurrentEndTime());
+  userId : Number;
 
-  constructor(private userService: UserService, private activatedRoute : ActivatedRoute, private dataService: DataService) { }
+  constructor(private userService: UserService, private activatedRoute : ActivatedRoute, private dataService: DataService) {
+    var userDetail = this.userService.getUserDetails(); 
+    this.userId = userDetail['id'];
+   }
 
   ngOnInit(): void {
 
@@ -39,11 +43,14 @@ export class HistoryComponent implements OnInit {
     var sTime = new Date(startTime).getTime();
     var eTime = new Date(endTime).getTime();
     
-    let params = new HttpParams().set("userId", "8")
-    .set("vehicleId", '8').set("startTime", '1577987714000').set("endTime", '1577989777000');
+    let params = new HttpParams().set("userId", this.userId.toString())
+    .set("vehicleId", vehicle.id).set("startTime", sTime.toString()).set("endTime", eTime.toString());
+
+    // let params = new HttpParams().set("userId", this.userId.toString())
+    // .set("vehicleId", vehicle.id).set("startTime", "1572546600000").set("endTime", "1573324200000");
 
     this.dataService.sendPostRequest('jmc/api/v1/vehicle/history', {}, params).subscribe(data => {
-      if (data['payLoad'].length > 0) {
+      if (data['message'] == 'SUCCESS' && data['payLoad'].length > 0) {
          this.historyList = data['payLoad']; 
          this.mapDataObj = {'eventType' : 'history' , data : data['payLoad']};    
         }
@@ -51,7 +58,7 @@ export class HistoryComponent implements OnInit {
   }
 
   getVehicleList(){
-    let params = new HttpParams().set("userId", "8");
+    let params = new HttpParams().set("userId", this.userId.toString());
 
     this.dataService.sendPostRequest('jmc/api/v1/vehicle/live', {}, params).subscribe(data => {
       if (data['message'] == 'SUCCESS' && data['payLoad'].length > 0) {

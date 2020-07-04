@@ -55,7 +55,7 @@ export class VehicleManufactureComponent implements OnInit {
     this.alertsDismiss.push({
       type: 'warning',
       msg: text,
-      timeout: 5000
+      timeout: 9000
     });
   }
 
@@ -68,14 +68,37 @@ export class VehicleManufactureComponent implements OnInit {
 
   delete(desig){
     if(desig.id){
+      console.log(desig);
       this.dataService.sendGetRequest('jmc/api/v1/vehicle/manufacturer/delete?manufacturerId=' + desig.id).subscribe(data => {
         if (data['status'] == 200) {
           this.add(data['message']);
           this.getManufactureList();
         }else{
-          this.add(data['message']);
+          if(data['payLoad'] && data['payLoad'].length > 0){
+            let ePaylad = this.arrayTextCommaSeperated(data['payLoad']);
+            this.add(data['message'] +" "+ ePaylad);
+          }else {
+            this.add(data['message']);
+          }
+        }
+      }, error => {        
+        if(error.payLoad && error.payLoad.length > 0){
+          let ePaylad = this.arrayTextCommaSeperated(error.payLoad);
+          this.add(error['message'] +" "+ ePaylad);
+        }else {
+          this.add(error['message']);
         }
       })
     }
+  }
+
+  public arrayTextCommaSeperated(payload : Array<any>){
+    var result = new Array();
+    for (var i=0; i< payload.length; i++)
+    {
+        var selectedcol = payload[i].vehicleNo;
+        result.push(selectedcol);
+    }
+    return result.join(', ');
   }
 }

@@ -21,12 +21,17 @@ export class ProjectDetailsComponent implements OnInit {
 
   vehicleConditionList: Array<any> = [];
   vehicleStatusList: Array<any> = [];
+  userId : Number;
 
   @ViewChild('largeModal') public largeModal: ModalDirective;
   @ViewChild('vehicleStatusModel') public vehicleStatusModel: ModalDirective;
 
 
-  constructor(private dataService: DataService, private userService: UserService, private formBuilder: FormBuilder) { }
+  constructor(private dataService: DataService, private userService: UserService, private formBuilder: FormBuilder,
+    private userDetails: UserService) {
+      var userDetail = this.userDetails.getUserDetails(); 
+      this.userId = userDetail['id'];
+   }
 
   ngOnInit(): void {
   
@@ -43,7 +48,7 @@ export class ProjectDetailsComponent implements OnInit {
   getLiveData(projectId?, siteId?, vehicleStatus?){
     let params = new HttpParams({
       fromObject : {
-        "userId": "8"
+        "userId": this.userId.toString()
       }
     })
     
@@ -70,7 +75,7 @@ export class ProjectDetailsComponent implements OnInit {
   }
 
   getCustomerList() {
-    let params = new HttpParams().set("userId", "8");
+    let params = new HttpParams().set("userId", this.userId.toString());
     this.dataService.sendGetRequest('jmc/api/v1/customer/get/all', params).subscribe(data => {
       if (data['status'] == 200 && data['payLoad'].length > 0) {
         this.customerList = data['payLoad'];
@@ -361,7 +366,6 @@ export class ProjectDetailsComponent implements OnInit {
     editVehicleStatusFlag : boolean = false;
 
     selectStatus(status){
-      console.log(status);
       if(status == 'FREE'){
         if(!confirm("Vehicle Will be removed from project, Do you want to continue")){
           this.vehicleConditionForm.controls.vehicleStatus.setValue('ASSIGNED_TO_PROJECT');
@@ -380,7 +384,7 @@ export class ProjectDetailsComponent implements OnInit {
     }
 
     getAllProjects(){
-      let params = new HttpParams().set("userId", "8");
+      let params = new HttpParams().set("userId", this.userId.toString());
       this.dataService.sendGetRequest('jmc/api/v1/project/get/all', params).subscribe(data => {
         if (data['status'] == 200 && data['payLoad'].length > 0) {
           this.projectList = data['payLoad'];

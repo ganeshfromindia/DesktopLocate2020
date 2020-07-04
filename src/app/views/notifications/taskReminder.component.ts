@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { UserService } from '../../user.service';
 import { HttpParams, HttpClient } from '@angular/common/http';
 import { DataService } from '../../data.service';
+import {ModalDirective} from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-task-reminder',
@@ -20,8 +21,12 @@ export class TaskReminderComponent {
   oilChangeDistnce : Number;
   serviceChangeDistance : Number;
   taskList : Array<any> = [];
+  userId : Number;
 
-  constructor(private userService: UserService, private dataService: DataService) { }
+  constructor(private userService: UserService, private dataService: DataService) {
+    var userDetail = this.userService.getUserDetails(); 
+                this.userId = userDetail['id'];
+   }
 
 
   ngOnInit(): void {
@@ -48,7 +53,7 @@ export class TaskReminderComponent {
   }
 
   getVehicleList(){
-    let params = new HttpParams().set("userId", "8");
+    let params = new HttpParams().set("userId", this.userId.toString());
 
     this.dataService.sendPostRequest('jmc/api/v1/vehicle/list', {}, params).subscribe(data => {
       if (data['message'] == 'SUCCESS' && data['payLoad'].length > 0) {
@@ -73,6 +78,12 @@ export class TaskReminderComponent {
          this.taskList = [];
       }
     })
+
+    this.pucImageName = null;
+    this.insuranceImageName = null;
+
+    this.findImage('insuranceImage',vehicle);
+    this.findImage('pucImage',vehicle);
   }
 
   isEdit : boolean = false;
@@ -219,12 +230,56 @@ export class TaskReminderComponent {
     })
   }
 
+  onReset(){    
+  }
 
-  onReset(){
-    
+  insuranceImageName: String;
+  pucImageName: String;
+  commonImageName: any = '';
+  @ViewChild('largeModal') public largeModal: ModalDirective;
+
+  findImage(imageType, v) {
+    console.log(v);
+    if (imageType == 'insuranceImage') {
+
+      let params = new HttpParams().set("vehicleId", v.id).set("imageType", "VEHICLE_INSURANCE");
+      this.dataService.sendGetRequest('jmc/api/v1/vehicle/image/get', params).subscribe(data => {
+        if (data['status'] == 200) {
+          this.insuranceImageName = data['payLoad'].image;
+        }
+      })
+
+    } else if (imageType == 'pucImage') {
+
+      let params = new HttpParams().set("vehicleId", v.id).set("imageType", "VEHICLE_PUC");
+      this.dataService.sendGetRequest('jmc/api/v1/vehicle/image/get', params).subscribe(data => {
+        if (data['status'] == 200) {
+          this.pucImageName = data['payLoad'].image;
+        }
+      })
+    }
   }
 
   showImage(imageType){
-    console.log(imageType);
+    this.commonImageName = "";
+    if(imageType == 'insuranceImage'){
+      this.commonImageName = this.insuranceImageName;
+    }else if(imageType == 'pucImage'){
+      this.commonImageName = this.pucImageName;
+    }
+     
+    this.largeModal.show();    
   }
+
+
+  taskModefObj = {
+    "VEHICLE_INSURANCE" : {"name" : "VEHICLE INSURANCE" , "isTime" : true}, 
+    "VEHICLE_SERVICE" : {"name" : "VEHICLE SERVICE", "isTime" : true},
+    "VEHICLE_OIL_CHANGE" : {"name" : "VEHICLE OIL CHANGE", "isTime" : true},
+    "VEHICLE_PASSING" : {"name" : "VEHICLE PASSING", "isTime" : true},
+    "VEHICLE_PUC" : {"name" : "VEHICLE PUC", "isTime" : true},
+    "VEHICLE_OIL_CHANGE_DISTANCE" : {"name" : "VEHICLE OIL CHANGE DISTANCE", "isTime" : false},
+    "VEHICLE_SERVICE_DISTANCE" : {"name" : "VEHICLE SERVICE DISTANCE", "isTime" : false}, 
+  }
+
 }

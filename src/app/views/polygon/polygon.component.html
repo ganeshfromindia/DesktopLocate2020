@@ -40,9 +40,9 @@
                                 </div>
                                 <div class="col-sm-12">
                                         <div class="form-group">
-                                                <label for="aerialDistance">Aerial Distance</label>
+                                                <label for="aerialDistance">Aerial Distance (meter)</label>
                                                 <input type="number" class="form-control" id="aerialDistance" formControlName="aerialDistance"
-                                                    placeholder="Enter Aerial Distance" (blur)="setArialDistance()">
+                                                min="200" max="2000" placeholder="Enter Aerial Distance (Range 200 To 2000)" (blur)="setArialDistance()">
                                             </div>
                                 </div>
                             </span>

@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef, NgZone } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DataService } from '../../data.service';
 import { HttpParams, HttpClient } from '@angular/common/http';
+import { UserService } from '../../user.service';
 
 import {MapsAPILoader} from '@agm/core';
 declare var google: any;
@@ -17,12 +18,17 @@ export class SitesComponent implements OnInit {
   isValidFormSubmitted = null;
   selectedItems = [];
   dropdownSettings = {};
+  userId : Number;
 
   @ViewChild("searchAddress")
   public searchAddress: ElementRef;
 
   constructor(private formBuilder: FormBuilder, private dataService: DataService,
-             private mapsAPILoader: MapsAPILoader, private ngZone: NgZone) { }
+             private mapsAPILoader: MapsAPILoader, private ngZone: NgZone,
+             private userDetails: UserService) {
+              var userDetail = this.userDetails.getUserDetails(); 
+              this.userId = userDetail['id'];
+              }
 
   ngOnInit(): void {
     this.createForm();
@@ -74,7 +80,7 @@ export class SitesComponent implements OnInit {
                 "longitude":this.siteForm.controls.longitude.value,
                 "telephoneNumber": numberArray
                }
-  let params = new HttpParams().set("userId", "8");  
+  let params = new HttpParams().set("userId", this.userId.toString());  
   console.log(this.siteForm.getRawValue());    
   let projectArray = [];
   if(this.siteForm.controls.projectIdList.value && this.siteForm.controls.projectIdList.value.length > 0){
@@ -93,11 +99,17 @@ export class SitesComponent implements OnInit {
       }else{
         this.add(data['message']);
       }
+    }, error => {        
+      if(error.payLoad && error.payLoad.length > 0){
+        let ePaylad = this.arrayTextCommaSeperated(error.payLoad);
+        this.add(error['message'] +" "+ ePaylad);
+      }else {
+        this.add(error['message']);
+      }
     });
 
   }else{
-    
-    
+        
     this.dataService.sendPostRequest('jmc/api/v1/site/save', data, params).subscribe(data => {
       if (data['status'] == 200) {
         this.add(data['message']);
@@ -106,11 +118,26 @@ export class SitesComponent implements OnInit {
       }else{
         this.add(data['message']);
       }
+    }, error => {        
+      if(error.payLoad && error.payLoad.length > 0){
+        let ePaylad = this.arrayTextCommaSeperated(error.payLoad);
+        this.add(error['message'] +" "+ ePaylad);
+      }else {
+        this.add(error['message']);
+      }
     });
-  }             
-
-             
+  }                          
  }
+
+ public arrayTextCommaSeperated(payload : Array<any>){
+  var result = new Array();
+  for (var i=0; i< payload.length; i++)
+  {
+      var selectedcol = payload[i].firstName + " " + payload[i].lastName;
+      result.push(selectedcol);
+  }
+  return result.join(', ');
+}
 
  autoCompleteAddress() {
   //load Places Autocomplete
@@ -188,7 +215,7 @@ export class SitesComponent implements OnInit {
     this.alertsDismiss.push({
       type: 'warning',
       msg: text,
-      timeout: 5000
+      timeout: 9000
     });
   }
 
@@ -196,7 +223,7 @@ export class SitesComponent implements OnInit {
   projectList: Array<any> = [];
   
   getSiteList() {
-    let params = new HttpParams().set("userId", "8");
+    let params = new HttpParams().set("userId", this.userId.toString());
     this.dataService.sendGetRequest('jmc/api/v1/site/get/all', params).subscribe(data => {
       if (data['status'] == 200 && data['payLoad'].length > 0) {
         this.siteList = data['payLoad'];
@@ -205,7 +232,7 @@ export class SitesComponent implements OnInit {
   }
 
   getProjectList() {
-    let params = new HttpParams().set("userId", "8");
+    let params = new HttpParams().set("userId", this.userId.toString());
     this.dataService.sendGetRequest('jmc/api/v1/project/get/all', params).subscribe(data => {
       if (data['status'] == 200 && data['payLoad'].length > 0) {
         this.projectList = data['payLoad'];
@@ -251,5 +278,9 @@ export class SitesComponent implements OnInit {
       itemsShowLimit: 3,
       allowSearchFilter: true
     };
+  }
+
+  reset(){
+    this.siteForm.reset();
   }
 }

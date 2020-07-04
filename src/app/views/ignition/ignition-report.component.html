@@ -54,8 +54,8 @@
                     <tr *ngFor="let v of igntionDayList ; index as ind">
                         <td nowrap>{{v?.startTime ? ( v?.startTime | date : 'dd/MM/yy h:mm a' ) : "-"}}</td>
                         <td nowrap>{{v?.endTime ? ( v?.endTime | date : 'dd/MM/yy h:mm a' ) : "-"}}</td>
-                        <td nowrap>{{v?.workingTime ? v?.workingTime : "-"}}</td>
-                        <td nowrap>{{v?.overTime ? v?.overTime : "-"}}</td>
+                        <td nowrap>{{v?.workingTime ? userService.convertMS(v?.workingTime) : "-"}}</td>
+                        <td nowrap>{{v?.overTime ? userService.convertMS(v?.overTime) : "-"}}</td>
                         <td nowrap class="text-center"><i class="fa fa-pencil-square-o" aria-hidden="true"
                                 (click)="showIgnitionData(v.vehicleIgnitionList, ind)"></i></td>
                     </tr>
@@ -80,11 +80,11 @@
                     </tr>
                     <tr *ngFor="let i of innerIgntionList; index as ind">
                         <td nowrap>{{i?.startTime ? ( i?.startTime | date : 'dd/MM/yy h:mm a' ) : "-"}}</td>
-                        <td nowrap class="text-center"><span class="pointer" (click)="getAddress({'lattitude' : i.sourceLatitude, 'longitude' : i.sourceLongitude})">
+                        <td nowrap class="text-center"><span class="pointer" (click)="getAddress({'latitude' : i.sourceLatitude, 'longitude' : i.sourceLongitude})">
                                 <i class="fa fa-map-marker fa-lg " style="color: darkred;" aria-hidden="true"></i>
                             </span></td>
                         <td nowrap>{{i?.endTime ? ( i?.endTime | date : 'dd/MM/yy h:mm a' ) : "-"}}</td>
-                        <td nowrap class="text-center"><span class="pointer" (click)="getAddress({'lattitude' : i.destinationLatitude, 'longitude' : i.destinationLongitude})">
+                        <td nowrap class="text-center"><span class="pointer" (click)="getAddress({'latitude' : i.destinationLatitude, 'longitude' : i.destinationLongitude})">
                                 <i class="fa fa-map-marker fa-lg " style="color: darkred;" aria-hidden="true"></i>
                             </span></td>
                         <td nowrap>

@@ -19,8 +19,10 @@ export class MapComponent implements OnInit {
   zoom: number = 15;
   totalDistance : number;
   historyList : Array<any>;
+  flag: Flag;
 
   ngOnInit(): void {
+    this.initFlag();
   }
 
   private _mapDataObj;
@@ -29,7 +31,9 @@ export class MapComponent implements OnInit {
 
   @Input()
   set mapDataObj(mapDataObj: object) {
-      console.log(mapDataObj);
+
+    console.log(mapDataObj);
+
       if(mapDataObj){
         this._mapDataObj = mapDataObj;
         if(this.mainMapEvent && this._mapDataObj){
@@ -43,6 +47,22 @@ export class MapComponent implements OnInit {
         }
       }
   }
+
+
+private initFlag() {
+
+    this.flag = {
+        viewPlaceLine: false,
+        showPolyline: false,
+        showHistory: false,
+        showIgnitionHistory: false,
+        showPolygonReport: false,
+        boundChangeCount: 0,
+        showAssignPolygon: false,
+        showMapCircle: false,
+        isVehicleSearch: false
+    }
+}
 
   mapReady(event) {
     
@@ -162,9 +182,9 @@ private _calculateLatLongBounds(data: any, event?) {
       var bounds = new google.maps.LatLngBounds();
       for (let user of data) {
 
-          if(user.lattitude && user.longitude){
+          if(user.latitude && user.longitude){
               this.createMainMarker(user, event);
-              bounds.extend(new google.maps.LatLng(user.lattitude, user.longitude));
+              bounds.extend(new google.maps.LatLng(user.latitude, user.longitude));
           }else{
               this.MarkerArrayMain.push({});
           }
@@ -183,8 +203,8 @@ private _calculateLatLongBounds(data: any, event?) {
       event.fitBounds(bounds);
 
   }else{
-      this.createMainMarker({'lattitude' :data[0]['lattitude'],'longitude' : data[0]['longitude'], 'status' : data[0]['status']}, event);
-      this.viewSingleMarkerPan(data[0].lattitude, data[0].longitude, event);
+      this.createMainMarker({'lattitude' :data[0]['latitude'],'longitude' : data[0]['longitude'], 'status' : data[0]['status']}, event);
+      this.viewSingleMarkerPan(data[0].latitude, data[0].longitude, event);
   }
 }
 
@@ -306,8 +326,8 @@ private showSingleMarker(lat, lng) {
       return true;
   }
 
-  // this.flag.viewPlaceLine = true;
-  // this.flag.showPolyline = false;
+  this.flag.viewPlaceLine = true;
+  this.flag.showPolyline = false;
 
   var bounds = new google.maps.LatLngBounds();
 
@@ -372,7 +392,12 @@ private historyMarkerIndex : number = 0;
                         this._calcLatLongBoundsWithoutKey(this.polylines);
                         return;
 
-                    }).catch((genericPolyLines) => {
+                    })
+                    .then(() => {
+                      this.flag.viewPlaceLine = true;
+                      this.flag.showPolyline = true;
+                  })
+                  .catch((genericPolyLines) => {
 
                         this.polylines = genericPolyLines;
                         this._calcLatLongBoundsWithoutKey(this.polylines);
@@ -548,4 +573,18 @@ private mapPolyLine(user: any, index: number) {
   }
 }
 
+}
+
+
+export interface Flag {
+
+  viewPlaceLine: boolean;
+  showPolyline: boolean;
+  showHistory: boolean;
+  showIgnitionHistory: boolean;
+  showPolygonReport: boolean;
+  boundChangeCount: number;
+  showAssignPolygon: boolean;
+  showMapCircle: boolean;
+  isVehicleSearch: boolean
 }

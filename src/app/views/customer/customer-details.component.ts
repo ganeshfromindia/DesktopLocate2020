@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpParams, HttpClient } from '@angular/common/http';
 import { DataService } from '../../data.service';
+import { UserService } from '../../user.service';
 
 @Component({
   selector: 'app-customer-details',
@@ -13,8 +14,14 @@ export class CustomerDetailsComponent implements OnInit {
   customerDetailForm: FormGroup;
   customerDetailList : Array<any> = [];
   customerList : Array<any> = [];
+  userId : Number;
 
-  constructor(private formBuilder: FormBuilder,private dataService: DataService) { }
+  constructor(private formBuilder: FormBuilder,
+              private dataService: DataService,
+              private userDetails: UserService) {
+                var userDetail = this.userDetails.getUserDetails(); 
+                this.userId = userDetail['id'];
+               }
 
   ngOnInit(): void {
     this.createForm();
@@ -42,7 +49,7 @@ export class CustomerDetailsComponent implements OnInit {
   }
 
   getCustomerList() {
-    let params = new HttpParams().set("userId", "8");
+    let params = new HttpParams().set("userId", this.userId.toString());
     this.dataService.sendGetRequest('jmc/api/v1/customer/get/all', params).subscribe(data => {
       if (data['status'] == 200 && data['payLoad'].length > 0) {
         this.customerList = data['payLoad'];

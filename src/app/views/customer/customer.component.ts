@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../../data.service';
 import { HttpParams, HttpClient } from '@angular/common/http';
+import { UserService } from '../../user.service';
 
 
 @Component({
@@ -16,15 +17,23 @@ export class CustomerComponent implements OnInit {
   makeModelEditId = false;
   customerSearch : String = "";
   customerDataCopy : Array<any> = [];
+  userId : Number;
 
-  constructor(private dataService: DataService) { }
+  constructor(private dataService: DataService,
+    private userDetails: UserService) {
+      
+     }
 
   ngOnInit(): void {
+    var userDetail = this.userDetails.getUserDetails(); 
+    this.userId = userDetail['id'];
+    console.log(this.userId);
     this.getCustomerList();
   }
 
-  getCustomerList() {
-    let params = new HttpParams().set("userId", "8");
+  getCustomerList() {    
+    let params = new HttpParams().set("userId", this.userId.toString());
+    
     this.dataService.sendGetRequest('jmc/api/v1/customer/get/all', params).subscribe(data => {
       if (data['status'] == 200 && data['payLoad'].length > 0) {
         this.customerList = data['payLoad'];
@@ -39,7 +48,7 @@ export class CustomerComponent implements OnInit {
     if(this.customerName){
       
       let data = {"name": this.customerName};
-      let params = new HttpParams().set("userId", "8");
+      let params = new HttpParams().set("userId", this.userId.toString());
       
       if(this.editId){
         data['id'] = this.editId;
