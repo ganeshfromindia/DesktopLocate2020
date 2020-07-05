@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DataService } from '../../data.service';
 import { HttpParams, HttpClient } from '@angular/common/http';
 import { UserService } from '../../user.service';
-
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-customer',
@@ -36,9 +36,16 @@ export class CustomerComponent implements OnInit {
     
     this.dataService.sendGetRequest('jmc/api/v1/customer/get/all', params).subscribe(data => {
       if (data['status'] == 200 && data['payLoad'].length > 0) {
-        this.customerList = data['payLoad'];
-        this.customerDataCopy = JSON.parse(JSON.stringify(this.customerList));
+        this.createPaginationList(data['payLoad']);
+        this.customerDataCopy = JSON.parse(JSON.stringify(data['payLoad']));
+      }else{
+        this.customerDataCopy = [];
+        this.sortedVehicleList = [];
       }
+    }, error =>{
+      this.customerDataCopy = [];
+      this.sortedVehicleList = [];
+      this.paginationIndex = 0;
     })
   }
 
@@ -88,12 +95,14 @@ export class CustomerComponent implements OnInit {
     this.customerList = JSON.parse(JSON.stringify(this.customerDataCopy));
 
     if ( this.customerSearch && this.customerSearch != "" && this.customerList.length > 0 ) {
-      this.customerList = this.customerList.filter(element => {
-        return (element.name.toLowerCase().indexOf(this.customerSearch.toLocaleLowerCase()) > -1
-      );
+       let customerListD = this.customerList.filter(element => {
+        return (element.name.toLowerCase().indexOf(this.customerSearch.toLocaleLowerCase()) > -1);
     });
+
+    this.createPaginationList(customerListD);
   }
-  }
+  
+}
 
 alertsDismiss: any = [];
 add(text): void {
@@ -110,5 +119,24 @@ edit(p){
   this.customerName = p.name;
   this.editId = p.id;
   this.makeModelEditId = true
+  }
+
+
+  public sortedVehicleList = [];
+  public paginationIndex : Number = 0;
+
+  private createPaginationList(allVehicleList) {
+    this.sortedVehicleList = [];
+    var i,j,temparray,chunk = environment.pageCount;
+    for (i=0,j=allVehicleList.length; i<j; i+=chunk) {
+        temparray = allVehicleList.slice(i,i+chunk);
+        this.sortedVehicleList.push(temparray);                
+    }
+    this.setSelectedPageList(this.sortedVehicleList[0], 0);
+  }
+
+  public setSelectedPageList(list, i){
+    this.customerList = list;
+    this.paginationIndex = i;
   }
 }

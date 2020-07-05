@@ -124,7 +124,7 @@
                                         <th>Task Name</th>
                                         <th>Time/ Distance</th>
                                         <th>Edit</th>
-                                        <th>Status</th>
+                                        <!-- <th>Status</th> -->
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -133,9 +133,9 @@
                                         <td>{{taskModefObj[t.taskType].isTime ? 
                                             (t.activityDuration | date : 'dd/MM/yy h:mm a') : t.activityDuration}}</td>
                                         <td><i class="fa fa-pencil-square-o" aria-hidden="true" (click)="editTask(t)"></i></td>
-                                        <td>
+                                        <!-- <td>
                                             <span class="badge badge-success">Active</span>
-                                        </td>
+                                        </td> -->
                                     </tr>
 
                                 </tbody>

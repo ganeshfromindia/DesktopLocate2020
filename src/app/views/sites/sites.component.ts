@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DataService } from '../../data.service';
 import { HttpParams, HttpClient } from '@angular/common/http';
 import { UserService } from '../../user.service';
+import { environment } from '../../../environments/environment';
 
 import {MapsAPILoader} from '@agm/core';
 declare var google: any;
@@ -305,7 +306,7 @@ export class SitesComponent implements OnInit {
 
   private createPaginationList(allVehicleList) {
     this.sortedVehicleList = [];
-    var i,j,temparray,chunk = 4;
+    var i,j,temparray,chunk = environment.pageCount;
     for (i=0,j=allVehicleList.length; i<j; i+=chunk) {
         temparray = allVehicleList.slice(i,i+chunk);
         this.sortedVehicleList.push(temparray);                

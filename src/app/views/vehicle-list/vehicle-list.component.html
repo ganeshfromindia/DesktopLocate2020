@@ -4,7 +4,7 @@
             <div class="card-header">
                 <i class="fa fa-align-justify"></i> Vehicle List
             </div>
-            <div class="card-body">
+            <div *ngIf="!isVehicleDetailList" class="card-body">
                 <table class="table table-bordered table-striped table-sm">
                     <thead>
                         <tr>
@@ -46,6 +46,45 @@
                     </ul>
                 </nav>
             </div>
+
+            <div class="card-body" *ngIf="isVehicleDetailList">
+                    <table class="table table-bordered table-striped table-sm">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Mobile Number</th>
+                                <th>Device Id</th>
+                                <th>Device Type</th>
+                                <th>Vehicle Type</th>
+                                <th>Manufacturer</th>
+                                <th>Make Model</th>
+                                <th>Created On</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let vehicle of vehicleData">
+                                <td>{{vehicle.vehicleNo}}</td>
+                                <td>{{vehicle.mobileNumber}}</td>
+                                <td>{{vehicle.vehicleDeviceId}}</td>
+                                <td>{{vehicle.vehicleDeviceType}}</td>
+                                <td>{{vehicle.vehicleType.vehicleType}}</td>
+                                <td>{{vehicle.manufacturer.manufacturer}}</td>
+                                <td>{{vehicle.makeModel.makeModel}}</td> 
+                                <td>{{vehicle.createdOn | date : 'dd/MM/yy, h:mm a'}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <nav>
+                        <ul class="pagination">
+                            <!-- <li class="page-item"><a class="page-link" href="#">Prev</a></li> -->
+                            <li class="page-item active" *ngFor="let p of sortedVehicleList; let idx = index;"
+                             [ngClass]="{'active': idx == paginationIndex }">
+                                <a class="page-link" (click)="setSelectedPageList(p, idx)">{{idx + 1}}</a>
+                            </li>
+                            <!-- <li class="page-item"><a class="page-link" href="#">Next</a></li> -->
+                        </ul>
+                    </nav>
+                </div>
         </div>
     </div>
 </div>

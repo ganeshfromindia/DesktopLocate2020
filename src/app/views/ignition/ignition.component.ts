@@ -69,12 +69,18 @@ export class IgnitionComponent implements OnInit {
   }
 
   ignitionListIndex = null;
+  noIgnitionData = false;
 
   showIgnitionData(list, i){
-    if(list.length > 0){
+    this.ignitionListIndex = null;
+    if(list && list.length > 0){
       this.innerIgntionList = list;
+      this.ignitionListIndex = i;
+      this.noIgnitionData = false;
+    }else{
+      this.innerIgntionList = [];
+      this.noIgnitionData = true;
     }
-    this.ignitionListIndex = i;
   }
 
   lat: number = 19.21026;

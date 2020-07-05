@@ -1,47 +1,53 @@
 <div class="animated fadeIn">
     <div class="row">
-        <div class="col-sm-6">
+        <div class="col-sm-12">
             <div *ngFor="let alert of alertsDismiss">
                 <alert [type]="alert.type" [dismissOnTimeout]="alert.timeout">{{ alert.msg }}</alert>
             </div>
             <div class="card">
                 <div class="card-header">
-                    <strong>Create Sites</strong>
+                    <strong>Create Customer Details</strong>
                 </div>
                 <div class="card-body">
                     <form [formGroup]="customerDetailForm">
                         <div class="row">
-                            <div class="col-sm-12">
+                            <div class="col-sm-6">
                                 <div class="form-group">
                                     <label for="bill-address">Customer</label>
-                                    <select id="projectId" name="projectId" class="form-control" 
-                                    (change)="getCustomerDetail($event)" formControlName="customerId">
+                                    <select id="projectId" name="projectId" class="form-control"
+                                        (change)="getCustomerDetail($event)" formControlName="customerId">
                                         <option *ngFor="let c of customerList" [value]="c.id">
                                             {{c.name}}</option>
                                     </select>
                                 </div>
                             </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="bill-address">Bill Address</label>
+                                    <input type="text" class="form-control" id="bill-address"
+                                        formControlName="billAddress" placeholder="Enter Bill Address">
+                                </div>
+                            </div>
                         </div>
-
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="form-group">
-                                    <label for="bill-address">Bill Address</label>
-                                    <input type="text" class="form-control" id="bill-address" formControlName="billAddress"
-                                        placeholder="Enter Bill Address">
+                                    <label for="name">Site Address</label>
+                                    <input type="text" class="form-control" id="siteAddress"
+                                        formControlName="siteAddress" placeholder="Enter Site Address">
                                 </div>
                             </div>
                         </div>
 
                         <div class="row">
-                            <div class="col-sm-6">
+                            <div class="col-sm-3">
                                 <div class="form-group">
                                     <label for="pin-code">Pin Code</label>
                                     <input type="number" class="form-control" id="pin-code" formControlName="pinCode"
                                         placeholder="Enter Pin Code">
                                 </div>
                             </div>
-                            <div class="col-sm-6">
+                            <div class="col-sm-3">
                                 <div class="form-group">
                                     <label for="name">State</label>
                                     <select id="state" name="state" class="form-control" formControlName="state">
@@ -50,28 +56,14 @@
                                     </select>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="form-group">
-                                    <label for="name">Site Address</label>
-                                    <input type="text" class="form-control" id="siteAddress" formControlName="siteAddress"
-                                    placeholder="Enter Site Address">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-12">
+                            <div class="col-sm-3">
                                 <div class="form-group">
                                     <label for="name">GSTN Number</label>
                                     <input type="text" class="form-control" id="gstnNumber" formControlName="gstnNumber"
                                         placeholder="GSTN Number">
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-12">
+                            <div class="col-sm-3">
                                 <div class="form-group">
                                     <label for="name">GST Code</label>
                                     <input type="text" class="form-control" id="gstCode" formControlName="gstCode"
@@ -80,26 +72,25 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-sm-12">
+                            <div class="col-sm-4">
                                 <div class="form-group">
                                     <label for="name">Field 1</label>
-                                    <input type="text" class="form-control" id="field1" formControlName="field1" placeholder="Enter Field 1">
+                                    <input type="text" class="form-control" id="field1" formControlName="field1"
+                                        placeholder="Enter Field 1">
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-12">
+                            <div class="col-sm-4">
                                 <div class="form-group">
                                     <label for="name">Field 2</label>
-                                    <input type="text" class="form-control" id="field2" formControlName="field2" placeholder="Enter Field 2">
+                                    <input type="text" class="form-control" id="field2" formControlName="field2"
+                                        placeholder="Enter Field 2">
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-12">
+                            <div class="col-sm-4">
                                 <div class="form-group">
                                     <label for="name">Field 3</label>
-                                    <input type="text" class="form-control" id="field3" formControlName="field3" placeholder="Enter Field 3">
+                                    <input type="text" class="form-control" id="field3" formControlName="field3"
+                                        placeholder="Enter Field 3">
                                 </div>
                             </div>
                         </div>
@@ -107,16 +98,19 @@
                 </div>
 
                 <div class="card-footer">
-                    <button type="button" class="btn btn-sm btn-primary" (click)="onFormSubmit()" [disabled]="!customerDetailForm.valid"><i
-                            class="fa fa-dot-circle-o"></i> Submit</button>
+                    <button type="button" class="btn btn-sm btn-primary" (click)="onFormSubmit()"
+                        [disabled]="!customerDetailForm.valid"><i class="fa fa-dot-circle-o"></i> Submit</button>
                 </div>
 
             </div>
         </div>
-        <div class="col-sm-6">
+
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
             <div class="card">
                 <div class="card-header">
-                    <i class="fa fa-align-justify"></i> Site List
+                    <i class="fa fa-align-justify"></i> Customer Detail List
                 </div>
                 <div class="card-body">
                     <table class="table table-bordered">
@@ -147,14 +141,12 @@
                         </tbody>
                     </table>
                     <ul class="pagination">
-                        <li class="page-item"><a class="page-link" href="#">Prev</a></li>
-                        <li class="page-item active">
-                            <a class="page-link" href="#">1</a>
+                        <!-- <li class="page-item"><a class="page-link" href="#">Prev</a></li> -->
+                        <li class="page-item active" *ngFor="let p of sortedVehicleList; let idx = index;"
+                            [ngClass]="{'active': idx == paginationIndex }">
+                            <a class="page-link" (click)="setSelectedPageList(p, idx)">{{idx + 1}}</a>
                         </li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item"><a class="page-link" href="#">4</a></li>
-                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                        <!-- <li class="page-item"><a class="page-link" href="#">Next</a></li> -->
                     </ul>
                 </div>
             </div>

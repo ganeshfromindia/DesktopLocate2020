@@ -18,6 +18,18 @@ import { NotificationsRoutingModule } from './notifications-routing.module';
 
 import { TaskReminderComponent } from './taskReminder.component';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
+import { OWL_DATE_TIME_FORMATS } from 'ng-pick-datetime';
+import { OwlMomentDateTimeModule } from 'ng-pick-datetime-moment';
+
+export const MY_MOMENT_FORMATS = {
+  parseInput: 'DD/MM/YYYY',
+  fullPickerInput: 'DD/MM/YYYY',
+  datePickerInput: 'DD/MM/YYYY',
+  timePickerInput: 'HH:mm:ss',
+  monthYearLabel: 'MMM YYYY',
+  dateA11yLabel: 'LL',
+  monthYearA11yLabel: 'MMMM YYYY',
+};
 
 @NgModule({
   imports: [
@@ -27,6 +39,7 @@ import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
     ModalModule.forRoot(),
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
+    OwlMomentDateTimeModule,
     FormsModule
   ],
   declarations: [
@@ -34,6 +47,9 @@ import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
     BadgesComponent,
     ModalsComponent,
     TaskReminderComponent
-  ]
+  ],
+  providers:[{ provide: OWL_DATE_TIME_FORMATS, useValue: MY_MOMENT_FORMATS }]
 })
 export class NotificationsModule { }
+
+

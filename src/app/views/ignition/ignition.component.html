@@ -52,7 +52,7 @@
                         <td nowrap>{{v?.endTime ? ( v?.endTime | date : 'dd/MM/yy h:mm a' ) : "-"}}</td>
                         <td nowrap>{{v?.workingTime ? userService.convertMS(v?.workingTime) : "-"}}</td>
                         <td nowrap>{{v?.overTime ? userService.convertMS(v?.overTime) : "-"}}</td>
-                        <td nowrap><i class="fa fa-pencil-square-o" aria-hidden="true"
+                        <td nowrap><i class="fa fa-pencil-square-o fa-lg pointer" aria-hidden="true"
                                 (click)="showIgnitionData(v.vehicleIgnitionList, ind)"></i></td>
                     </tr>
                 </table>
@@ -96,8 +96,8 @@
                                   [disabled]="true" aria-pressed="true">Decline</button>
                         </td>
                     </tr>
-
                 </table>
+                <h4 class="colorRed" *ngIf="noIgnitionData">Ignition Data is not available</h4>
             </div>
         </div>
     </div>

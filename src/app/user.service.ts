@@ -170,6 +170,18 @@ export class UserService {
      ( minute > 9 ? minute : '0'+ minute ) + ' : ' + ( seconds > 9 ? seconds : '0'+ seconds );
   }
 
+  convertMimuetToTime( milliseconds ) {
+    var hour, minute, seconds;
+    seconds = Math.floor(milliseconds / 1000);
+    minute = Math.floor(seconds / 60);
+    seconds = seconds % 60;
+    hour = Math.floor(minute / 60);
+    minute = minute % 60;
+
+    return ( hour > 9 ? hour : '0'+ hour ) + ' : ' +
+     ( minute > 9 ? minute : '0'+ minute );
+  }
+
   public arrayTextCommaSeperated(payload : Array<any>){
     var result = new Array();
     for (var i=0; i< payload.length; i++)

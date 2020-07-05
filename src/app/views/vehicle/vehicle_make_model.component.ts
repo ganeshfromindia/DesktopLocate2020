@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../../data.service'
+import { environment } from '../../../environments/environment';
+
 @Component({
   selector: 'app-vehicle-make-model',
   templateUrl: './vehicle_make_model.component.html',
@@ -106,7 +108,7 @@ export class VehicleMakeModelComponent implements OnInit {
 
   private createPaginationList(allVehicleList) {
     this.sortedVehicleList = [];
-    var i,j,temparray,chunk = 2;
+    var i,j,temparray,chunk = environment.pageCount;
     for (i=0,j=allVehicleList.length; i<j; i+=chunk) {
         temparray = allVehicleList.slice(i,i+chunk);
         this.sortedVehicleList.push(temparray);                

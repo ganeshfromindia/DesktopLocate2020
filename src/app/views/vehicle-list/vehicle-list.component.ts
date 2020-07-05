@@ -1,9 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataService } from '../../data.service';
-import { HttpParams, HttpClient } from '@angular/common/http';
+import { HttpParams } from '@angular/common/http';
 import { UserService } from '../../user.service';
 import { AddressService } from '../../services/address.service';
 import {ModalDirective} from 'ngx-bootstrap/modal';
+import { environment } from '../../../environments/environment';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-vehicle-list',
@@ -16,14 +18,24 @@ export class VehicleListComponent implements OnInit {
   theCheckbox : boolean = false;
   userId : Number;
   @ViewChild('largeModal') public largeModal: ModalDirective;
+  isVehicleDetailList = false;
 
-  constructor(private dataService: DataService, private userService: UserService, private addressService : AddressService) {
+  constructor(private dataService: DataService, private userService: UserService,
+     private addressService : AddressService, private router: Router) {
     var userDetail = this.userService.getUserDetails(); 
     this.userId = userDetail['id'];
+
+    if(this.router.url == '/setting/list/vehicle'){
+      this.isVehicleDetailList = true;
+      this.getVehicleList();
+    }else{
+      this.isVehicleDetailList = false;
+      this.getLiveData();
+    }
    }
 
   ngOnInit(): void {
-    this.getLiveData();
+    
   }
 
   getLiveData(){
@@ -33,6 +45,26 @@ export class VehicleListComponent implements OnInit {
       if (data['message'] == 'SUCCESS' && data['payLoad'].length > 0) {
          this.createPaginationList(data['payLoad']);
         }else{
+         this.vehicleData = [];
+         this.sortedVehicleList = [];
+      }
+    }, error => {
+      this.vehicleData = [];
+      this.sortedVehicleList = [];
+    })
+  }
+
+  getVehicleList(){
+    let params = new HttpParams({
+      fromObject : {
+        "userId": this.userId.toString()
+      }
+    })
+    
+    this.dataService.sendPostRequest('jmc/api/v1/vehicle/list', {}, params).subscribe(data => {
+      if (data['message'] == 'SUCCESS' && data['payLoad'].length > 0) {
+         this.createPaginationList(data['payLoad']);
+      }else{
          this.vehicleData = [];
          this.sortedVehicleList = [];
       }
@@ -78,7 +110,7 @@ export class VehicleListComponent implements OnInit {
 
   private createPaginationList(allVehicleList) {
     this.sortedVehicleList = [];
-    var i,j,temparray,chunk = 2;
+    var i,j,temparray,chunk = environment.pageCount;
     for (i=0,j=allVehicleList.length; i<j; i+=chunk) {
         temparray = allVehicleList.slice(i,i+chunk);
         this.sortedVehicleList.push(temparray);                

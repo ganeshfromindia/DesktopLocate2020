@@ -4,6 +4,7 @@ import { HttpParams, HttpClient } from '@angular/common/http';
 import { UserService } from '../../user.service';
 import {ModalDirective} from 'ngx-bootstrap/modal';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-project-details',
@@ -470,7 +471,7 @@ export class ProjectDetailsComponent implements OnInit {
 
   private createPaginationList(allVehicleList) {
     this.sortedVehicleList = [];
-    var i,j,temparray,chunk = 4;
+    var i,j,temparray,chunk = environment.pageCount;
     for (i=0,j=allVehicleList.length; i<j; i+=chunk) {
         temparray = allVehicleList.slice(i,i+chunk);
         this.sortedVehicleList.push(temparray);                

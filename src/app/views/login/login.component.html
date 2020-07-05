@@ -2,6 +2,21 @@
   <main class="main d-flex align-items-center">
     <div class="container">
       <div class="row">
+          <div class="col-md-3 mx-auto">
+            <!-- <h2>RENTEASE</h2> -->
+            <!-- <img _ngcontent-c1="" alt="" class="pull-right" src="assets/img/rentease.png" style="height:98px; width:98px;"> -->
+            <!-- <object data="assets/img/logo_rentease.svg" type="image/svg+xml">
+              
+            </object> -->
+
+            <img 
+            src="assets/img/logo_rentease.svg" 
+            alt="triangle with all three sides equal"
+            height="116"
+            width="247" />
+          </div>
+      </div>
+      <div class="row">
         <div class="col-md-5 mx-auto">
           <div class="card-group">
             <div class="card p-4">
@@ -15,13 +30,13 @@
                     </div>
                     <input type="text" class="form-control" placeholder="Username" autocomplete="username" formControlName="email" autocomplete="off">
                   </div>
-                  <p *ngIf="isControlHasError('email','required')"> <span>Error</span> </p>
-                  <p *ngIf="isControlHasError('email','email')"> <span>Email Error</span> </p>
-                  <p *ngIf="isControlHasError('email','minLength')">
+                  <p class="colorRed" *ngIf="isControlHasError('email','required')"> <span>Please Enter Email Id !</span> </p>
+                  <p class="colorRed" *ngIf="isControlHasError('email','email')"> <span>Enter Valid Email Id</span> </p>
+                  <p class="colorRed" *ngIf="isControlHasError('email','minLength')">
                     <strong>minLength error</strong>
                   </p>
-                  <p *ngIf="isControlHasError('email','maxLength')">
-                    <strong>maximum error`</strong>
+                  <p class="colorRed" *ngIf="isControlHasError('email','maxLength')">
+                    <strong>maximum error</strong>
                   </p>
                   <div class="input-group mb-4">
                     <div class="input-group-prepend">
@@ -30,11 +45,11 @@
                     <input type="password" class="form-control" placeholder="Password" autocomplete="current-password" formControlName="password" autocomplete="off">
                   </div>
 
-                  <p *ngIf="isControlHasError('password','required')"> <span>Error</span> </p>
-                  <p *ngIf="isControlHasError('password','minLength')">
+                  <p class="colorRed" *ngIf="isControlHasError('password','required')"> <span>Enter Password</span> </p>
+                  <p class="colorRed" *ngIf="isControlHasError('password','minLength')">
                     <strong>minLength error</strong>
                   </p>
-                  <p *ngIf="isControlHasError('password','maxLength')">
+                  <p class="colorRed" *ngIf="isControlHasError('password','maxLength')">
                     <strong>maximum error`</strong>
                   </p>
 
@@ -42,9 +57,9 @@
                     <div class="col-6">
                       <button type="button" (click)="submit()" class="btn btn-primary px-4">Login</button>
                     </div>
-                    <div class="col-6 text-right">
+                    <!-- <div class="col-6 text-right">
                       <button type="button" class="btn btn-link px-0">Forgot password?</button>
-                    </div>
+                    </div> -->
                   </div>
                 </form>
               </div>

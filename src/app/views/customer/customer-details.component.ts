@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpParams, HttpClient } from '@angular/common/http';
 import { DataService } from '../../data.service';
 import { UserService } from '../../user.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-customer-details',
@@ -91,13 +92,16 @@ export class CustomerDetailsComponent implements OnInit {
 
     this.dataService.sendGetRequest('jmc/api/v1/customer/detail/get', params).subscribe(data => {
       if (data['status'] == 200) {
-        this.customerDetailList = data['payLoad'];
+        this.createPaginationList(data['payLoad']);
       }else{
         this.customerDetailList = [];
       }
+    }, error =>{
+      this.customerDetailList = [];
+      this.sortedVehicleList = [];
+      this.paginationIndex = 0;
     })
   }
-
 
   edit(custmerDetail){
 
@@ -126,5 +130,24 @@ export class CustomerDetailsComponent implements OnInit {
       timeout: 5000
     });
   }
+
+  public sortedVehicleList = [];
+  public paginationIndex : Number = 0;
+
+  private createPaginationList(allVehicleList) {
+    this.sortedVehicleList = [];
+    var i,j,temparray,chunk = environment.pageCount;
+    for (i=0,j=allVehicleList.length; i<j; i+=chunk) {
+        temparray = allVehicleList.slice(i,i+chunk);
+        this.sortedVehicleList.push(temparray);                
+    }
+    this.setSelectedPageList(this.sortedVehicleList[0], 0);
+  }
+
+  public setSelectedPageList(list, i){
+    this.customerDetailList = list;
+    this.paginationIndex = i;
+  }
+
 
 }

@@ -37,7 +37,7 @@ export class IgnitionReportComponent implements OnInit {
         getVehicleList(){
             let params = new HttpParams().set("userId", this.userId.toString());
         
-            this.dataService.sendPostRequest('jmc/api/v1/vehicle/live', {}, params).subscribe(data => {
+            this.dataService.sendPostRequest('jmc/api/v1/vehicle/list', {}, params).subscribe(data => {
                 if (data['message'] == 'SUCCESS' && data['payLoad'].length > 0) {
                     this.vehicleList = data['payLoad'];
                     this.vehicle = this.vehicleList[0];
@@ -69,12 +69,18 @@ export class IgnitionReportComponent implements OnInit {
           }
         
           ignitionListIndex = null;
+          noIgnitionData = false;
         
           showIgnitionData(list, i){
-            if(list.length > 0){
+            this.ignitionListIndex = null;
+            if(list && list.length > 0){
               this.innerIgntionList = list;
+              this.ignitionListIndex = i;
+              this.noIgnitionData = false;
+            }else{
+              this.innerIgntionList = [];
+              this.noIgnitionData = true;
             }
-            this.ignitionListIndex = i;
           }
         
           lat: number = 19.21026;

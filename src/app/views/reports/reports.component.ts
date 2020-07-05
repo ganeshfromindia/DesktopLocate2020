@@ -30,10 +30,10 @@ export class ReportsComponent implements OnInit {
 
   downloadList: any[] = [
     { value: 'Dt', viewValue: 'Distance Traveled' },
-    { value: 'Ar', viewValue: 'Analytics Report' },
-    { value: 'Al', viewValue: 'Alert Report' },
+    // { value: 'Ar', viewValue: 'Analytics Report' },
+    // { value: 'Al', viewValue: 'Alert Report' },
     { value: 'hi', viewValue: 'History Report' },
-    { value: 'Tm', viewValue: 'Temperature Report' },
+    // { value: 'Tm', viewValue: 'Temperature Report' },
     { value: 'Tk', viewValue: 'Task Reminder Report' },
     { value: 'Vs', viewValue: 'Vehicle Status' }
   ];
@@ -47,18 +47,19 @@ export class ReportsComponent implements OnInit {
 
   ngOnInit(): void {
 
-    if(this.userService.getVehicleList()){
-      this.vehicleList = this.userService.getVehicleList();
-      this.vehicle = this.vehicleList[0];
-    }else{
-      this.getVehicleList();  
-    } 
+    // if(this.userService.getVehicleList()){
+    //   this.vehicleList = this.userService.getVehicleList();
+    //   this.vehicle = this.vehicleList[0];
+    // }else{
+        
+    // } 
+    this.getVehicleList();
   }
 
   getVehicleList(){
     let params = new HttpParams().set("userId", this.userId.toString());
 
-    this.dataService.sendPostRequest('jmc/api/v1/vehicle/live', {}, params).subscribe(data => {
+    this.dataService.sendPostRequest('jmc/api/v1/vehicle/list', {}, params).subscribe(data => {
       if (data['message'] == 'SUCCESS' && data['payLoad'].length > 0) {
          this.vehicleList = data['payLoad'];
          this.vehicle = this.vehicleList[0];

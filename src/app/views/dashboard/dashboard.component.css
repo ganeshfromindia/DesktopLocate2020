@@ -1,0 +1,23 @@
+.dataCount{
+    text-align: center;
+    margin: 15px 46px 46px 44px;
+}
+
+.dataLabel{
+    margin-top: 10px;
+    font-weight: 600;
+}
+
+.dataBox{
+    border: white 1px solid;
+    border-radius: 15px;
+}
+
+h1, .h1 {
+    font-size: 3.1875rem;
+}
+
+.bg-primary {
+    background-color: #3a9d5d !important;
+}
+    

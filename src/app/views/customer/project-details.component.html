@@ -68,7 +68,7 @@
     <div class="col-lg-12">
         <div class="card">
             <div class="card-header">
-                <i class="fa fa-align-justify"></i> Combined All Table
+                <i class="fa fa-align-justify"></i> Vehicle List
             </div>
             <div class="card-body">
                 <table class="table table-bordered table-striped table-sm">
@@ -94,8 +94,10 @@
                             <td>{{vehicle.mobileNumber}}</td>
                             <td>{{vehicle?.project ? vehicle.project.project : '-'}}</td>
                             <td>{{vehicle?.site ? vehicle.site.siteName : '-'}}</td>
-                            <td>{{vehicle.effectiveFrom | date : 'dd/MM/yy h:mm a'}}</td>
-                            <td>{{vehicle.effectiveTo | date : 'dd/MM/yy h:mm a'}}</td>
+                            <td class="text-center"> 
+                                {{this.userService.convertMimuetToTime(vehicle?.effectiveFrom ? (vehicle?.effectiveFrom * 60000) : 0  )}}</td>
+                            <td class="text-center">
+                                {{this.userService.convertMimuetToTime(vehicle?.effectiveTo ? (vehicle?.effectiveTo * 60000) : 0  )}}</td>
                             <td>{{vehicle.vehicleStatus}}</td>
                             <td>{{vehicle.vehicleCondition}}</td>
                             <td class="text-center"><i class="fa fa-pencil-square-o fa-lg pointer" aria-hidden="true"
