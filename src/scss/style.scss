@@ -51,5 +51,27 @@ button {
 }
 
 .colorRed{
-    color: red;
+    color:#c71416ed;
+}
+
+.lgnBtn{
+    background-color: rgb(199,20,22);
+    border-color: rgb(199,20,22);
+    border-radius: 8px;
+    margin-left: 26px;
+    font-weight: 600;
+}
+
+.lgnJust{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.paddingZero{
+    padding-top: 0px !important;
+}
+
+.lgnRadius{
+    border-radius: 8px;
 }

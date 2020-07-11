@@ -77,7 +77,7 @@ export class ProjectDetailsComponent implements OnInit {
 
   getCustomerList() {
     let params = new HttpParams().set("userId", this.userId.toString());
-    this.dataService.sendGetRequest('jmc/api/v1/customer/get/all', params).subscribe(data => {
+    this.dataService.sendGetRequest('jmc/api/v1/customer/get/all', {}).subscribe(data => {
       if (data['status'] == 200 && data['payLoad'].length > 0) {
         this.customerList = data['payLoad'];
       }
@@ -85,15 +85,18 @@ export class ProjectDetailsComponent implements OnInit {
   }
 
   getCustomerDetail(value, isEdit?) {
-
+    this.inItBillingForm();
     if(value){
       let params = new HttpParams().set("customerId", value);
       this.dataService.sendGetRequest('jmc/api/v1/customer/detail/get', params).subscribe(data => {
         if (data['status'] == 200) {
           this.customerDetailList = data['payLoad'];
           this.customerDetailBoolean = true;
+          
           if(isEdit){
             this.updateBillingData(isEdit);  
+          }else if(this.customerDetailList.length > 0){
+            this.autoSelectBilling(this.customerDetailList[0]);
           }        
         }else{
           this.customerDetailList = [];
@@ -107,6 +110,7 @@ export class ProjectDetailsComponent implements OnInit {
   customerDetailBoolean : boolean = false;
   addBillingData(id){
     this.editFlag = false;
+    this.customerDetailBoolean = false;
     this.onReset();
     let params = new HttpParams().set("vehicleId", id);
 
@@ -127,30 +131,49 @@ export class ProjectDetailsComponent implements OnInit {
     this.largeModal.show();
   }
 
-
-  
-
   updateBillingData(data){
     
-    var editData = {
-      id: data.id,
-      customerId: data.customerId,
-      billAddress: this.customerDetailList.find(x => x.id == data.customerDetailId),
-      siteAddress: "",
-      workOrderNo : data.workOrderNo,
-      workOrderDate : new Date(data.workOrderDate),
-      AmmendmentDate: new Date(data.ammendmentDate),
-      billingDescription: data.billingDescription,
-      subDescription: data.subBillingDescription,
-      perHourBilling: data.perHourBilling,
-      NormalRate: data.normalRate,
-      OverTimeRate: data.overTimeRate,
-      perMonthBillingRate: data.perMonthBillingRate,
-      cgst: data.cgst,
-      sgst: data.sgst,
-      igst: data.igst,
+    var billAddress = this.customerDetailList.find(x => x.id == data.customerDetailId);
+    if(billAddress){
+      var editData = {
+        id: data.id,
+        customerId: data.customerId,
+        billAddress: billAddress,
+        siteAddress: billAddress ? billAddress.siteAddress : '',
+        workOrderNo : data.workOrderNo,
+        workOrderDate : new Date(data.workOrderDate),
+        AmmendmentDate: new Date(data.ammendmentDate),
+        billingDescription: data.billingDescription,
+        subDescription: data.subBillingDescription,
+        perHourBilling: data.perHourBilling,
+        NormalRate: data.normalRate,
+        OverTimeRate: data.overTimeRate,
+        perMonthBillingRate: data.perMonthBillingRate,
+        cgst: data.cgst,
+        sgst: data.sgst,
+        igst: data.igst,
+      }
+      this.AssignBillingForm.patchValue(editData);
     }
+  }
 
+  inItBillingForm(){
+    var editData = {
+      billAddress: null,
+      siteAddress: null,
+      workOrderNo : null,
+      workOrderDate : null,
+      AmmendmentDate: null,
+      billingDescription: null,
+      subDescription: null,
+      perHourBilling: null,
+      NormalRate: null,
+      OverTimeRate: null,
+      perMonthBillingRate:null,
+      cgst: null,
+      sgst: null,
+      igst: null,
+    }
     this.AssignBillingForm.patchValue(editData);
   }
 
@@ -186,9 +209,16 @@ export class ProjectDetailsComponent implements OnInit {
     })
   }
 
+  autoSelectBilling(event){
+    this.AssignBillingForm.patchValue({
+      billAddress : event
+    });
+    this.AssignBillingForm.updateValueAndValidity();
+    this.selectBillAddress(event);
+  }
+
   selectBillAddress(event){
-    console.log(event);
-    console.log(this.AssignBillingForm.controls['billAddress'].value);
+
     this.AssignBillingForm.patchValue({
       siteAddress: this.AssignBillingForm.controls['billAddress'].value.siteAddress,
       state : this.AssignBillingForm.controls['billAddress'].value.stateCode,
@@ -206,6 +236,7 @@ export class ProjectDetailsComponent implements OnInit {
       this.AssignBillingForm.controls['cgst'].disable();
       this.AssignBillingForm.controls['sgst'].disable();
     }
+    this.AssignBillingForm.updateValueAndValidity();
   }
 
   submit(){
@@ -317,10 +348,8 @@ export class ProjectDetailsComponent implements OnInit {
           this.editVehicleStatusFlag = true;
           this.getSite(data['payLoad'].projectId, data['payLoad']);
 
-          if(data['payLoad'].vehicleStatus == 'FREE'){
+          if(data['payLoad'].vehicleStatus == 'FREE' || (this.siteBoolean && this.editVehicleStatusFlag)){
             this.updateVehicleStatus(data['payLoad']);
-          }else if(this.siteBoolean && this.editVehicleStatusFlag){
-            this.updateVehicleStatus(data['payLoad']);  
           }
 
         }else{
@@ -330,8 +359,7 @@ export class ProjectDetailsComponent implements OnInit {
     }
   
     updateVehicleStatus(data){
-      console.log(data);
-  
+
       if(data.vehicleStatus == 'ASSIGNED_TO_PROJECT'){
         this.vehicleConditionForm.addControl('project', this.formBuilder.control('', Validators.required))
         this.vehicleConditionForm.addControl('site', this.formBuilder.control('', Validators.required))
@@ -348,8 +376,8 @@ export class ProjectDetailsComponent implements OnInit {
         id: data.id,
         vehicleCondition : data.vehicleCondition,
         vehicleStatus : data.vehicleStatus,
-        fromdate : new Date(data.toDate),
-        toDate : null,
+        fromdate : data.toDate ? new Date(data.toDate) : new Date(),
+        toDate : new Date(),
         project : data.projectId,
         site : data.siteId
       }

@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { getStyle, hexToRgba } from '@coreui/coreui/dist/js/coreui-utilities';
 import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
 
 import { DataService } from '../../data.service';
 import { HttpParams, HttpClient } from '@angular/common/http';
 import { UserService } from '../../user.service';
+
+import {ModalDirective} from 'ngx-bootstrap/modal';
 
 @Component({
   templateUrl: 'dashboard.component.html',
@@ -198,6 +200,8 @@ export class DashboardComponent implements OnInit {
   FreeVehicleCount = [];
   workingVehicleCount = [];
 
+  @ViewChild('largeModal') public largeModal: ModalDirective;
+
   constructor(private dataService: DataService,
     private userDetails: UserService) {
       var userDetail = this.userDetails.getUserDetails(); 
@@ -236,5 +240,13 @@ export class DashboardComponent implements OnInit {
       }, error => {
         this.vehicleList = [];
       })
+    }
+
+    viewList : Array<any> = [];
+    viewLabel : String;
+    showVehicleData(list, label){
+      this.viewList = list;
+      this.viewLabel = label;
+      this.largeModal.show(); 
     }
 }

@@ -119,7 +119,7 @@ export class UserComponent implements OnInit {
   }
 
   submit(){
-
+    this.userList = [];
     if(this.userForm.valid){
 
       let data = this.userForm.getRawValue();
@@ -161,10 +161,13 @@ export class UserComponent implements OnInit {
   onReset() {
     this.submitted = false;
     this.userForm.reset();
+    let el: HTMLElement = this.projectEle.nativeElement;
+    el.click();
   }
 
   userSelectType: String = "emailId";
   selectedValue : String;
+  userList : Array<any> = [];
 
   changeType(event){
    if(event && this.selectedValue){
@@ -174,35 +177,38 @@ export class UserComponent implements OnInit {
 
   getUser(type, value) {
     this.dataService.sendGetRequest('jmc/api/v1/user/get?'+ type + '=' + value).subscribe(data => {
-      if (data['status'] == 200) {
-        var userData = data['payLoad'];
-        userData.designationId = data['payLoad'].designation.id;
-
-        userData.project = this.getMultiSelectData(userData.projects, "project", 'project');
-
-        let pArray = this.getIdArray(userData.project);
-        this.getSiteList(pArray);
-
-        userData['siteIdList'] = this.getMultiSelectData(userData.sites, "siteName", 'siteName');
-
-        this.userEditId = userData.id; 
-        delete userData.createdOn;
-        delete userData.lastUpdate;
-        delete userData.designationModel;
-        delete userData.registrationDate;
-        delete userData.active;
-        delete userData.password;
-        delete userData.projectModels;
-        delete userData.designation;
-        delete userData.sites;
-        delete userData.projects;
-
-        this.userForm.setValue(userData);
-        
-        let el: HTMLElement = this.projectEle.nativeElement;
-        el.click();
+      if (data['status'] == 200 ) {
+        this.userList = data['payLoad'];
       }
     })
+  }
+
+  edit(userData){
+
+      userData.designationId = userData.designation.id;
+      userData.project = this.getMultiSelectData(userData.projects, "project", 'project');
+
+      let pArray = this.getIdArray(userData.project);
+      this.getSiteList(pArray);
+
+      userData['siteIdList'] = this.getMultiSelectData(userData.sites, "siteName", 'siteName');
+
+      this.userEditId = userData.id; 
+      delete userData.createdOn;
+      delete userData.lastUpdate;
+      delete userData.designationModel;
+      delete userData.registrationDate;
+      delete userData.active;
+      delete userData.password;
+      delete userData.projectModels;
+      delete userData.designation;
+      delete userData.sites;
+      delete userData.projects;
+
+      this.userForm.setValue(userData);
+      
+      let el: HTMLElement = this.projectEle.nativeElement;
+      el.click();
   }
 
   multiSelectDropDownSetting(){

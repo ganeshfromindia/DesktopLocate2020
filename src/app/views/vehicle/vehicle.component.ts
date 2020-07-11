@@ -48,7 +48,7 @@ export class vehicleComponent implements OnInit {
       manufacturerId: ['', Validators.required],
       makeModelId: ['', Validators.required],
       vehicleTypeId: ['', Validators.required],
-      fuelTankCapacity: ['', Validators.required],
+      fuelTankCapacity: [''],
       projectId : [''],
       manufacturerYear : [''],
       siteId : [''],
@@ -266,6 +266,10 @@ export class vehicleComponent implements OnInit {
           this.updateVehicleData(vehicleData);  
         }
       }
+    }, error => {
+      if(error.message){
+        this.add(error.message);
+      }
     })
   }
 
@@ -300,7 +304,7 @@ export class vehicleComponent implements OnInit {
 
 
     
-    this.vehicleForm.setValue(Data);
+    this.vehicleForm.patchValue(Data);
   }
 
   insuranceImage: FileList;

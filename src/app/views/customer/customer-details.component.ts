@@ -27,11 +27,10 @@ export class CustomerDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.createForm();
     this.getCustomerList();
+    this.getStateList();
   }
 
-  stateList : Array<any> = [{"code" : "MH", "name" : "MAHARASHTRA"},
-                            {"code" : "GU", "name" : "GUJRAT"},
-                            {"code" : "KE", "name" : "KERALA"}]
+  stateList : Array<any> = []
 
   createForm(){
     this.customerDetailForm = this.formBuilder.group({
@@ -51,9 +50,18 @@ export class CustomerDetailsComponent implements OnInit {
 
   getCustomerList() {
     let params = new HttpParams().set("userId", this.userId.toString());
-    this.dataService.sendGetRequest('jmc/api/v1/customer/get/all', params).subscribe(data => {
+    this.dataService.sendGetRequest('jmc/api/v1/customer/get/all', {}).subscribe(data => {
       if (data['status'] == 200 && data['payLoad'].length > 0) {
         this.customerList = data['payLoad'];
+      }
+    })
+  }
+
+  getStateList() {
+    
+    this.dataService.sendGetRequest('jmc/api/v1/get/india-state', {}).subscribe(data => {
+      if (data['status'] == 200 && data['payLoad'].length > 0) {
+        this.stateList = data['payLoad'];
       }
     })
   }

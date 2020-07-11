@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataService } from '../../data.service';
 import { UserService } from '../../user.service';
 import { HttpParams, HttpClient } from '@angular/common/http';
-
+import {ModalDirective} from 'ngx-bootstrap/modal';
 import { Angular5Csv } from 'angular5-csv/dist/Angular5-csv';
 import { AddressService } from '../../services/address.service'
 
@@ -35,7 +35,9 @@ export class ReportsComponent implements OnInit {
     { value: 'hi', viewValue: 'History Report' },
     // { value: 'Tm', viewValue: 'Temperature Report' },
     { value: 'Tk', viewValue: 'Task Reminder Report' },
-    { value: 'Vs', viewValue: 'Vehicle Status' }
+    { value: 'Vs', viewValue: 'Vehicle Status' },
+    { value: 'Pr', viewValue: 'Polygon Report' },
+    { value: 'Pn', viewValue: 'Polygon Notification' }
   ];
 
   constructor(private userService: UserService, private dataService: DataService,
@@ -71,6 +73,7 @@ export class ReportsComponent implements OnInit {
   }
 
   showReport(downloadType){
+    
     if(downloadType && this.userService.getTime(this.startTime) && this.userService.getTime(this.endTime) 
         && this.userService.getTime(this.endTime) > this.userService.getTime(this.startTime)){
           if(this.selectedValue == 'Dt'){
@@ -88,9 +91,12 @@ export class ReportsComponent implements OnInit {
             this.getTaskReminderReport(this.userService.getEndTime(this.endTime), this.userId.toString());  
           }else if(this.selectedValue == 'Vs'){
               this._getVehicleStatus(this.vehicle, this.userService.getTime(this.startTime), this.userService.getTime(this.endTime));
+          }else if(this.selectedValue == 'Pr'){
+            this._getPolygonReport(this.vehicle, this.userService.getTime(this.startTime), this.userService.getTime(this.endTime));
+          }else if(this.selectedValue == 'Pn'){
+            this._getPolygonNotification(this.vehicle, this.userService.getTime(this.startTime), this.userService.getTime(this.endTime));
           }
         }
-    
   }
 
   downloadReport(downloadType){
@@ -126,6 +132,9 @@ export class ReportsComponent implements OnInit {
           this.taskReminderReport = [];
           this.TaskReminderEmpty = true;
         }
+      }, error =>{
+        this.taskReminderReport = [];
+        this.TaskReminderEmpty = true;
       })  
     }
   }
@@ -147,6 +156,9 @@ export class ReportsComponent implements OnInit {
         this.distanceTraveledEmpty = true;
         this.distanceTraveledReport = [];
       }
+    }, error =>{
+      this.distanceTraveledEmpty = true;
+      this.distanceTraveledReport = [];
     })
   }
 
@@ -374,14 +386,126 @@ export class ReportsComponent implements OnInit {
     this.vehicleStatusTimeCount = {};
 
     this.dataService.sendGetRequest('jmc/api/v1/vehicle/status/report', params).subscribe(data => {
-      if (data['status'] == 200 && data['payLoad']) {
+      if (data['status'] == 200 && data['payLoad'] && data['payLoad'].reportList.length > 0) {
         this.vehicleStatusList = data['payLoad'].reportList;
         this.vehicleStatusTimeCount = data['payLoad'].statusTimeCount;
         this.vehicleStatusEmpty = false;
       }else{
         this.vehicleStatusEmpty = true;
       }
+    }, error =>{
+      this.vehicleStatusEmpty = true;
+      this.vehicleStatusList = [];
+      this.vehicleStatusTimeCount = {};
     })
+  }
+
+
+
+  polygonReportList : Array<any> = [];
+  polygonDataList : Array<any> = [];
+  polygonReportEmpty : boolean = false;
+  polygonDataEmpty : boolean = false;
+  polygon = {};
+
+  _getPolygonReport(vehicle, startTime, endTime){
+
+    let params = new HttpParams().set("vehicleId", vehicle.id).set("startTime", startTime).set("endTime", endTime);
+    this.showTable = true;
+    this.polygonReportEmpty = false;
+    this.polygonReportList = [];
+    this.polygonDataList = [];
+    this.polygonDataEmpty = false;
+    this.polygon = {};
+
+    this.dataService.sendGetRequest('jmc/api/v1/polygon/report/list', params).subscribe(data => {
+      if (data['status'] == 200 && data['payLoad'] && data['payLoad'].length > 0) {
+        this.polygonReportList = data['payLoad'];
+        this.polygon = this.polygonReportList[0];
+        this.polygonReportEmpty = false;
+        this.changePolygon(this.polygon);
+        
+      }else{
+        this.polygonReportEmpty = true;
+        this.polygonDataList = [];
+      }
+    }, error =>{
+      this.polygonReportEmpty = true;
+      this.polygonReportList = [];
+      this.polygonDataList = [];
+    })
+  }
+
+  changePolygon(event){
+    if(event.polygonReportList && event.polygonReportList.length > 0){
+      this.polygonDataList = event.polygonReportList;
+      this.polygonDataEmpty = false;
+    }else{
+      this.polygonDataList = [];
+      this.polygonDataEmpty = true;
+    }
+  }
+
+
+  polygonNotificationList : Array<any> = [];
+  polygonNotificationEmpty : boolean = false;
+  
+  _getPolygonNotification(vehicle, startTime, endTime){
+
+    let params = new HttpParams().set("vehicleId", vehicle.id)
+                                 .set("startTime", startTime)
+                                 .set("endTime", endTime)
+                                 .set("eventType", 'GEO_FENCE'); //eventType
+    
+    this.showTable = true;
+    this.polygonNotificationEmpty = false;
+    this.polygonNotificationList = [];
+
+    this.dataService.sendGetRequest('jmc/api/v1/get/notification/report', params).subscribe(data => {
+      if (data['status'] == 200 && data['payLoad'] && data['payLoad'].length > 0) {
+        this.polygonNotificationList = data['payLoad'];
+        this.polygonNotificationEmpty = false;
+        
+      }else{
+        this.polygonNotificationEmpty = true;
+        this.polygonNotificationList = [];
+      }
+    }, error =>{
+      this.polygonNotificationEmpty = true;
+      this.polygonNotificationList = [];
+    })
+  }
+
+
+  lat: number = 19.21026;
+  lng: number = 72.85801;
+  latitude : number;
+  longitude : number;
+  mapAddress = "";
+  mapDataObj : any;
+  @ViewChild('largeModal') public largeModal: ModalDirective;
+
+  getAddress(element){
+
+    this.latitude = element.latitude;
+    this.longitude = element.longitude;
+
+    this.lat = element.lattitude;
+    this.lng = element.longitude;
+    
+    if(element.latitude && element.longitude){
+      this.addressService
+      .getAddress(element.latitude, element.longitude)
+      .then(data => {
+        try {
+          this.mapAddress = data["results"][0]["formatted_address"];
+          this.largeModal.show();
+          this.mapDataObj = {'eventType' : 'live' , data : [element]};
+        } catch (error) {
+          this.mapAddress = "No Address Found";
+        }
+      });
+    }
   }
 
   downloadTaskReminder(start, end, user){

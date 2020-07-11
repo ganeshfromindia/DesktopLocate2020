@@ -9,6 +9,8 @@ import { ReportsComponent } from './reports.component';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 import { OWL_DATE_TIME_FORMATS } from 'ng-pick-datetime';
 import { OwlMomentDateTimeModule } from 'ng-pick-datetime-moment';
+import { ModalModule } from 'ngx-bootstrap/modal';
+import { TrackingModule } from '../tracking/tracking.module';
 
 export const MY_MOMENT_FORMATS = {
   parseInput: 'DD/MM/YYYY',
@@ -45,6 +47,8 @@ const routes: Routes = [
     OwlDateTimeModule,
     OwlMomentDateTimeModule,
     OwlNativeDateTimeModule,
+    ModalModule.forRoot(),
+    TrackingModule
   ],
   providers:[DataService,
     { provide: OWL_DATE_TIME_FORMATS, useValue: MY_MOMENT_FORMATS }],

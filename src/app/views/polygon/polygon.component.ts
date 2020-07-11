@@ -46,7 +46,7 @@ export class PolygonComponent implements OnInit {
       polygonType: new FormControl('CIRCULAR', Validators.required),
       circularPoint: new FormGroup({
         address: new FormControl(null, Validators.required),
-        aerialDistance: new FormControl(200, [Validators.max(2000), Validators.min(200), Validators.required]),
+        aerialDistance: new FormControl(200, [Validators.max(20000), Validators.min(200), Validators.required]),
         latitude: new FormControl(null, Validators.required),
         longitude: new FormControl(null, Validators.required)
       })

@@ -5,6 +5,7 @@ import { UserService } from '../../user.service';
 import { AddressService } from '../../services/address.service';
 
 import {ModalDirective} from 'ngx-bootstrap/modal';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-ignition-report',
@@ -115,14 +116,21 @@ export class IgnitionReportComponent implements OnInit {
 
 
 
-          DownloadVoucher(){
+      DownloadVoucher(){
         
         var data = {"vehicleId":this.vehicle['id'], "startTime":this.userService.getStartTime(this.startTime),
                     "endTime":this.userService.getEndTime(this.endTime), "dayWise":true};
 
-        window.open("http://localhost:8071/jmc/api/v1/download/voucher?vehicleId="+data.vehicleId+
+        window.open(environment.base_url +"/jmc/api/v1/download/voucher?vehicleId="+data.vehicleId+
                         "&startTime="+data.startTime+"&endTime="+data.endTime+"&dayWise=true");
 
+          }
+
+          DownloadExcel(){
+            var data = {"vehicleId":this.vehicle['id'], "startTime":this.userService.getStartTime(this.startTime),
+            "endTime":this.userService.getEndTime(this.endTime), "dayWise":true};
+            window.open( environment.base_url + 'jmc/api/v1/get/vehicle/ignition-report/excel?vehicleIdList='+data.vehicleId
+            +'&startTime='+data.startTime+'&endTime='+data.endTime);
           }
         
 }

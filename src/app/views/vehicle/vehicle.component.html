@@ -14,7 +14,7 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="form-group">
-                                    <label for="name">Vehicle Device Id.</label>
+                                    <label for="name">Vehicle Device Id. <sup>*</sup></label>
                                     <input type="text" class="form-control" id="first-name"
                                         formControlName="vehicleDeviceId" placeholder="Enter Vehicle Device Id.">
                                 </div>
@@ -23,7 +23,7 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="form-group">
-                                    <label for="name">Vehicle No.</label>
+                                    <label for="name">Vehicle No. <sup>*</sup></label>
                                     <input type="text" class="form-control" id="last-name" formControlName="vehicleNo"
                                         placeholder="Enter Vehicle No.">
                                 </div>
@@ -32,7 +32,7 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="form-group">
-                                    <label for="name">Asset No.</label>
+                                    <label for="name">Asset No. <sup>*</sup></label>
                                     <input type="text" id="assetNo" name="assetNo" class="form-control"
                                         formControlName="assetNo" placeholder="Enter Asset No..">
                                 </div>
@@ -41,7 +41,7 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="form-group">
-                                    <label for="name">Moblie No</label>
+                                    <label for="name">Moblie No <sup>*</sup></label>
                                     <input type="number" id="mobile" name="mobile" class="form-control"
                                         formControlName="mobileNumber" placeholder="Enter Moblie No..">
                                 </div>
@@ -51,7 +51,7 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="form-group">
-                                    <label for="gender">Vehicle Device Type</label>
+                                    <label for="gender">Vehicle Device Type <sup>*</sup></label>
                                     <select id="vehicleDeviceType" name="vehicleDeviceType" class="form-control"
                                         formControlName="vehicleDeviceType">
                                         <option *ngFor="let type of deviceTypeList" [value]="type.deviceType">
@@ -64,7 +64,7 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="form-group">
-                                    <label for="gender">Vehicle Manufacture</label>
+                                    <label for="gender">Vehicle Manufacture <sup>*</sup></label>
                                     <select id="manufacturerId" name="manufacturerId"
                                         (change)="changeManufacture($event)" class="form-control"
                                         formControlName="manufacturerId">
@@ -78,7 +78,7 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="form-group">
-                                    <label for="gender">Vehicle Make Model</label>
+                                    <label for="gender">Vehicle Make Model <sup>*</sup></label>
                                     <select id="makeModelId" name="makeModelId" class="form-control"
                                         formControlName="makeModelId">
                                         <option *ngFor="let make of makeModelList" [value]="make.id">
@@ -91,7 +91,7 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="form-group">
-                                    <label for="gender">Vehicle Type</label>
+                                    <label for="gender">Vehicle Type <sup>*</sup></label>
                                     <select id="vehicleTypeId" name="vehicleTypeId" class="form-control"
                                         formControlName="vehicleTypeId">
                                         <option *ngFor="let type of vehicleTypeList" [value]="type.id">
@@ -126,7 +126,7 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="form-group">
-                                    <label for="project">Project</label>
+                                    <label for="project">Project <sup>*</sup></label>
                                     <select id="projectId" name="projectId" class="form-control"
                                         formControlName="projectId" (change)="projectChange($event.target.value)">
                                         <option *ngFor="let pro of projectList" [value]="pro.id">
@@ -139,7 +139,7 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="form-group">
-                                    <label for="site">Site</label>
+                                    <label for="site">Site <sup>*</sup></label>
                                     <select id="siteId" name="siteId" class="form-control"
                                         formControlName="siteId">
                                         <option *ngFor="let s of siteList" [value]="s.id">

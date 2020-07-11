@@ -13,11 +13,11 @@ export class TaskReminderComponent {
 
   vehicleList: Array<any> = [];
   vehicle : object = {};
-  insuranceDate : Date = new Date(this.userService.getCurrentStartTime());
-  serviceDate : Date = new Date(this.userService.getCurrentStartTime());
-  oilChangeDate : Date = new Date(this.userService.getCurrentStartTime());
-  passingDate : Date = new Date(this.userService.getCurrentStartTime());
-  pucDate : Date = new Date(this.userService.getCurrentStartTime());
+  insuranceDate : Date = null;
+  serviceDate : Date = null;
+  oilChangeDate : Date = null;
+  passingDate : Date = null;
+  pucDate : Date = null;
   oilChangeDistnce : Number;
   serviceChangeDistance : Number;
   taskList : Array<any> = [];
@@ -42,15 +42,25 @@ export class TaskReminderComponent {
     this.getVehicleList();
   }
 
-  taskInIt(){
-    this.insuranceDate = new Date(this.userService.getCurrentStartTime());
-    this.serviceDate = new Date(this.userService.getCurrentStartTime());
-    this.oilChangeDate = new Date(this.userService.getCurrentStartTime()); 
-    this.passingDate = new Date(this.userService.getCurrentStartTime());
-    this.pucDate = new Date(this.userService.getCurrentStartTime());
-    this.oilChangeDistnce = null; 
+  taskInit(){
+    this.insuranceDate  = null;
+    this.serviceDate  = null;
+    this.oilChangeDate  = null;
+    this.passingDate  = null;
+    this.pucDate  = null;
+    this.oilChangeDistnce = null;
     this.serviceChangeDistance = null;
   }
+
+  // taskInIt(){
+  //   this.insuranceDate = new Date(this.userService.getCurrentStartTime());
+  //   this.serviceDate = new Date(this.userService.getCurrentStartTime());
+  //   this.oilChangeDate = new Date(this.userService.getCurrentStartTime()); 
+  //   this.passingDate = new Date(this.userService.getCurrentStartTime());
+  //   this.pucDate = new Date(this.userService.getCurrentStartTime());
+  //   this.oilChangeDistnce = null; 
+  //   this.serviceChangeDistance = null;
+  // }
 
   getVehicleList(){
     let params = new HttpParams().set("userId", this.userId.toString());
@@ -68,7 +78,7 @@ export class TaskReminderComponent {
   }
 
   getSavedTaskList(vehicle){
-    console.log(vehicle);
+    this.taskInit();
     let params = new HttpParams().set("userId", "8").set("vehicleId", vehicle.id);
 
     this.dataService.sendPostRequest('jmc/api/v1/task/reminder/get', {}, params).subscribe(data => {
@@ -224,6 +234,7 @@ export class TaskReminderComponent {
     this.dataService.sendPostRequest('jmc/api/v1/task/reminder/save', taskReminderList).subscribe(data => {
       if (data['status'] == 200) {
         this.isEdit = false;
+        this.getSavedTaskList(this.vehicle);
       }else{
        
       }

@@ -2,3 +2,7 @@
     position: absolute;
     top: 30px;
   }
+
+  #map {
+    height: 55.5vh;
+  }

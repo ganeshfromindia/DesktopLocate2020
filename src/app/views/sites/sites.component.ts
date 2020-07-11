@@ -47,7 +47,7 @@ export class SitesComponent implements OnInit {
       address: ['', Validators.required],
       latitude: [{value: '', disabled: true}, Validators.required],
       longitude: [{value: '', disabled: true}, Validators.required],
-      telephoneNumber: ['', Validators.required]
+      telephoneNumber: ['']
     })
   }
 
@@ -58,22 +58,25 @@ export class SitesComponent implements OnInit {
     }
     this.isValidFormSubmitted = true;
 
-    let phoneNumberArray : Array<Number> = this.siteForm.controls.telephoneNumber.value.split(',');
-    let numberArray: Array<Number> = [] 
-    let isNumberValid : boolean = true;
-    phoneNumberArray.forEach(element => {
-      numberArray.push(element);
-      if(!this.validation.isNumber(element)){
-        alert("Enter Numeric value in telephone number " + element)
-        isNumberValid = false;
+    let numberArray: Array<Number> = [];
+    if(this.siteForm.controls.telephoneNumber.value){
+      let phoneNumberArray : Array<Number> = this.siteForm.controls.telephoneNumber.value.split(',');
+     
+      let isNumberValid : boolean = true;
+      phoneNumberArray.forEach(element => {
+        numberArray.push(element);
+        if(!this.validation.isNumber(element)){
+          alert("Enter Numeric value in telephone number " + element)
+          isNumberValid = false;
+          return;
+        }    
+      });
+
+      if(!isNumberValid){
         return;
-      }    
-    });
-
-    if(!isNumberValid){
-      return;
+      }
     }
-
+    
     var data = {
                 "siteName":this.siteForm.controls.siteName.value,
                 "address":this.siteForm.controls.address.value,
@@ -81,8 +84,10 @@ export class SitesComponent implements OnInit {
                 "longitude":this.siteForm.controls.longitude.value,
                 "telephoneNumber": numberArray
                }
+  
+  
   let params = new HttpParams().set("userId", this.userId.toString());  
-  console.log(this.siteForm.getRawValue());    
+      
   let projectArray = [];
   if(this.siteForm.controls.projectIdList.value && this.siteForm.controls.projectIdList.value.length > 0){
     data['projectId'] = this.siteForm.controls.projectIdList.value[0].id;

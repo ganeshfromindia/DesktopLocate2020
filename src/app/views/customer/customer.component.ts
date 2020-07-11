@@ -34,7 +34,7 @@ export class CustomerComponent implements OnInit {
   getCustomerList() {    
     let params = new HttpParams().set("userId", this.userId.toString());
     
-    this.dataService.sendGetRequest('jmc/api/v1/customer/get/all', params).subscribe(data => {
+    this.dataService.sendGetRequest('jmc/api/v1/customer/get/all', {}).subscribe(data => {
       if (data['status'] == 200 && data['payLoad'].length > 0) {
         this.createPaginationList(data['payLoad']);
         this.customerDataCopy = JSON.parse(JSON.stringify(data['payLoad']));

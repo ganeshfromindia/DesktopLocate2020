@@ -33,6 +33,7 @@ export class MapComponent implements OnInit {
   set mapDataObj(mapDataObj: object) {
 
     console.log(mapDataObj);
+    this.removeMarkerProcess();
 
       if(mapDataObj){
         this._mapDataObj = mapDataObj;

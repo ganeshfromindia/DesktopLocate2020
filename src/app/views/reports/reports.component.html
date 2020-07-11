@@ -24,7 +24,8 @@
                     </div>
                     <div class="form-group col-sm-2">
                         <label for="ccmonth">Downloads</label>
-                        <select id="level" name="level" class="form-control" [(ngModel)]="selectedValue">
+                        <select id="level" name="level" class="form-control" (change)="showTable = false;"
+                            [(ngModel)]="selectedValue">
                             <option *ngFor="let down of downloadList" [value]="down.value">
                                 {{down.viewValue}}
                             </option>
@@ -59,7 +60,7 @@
                         <td nowrap>{{v.vehicleName}}</td>
                         <td nowrap>{{v.distance}}</td>
                     </tr>
-                    <h3 *ngIf="distanceTraveledEmpty" style="position: absolute;padding: 3px 381px;"> Data is not
+                    <h3 *ngIf="distanceTraveledEmpty" style="position: absolute;padding: 3px 381px;"> Data not
                         available
                     </h3>
                     <i *ngIf="distanceTraveledReport.length == 0 && !distanceTraveledEmpty"
@@ -82,11 +83,73 @@
                         <td nowrap>{{t.taskName}}</td>
                         <td nowrap>{{ t?.taskTime ? ( t?.taskTime | date : 'dd/MM/yy h:mm a' ) : "-" }}</td>
                     </tr>
-                    <h3 *ngIf="distanceTraveledEmpty" style="position: absolute;padding: 3px 381px;"> Data is not
-                        available
+                    <h3 *ngIf="TaskReminderEmpty" style="position: absolute;padding: 3px 381px;"> Task Not Found
                     </h3>
-                    <i *ngIf="taskReminderReport.length == 0 && !distanceTraveledEmpty" class="fa fa-spinner fa-spin"
-                        style="font-size:30px; position: absolute;padding: 3px 381px;"></i>
+                    <i *ngIf="taskReminderReport.length == 0 && !TaskReminderEmpty" class="fa fa-spinner fa-spin"
+                        style="font-size:30px; position: absolute;right: 50%;"></i>
+                </table>
+            </div>
+        </div>
+
+        <div class="card" *ngIf="selectedValue == 'Pr' && showTable">
+            <div class="card-body">
+                
+                <div class="form-group row">
+                    <label class="col-md-3 col-form-label" for="hf-email">Polygon Name - Polygon Type - Project</label>
+                    <div class="col-md-9">
+                        <select id="level" name="level" class="form-control" [(ngModel)]="polygon" (ngModelChange)="changePolygon($event)">
+                            <option *ngFor="let p of polygonReportList" [ngValue]="p">{{p.name +' - '+ p.polygonType +' - '+ p.project.project}}</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table table-bordered" style="overflow-x:auto;">
+                            <tr>
+                                <th nowrap>Status</th>
+                                <th>Time</th>
+                                <th class="text-center">Address</th>
+                            </tr>
+                            <tr *ngFor="let t of polygonDataList">
+                                <td nowrap>{{t.status}}</td>
+                                <td nowrap>{{t?.time ? ( t?.time | date : 'dd/MM/yy h:mm a' ) : "-"}}</td>
+                                <td class="text-center">
+                                    <span class="pointer" (click)="getAddress(t)">
+                                        <i class="fa fa-map-marker fa-lg " style="color: darkred;" aria-hidden="true"></i>
+                                    </span>
+                                </td>
+                            </tr>
+                            <h3 *ngIf="polygonReportEmpty || polygonDataEmpty" style="position: absolute;padding: 3px 381px;"> Report Not Found
+                            </h3>
+                            <!-- <i *ngIf="polygonDataList.length == 0 && !polygonReportEmpty"
+                                class="fa fa-spinner fa-spin"
+                                style="font-size:30px; position: absolute;right: 50%;"></i> -->
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" *ngIf="selectedValue == 'Pn' && showTable">
+            <div class="card-body">
+                <table class="table table-bordered" style="overflow-x:auto;">
+                    <tr>
+                        <th nowrap>Time</th>
+                        <th class="text-center">Address</th>
+                    </tr>
+                    <tr *ngFor="let t of polygonNotificationList">
+                        <td nowrap>{{t?.time ? ( t?.time | date : 'dd/MM/yy h:mm a' ) : "-" }}</td>
+                        <td class="text-center">
+                            <span class="pointer" (click)="getAddress(t)">
+                                <i class="fa fa-map-marker fa-lg " style="color: darkred;" aria-hidden="true"></i>
+                            </span>
+                        </td>
+                    </tr>
+                    <h3 *ngIf="polygonNotificationEmpty" style="position: absolute;padding: 3px 381px;"> Data Not Found
+                    </h3>
+                    <i *ngIf="polygonNotificationList.length == 0 && !polygonNotificationEmpty" class="fa fa-spinner fa-spin"
+                        style="font-size:30px; position: absolute;right: 50%;"></i>
                 </table>
             </div>
         </div>
@@ -122,7 +185,8 @@
                             <li class="list-group-item active text-center">Delivery at Site</li>
                             <li class="list-group-item text-center">
                                 {{vehicleStatusTimeCount.DELIVERY_AT_SITE ?
-                                                    userService.convertMS(vehicleStatusTimeCount.DELIVERY_AT_SITE) : '-'}}</li>
+                                                    userService.convertMS(vehicleStatusTimeCount.DELIVERY_AT_SITE) : '-'}}
+                            </li>
                         </ul>
                     </div>
                     <div class="col-md-2">
@@ -130,7 +194,8 @@
                             <li class="list-group-item active text-center">Work Commenced</li>
                             <li class="list-group-item text-center">
                                 {{vehicleStatusTimeCount.WORK_COMMENCED ?
-                                                    userService.convertMS(vehicleStatusTimeCount.WORK_COMMENCED) : '-'}}</li>
+                                                    userService.convertMS(vehicleStatusTimeCount.WORK_COMMENCED) : '-'}}
+                            </li>
                         </ul>
                     </div>
                     <div class="col-md-2">
@@ -138,7 +203,8 @@
                             <li class="list-group-item active">To Be Dispatched</li>
                             <li class="list-group-item text-center">
                                 {{vehicleStatusTimeCount.TO_BE_DISPATCHED ?
-                                                    userService.convertMS(vehicleStatusTimeCount.TO_BE_DISPATCHED) : '-'}}</li>
+                                                    userService.convertMS(vehicleStatusTimeCount.TO_BE_DISPATCHED) : '-'}}
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -167,12 +233,38 @@
                                     </h3>
                                     <i *ngIf="vehicleStatusList.length == 0 && !vehicleStatusEmpty"
                                         class="fa fa-spinner fa-spin"
-                                        style="font-size:30px; position: absolute;padding: 3px 381px;"></i>
+                                        style="font-size:30px; position: absolute;right: 50%;"></i>
                                 </table>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div bsModal #largeModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Address</h4>
+                <button type="button" class="close" (click)="largeModal.hide()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>{{mapAddress}}</p>
+                <div id="map">
+                    <app-map [mapDataObj]="mapDataObj"></app-map>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="largeModal.hide()">Close</button>
             </div>
         </div>
     </div>

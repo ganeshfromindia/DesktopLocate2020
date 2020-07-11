@@ -51,8 +51,8 @@
                                 <div class="form-group">
                                     <label for="name">State</label>
                                     <select id="state" name="state" class="form-control" formControlName="state">
-                                        <option *ngFor="let s of stateList" [value]="s.code">
-                                            {{s.name}}</option>
+                                        <option *ngFor="let s of stateList" [value]="s.stateCode">
+                                            {{s.state}}</option>
                                     </select>
                                 </div>
                             </div>

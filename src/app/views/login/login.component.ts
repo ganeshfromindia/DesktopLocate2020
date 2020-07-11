@@ -70,9 +70,15 @@ export class LoginComponent {
 			.pipe(
 				tap(user => {
           console.log(user);
-          this.userService.setRoleBasedMenu(user['payLoad']['jsonData'])  
-          this.userService.setUserDetails(user['payLoad'].userDetails);
-					this.router.navigateByUrl('/dashboard'); // Main page
+
+          if(user.status == 200){
+            this.userService.setRoleBasedMenu(user['payLoad']['jsonData'])  
+            this.userService.setUserDetails(user['payLoad'].userDetails);
+            this.router.navigateByUrl('/dashboard'); // Main page
+          }else {
+            alert(user.message);
+          }
+
 				}),
 				takeUntil(this.unsubscribe),
 				finalize(() => {

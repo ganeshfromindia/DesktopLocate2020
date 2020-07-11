@@ -83,15 +83,15 @@ export class VehicleListComponent implements OnInit {
 
   getAddress(element){
 
-    this.latitude = element.lattitude;
+    this.latitude = element.latitude;
     this.longitude = element.longitude;
 
-    this.lat = element.lattitude;
+    this.lat = element.latitude;
     this.lng = element.longitude;
     
-    if(element.lattitude && element.longitude){
+    if(element.latitude && element.longitude){
       this.addressService
-      .getAddress(element.lattitude, element.longitude)
+      .getAddress(element.latitude, element.longitude)
       .then(data => {
         try {
           this.mapAddress = data["results"][0]["formatted_address"];
